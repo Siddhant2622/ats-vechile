@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATS Operations Management System</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:   #0b1829;
+      --navy2:  #102035;
+      --navy3:  #162d47;
+      --amber:  #f59e0b;
+      --amber2: #fbbf24;
+      --amber3: #fcd34d;
+      --text:   #e2e8f0;
+      --muted:  #94a3b8;
+      --card:   #132236;
+      --border: #1e3a5f;
+      --green:  #10b981;
+      --red:    #ef4444;
+      --blue:   #3b82f6;
+      --purple: #8b5cf6;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Utility ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+      color: var(--amber); font-size: 13px; font-weight: 600;
+      padding: 4px 14px; border-radius: 999px; letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px); font-weight: 800;
+      line-height: 1.2; margin-bottom: 16px;
+    }
+    .section-desc { font-size: 17px; color: var(--muted); max-width: 600px; }
+    .highlight { color: var(--amber); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      border: none; transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--amber); color: var(--navy);
+    }
+    .btn-primary:hover { background: var(--amber2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.35); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--amber); color: var(--amber); transform: translateY(-2px); }
+    .grid { display: grid; gap: 24px; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; transition: all 0.25s;
+    }
+    .card:hover { border-color: rgba(245,158,11,0.4); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+
+    /* ── Navbar ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,24,41,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-icon {
+      width: 38px; height: 38px; background: var(--amber);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { font-size: 16px; font-weight: 800; letter-spacing: -0.5px; }
+    .logo-sub { font-size: 11px; color: var(--muted); font-weight: 400; display: block; }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+      list-style: none;
+    }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--amber); }
+    .nav-cta { display: flex; gap: 10px; align-items: center; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-cta .btn-outline { display: none; }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; padding: 100px 0 80px; overflow: hidden;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
+      color: var(--amber2); font-size: 13px; font-weight: 600;
+      padding: 6px 16px; border-radius: 999px; margin-bottom: 28px;
+    }
+    .hero-badge span { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 70px); font-weight: 900;
+      line-height: 1.08; letter-spacing: -2px; margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: normal; color: var(--amber); }
+    .hero p {
+      font-size: 18px; color: var(--muted); max-width: 620px;
+      margin: 0 auto 40px;
+    }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 48px;
+      margin-top: 72px; padding-top: 40px;
+      border-top: 1px solid var(--border); flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 36px; font-weight: 900; color: var(--amber); display: block; }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    /* ── Scroll ticker ── */
+    .ticker-wrap {
+      background: var(--navy2); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0; overflow: hidden; white-space: nowrap;
+    }
+    .ticker-track {
+      display: inline-flex; gap: 0;
+      animation: ticker 25s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--muted); padding: 0 32px;
+    }
+    .ticker-item span.dot { color: var(--amber); font-size: 18px; line-height: 1; }
+
+    /* ── Modules ── */
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px,1fr)); gap: 24px; }
+    .module-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px; position: relative; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .module-card::before {
+      content: attr(data-num);
+      position: absolute; top: -10px; right: 20px;
+      font-size: 80px; font-weight: 900; color: rgba(255,255,255,0.03);
+      line-height: 1; pointer-events: none;
+    }
+    .module-card:hover { border-color: rgba(245,158,11,0.5); transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.4); }
+    .module-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 20px;
+    }
+    .module-title { font-size: 19px; font-weight: 700; margin-bottom: 10px; }
+    .module-desc { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+    .module-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 999px; border: 1px solid;
+    }
+    .tag-amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--amber2); }
+    .tag-green { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: var(--green); }
+    .tag-blue  { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: var(--blue); }
+    .tag-purple{ background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.3); color: var(--purple); }
+
+    /* ── Workflow ── */
+    .workflow-section { background: var(--navy2); }
+    .workflow-steps {
+      display: flex; flex-wrap: wrap; gap: 0;
+      position: relative; margin-top: 56px;
+    }
+    .workflow-step {
+      flex: 1; min-width: 150px; text-align: center; padding: 24px 16px;
+      position: relative;
+    }
+    .workflow-step:not(:last-child)::after {
+      content: '→';
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      color: var(--amber); font-size: 20px; font-weight: 900; z-index: 1;
+    }
+    @media(max-width:640px){ .workflow-step:not(:last-child)::after{display:none} }
+    .step-num {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--amber); color: var(--navy);
+      font-size: 18px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .step-icon { font-size: 28px; margin-bottom: 10px; }
+    .step-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .step-desc { font-size: 12px; color: var(--muted); }
+
+    /* ── Live Dashboard Preview ── */
+    .dashboard-preview {
+      background: var(--navy2); border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden; margin-top: 56px;
+    }
+    .db-topbar {
+      background: var(--navy3); border-bottom: 1px solid var(--border);
+      padding: 14px 24px; display: flex; align-items: center; gap: 10px;
+    }
+    .db-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .db-title { font-size: 14px; font-weight: 600; margin-left: 10px; color: var(--muted); }
+    .db-time { margin-left: auto; font-size: 12px; color: var(--muted); }
+    .db-body { padding: 24px; }
+    .db-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 18px;
+    }
+    .kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .kpi-value { font-size: 32px; font-weight: 900; line-height: 1; }
+    .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .kpi-green { color: var(--green); }
+    .kpi-amber { color: var(--amber); }
+    .kpi-red   { color: var(--red); }
+    .kpi-blue  { color: var(--blue); }
+    .db-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:640px){ .db-row{grid-template-columns:1fr} }
+    .db-panel {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+    }
+    .db-panel-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
+    .vehicle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+    }
+    .vehicle-row:last-child { border-bottom: none; }
+    .status-pill {
+      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+    }
+    .s-done { background: rgba(16,185,129,0.15); color: var(--green); }
+    .s-prog { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .s-pend { background: rgba(239,68,68,0.15); color: var(--red); }
+    .s-sched{ background: rgba(59,130,246,0.15); color: var(--blue); }
+    .progress-row { margin-bottom: 14px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+    .progress-label span:last-child { color: var(--muted); font-size: 12px; }
+    .progress-bar { height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 999px; transition: width 1.5s ease; }
+
+    /* ── Roles ── */
+    .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; }
+    .role-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 20px; text-align: center;
+      transition: all 0.25s;
+    }
+    .role-card:hover { border-color: rgba(245,158,11,0.4); transform: translateY(-3px); }
+    .role-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+    .role-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .role-perms { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Tech Stack ── */
+    .tech-wrap {
+      display: flex; flex-wrap: wrap; gap: 16px; margin-top: 48px;
+    }
+    .tech-pill {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 20px;
+      font-size: 14px; font-weight: 600; transition: all 0.2s;
+    }
+    .tech-pill:hover { border-color: var(--amber); color: var(--amber); }
+    .tech-pill span { font-size: 20px; }
+
+    /* ── Timeline / Phases ── */
+    .phases { margin-top: 56px; }
+    .phase-item {
+      display: flex; gap: 24px; margin-bottom: 32px;
+      position: relative;
+    }
+    .phase-item:not(:last-child)::after {
+      content: '';
+      position: absolute; left: 23px; top: 50px;
+      width: 2px; height: calc(100% + 8px);
+      background: var(--border);
+    }
+    .phase-num {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
+      border: 2px solid var(--amber); background: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 900; color: var(--amber);
+      position: relative; z-index: 1;
+    }
+    .phase-content { padding-top: 8px; }
+    .phase-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .phase-desc { font-size: 14px; color: var(--muted); }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--navy2) 0%, var(--navy3) 100%);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      text-align: center; padding: 96px 0;
+    }
+    .cta-section h2 { font-size: clamp(28px,4vw,48px); font-weight: 900; margin-bottom: 16px; }
+    .cta-section p { font-size: 17px; color: var(--muted); margin-bottom: 40px; }
+    .cta-cards {
+      display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;
+    }
+    .cta-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 32px; min-width: 200px;
+    }
+    .cta-card-num { font-size: 36px; font-weight: 900; color: var(--amber); }
+    .cta-card-label { font-size: 13px; color: var(--muted); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy); border-top: 1px solid var(--border);
+      padding: 48px 0 32px;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 32px; margin-bottom: 40px;
+    }
+    .footer-logo-area .logo-text { font-size: 20px; }
+    .footer-desc { font-size: 14px; color: var(--muted); margin-top: 10px; max-width: 300px; }
+    .footer-links h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 14px; }
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a { font-size: 14px; color: var(--muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--amber); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 24px; border-top: 1px solid var(--border);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 13px; color: var(--muted); }
+    .footer-badges { display: flex; gap: 10px; }
+    .fbadge {
+      font-size: 11px; font-weight: 600; padding: 4px 10px;
+      border-radius: 6px; background: var(--card); border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* ── Animations ── */
+    .fade-up { opacity: 0; transform: translateY(32px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <div class="container nav-inner">
+    <div class="logo">
+      <div class="logo-icon">🚗</div>
+      <div>
+        <div class="logo-text">ATS<span style="color:var(--amber)">Pro</span></div>
+        <span class="logo-sub">Operations Management System</span>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#modules">Modules</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#workflow">Workflow</a></li>
+      <li><a href="#roles">Roles</a></li>
+      <li><a href="#tech">Tech Stack</a></li>
+      <li><a href="#phases">Phases</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#phases" class="btn btn-outline">View Roadmap</a>
+      <a href="../ats-app/index.html" class="btn btn-primary" style="background:#10b981;color:#fff">🚀 Launch Live App →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span></span> Government-Authorized ATS Platform</div>
+    <h1>Vehicle Fitness Testing<br><em>Fully Digitized.</em></h1>
+    <p>A centralized operations platform for Automated Testing Stations — managing bookings, workforce, AI-powered inspections, test reports and customer communication in one place.</p>
+    <div class="hero-btns">
+      <a href="../ats-app/index.html" class="btn btn-primary" style="background:var(--amber);color:#0b1523;font-size:16px;padding:16px 32px">🚀 Launch Working ATS App →</a>
+      <a href="#modules" class="btn btn-outline" style="font-size:16px;padding:16px 28px">Explore Modules</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">8</span>
+        <span class="stat-label">Integrated Modules</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">25+</span>
+        <span class="stat-label">Employee Capacity</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">AI</span>
+        <span class="stat-label">OCR Number Plate</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">GPS</span>
+        <span class="stat-label">Attendance Verified</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">WA</span>
+        <span class="stat-label">WhatsApp Automated</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER ══ -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item"><span class="dot">●</span> Vehicle Booking & Scheduling</span>
+    <span class="ticker-item"><span class="dot">●</span> GPS-Verified Attendance</span>
+    <span class="ticker-item"><span class="dot">●</span> Brake · Light · Speed · Suspension Tests</span>
+    <span class="ticker-item"><span class="dot">●</span> AI Number Plate OCR</span>
+    <span class="ticker-item"><span class="dot">●</span> Payroll & Leave Management</span>
+    <span class="ticker-item"><span class="dot">●</span> WhatsApp Business API</span>
+    <span class="ticker-item"><span class="dot">●</span> Fitness Certificate Expiry Tracking</span>
+    <span class="ticker-item"><span class="dot">●</span> Admin Dashboard & Analytics</span>
+    <span class="ticker-item"><span class="dot">●</span> EOD Reporting</span>
+    <span class="ticker-item"><span class="dot">●</span> Role-Based Access Control</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><span class="dot">●</span> Vehicle Booking & Scheduling</span>
+    <span class="ticker-item"><span class="dot">●</span> GPS-Verified Attendance</span>
+    <span class="ticker-item"><span class="dot">●</span> Brake · Light · Speed · Suspension Tests</span>
+    <span class="ticker-item"><span class="dot">●</span> AI Number Plate OCR</span>
+    <span class="ticker-item"><span class="dot">●</span> Payroll & Leave Management</span>
+    <span class="ticker-item"><span class="dot">●</span> WhatsApp Business API</span>
+    <span class="ticker-item"><span class="dot">●</span> Fitness Certificate Expiry Tracking</span>
+    <span class="ticker-item"><span class="dot">●</span> Admin Dashboard & Analytics</span>
+    <span class="ticker-item"><span class="dot">●</span> EOD Reporting</span>
+    <span class="ticker-item"><span class="dot">●</span> Role-Based Access Control</span>
+  </div>
+</div>
+
+<!-- ══ MODULES ══ -->
+<section class="section" id="modules">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">📦 Functional Modules</div>
+      <h2 class="section-title">Everything an ATS Needs —<br><span class="highlight">One Platform.</span></h2>
+      <p class="section-desc">8 deeply integrated modules covering every aspect of vehicle fitness testing operations.</p>
+    </div>
+    <div class="module-grid" style="margin-top:48px">
+
+      <div class="module-card fade-up" data-num="01">
+        <div class="module-icon" style="background:rgba(245,158,11,0.15)">📋</div>
+        <div class="module-title">Vehicle Booking & Customer Management</div>
+        <div class="module-desc">Register customers and vehicles, schedule fitness test appointments, generate unique booking IDs, assign operators and track booking status end-to-end.</div>
+        <div class="module-tags">
+          <span class="tag tag-amber">Booking ID</span>
+          <span class="tag tag-green">LMV / HMV</span>
+          <span class="tag tag-blue">Audit Trail</span>
+        </div>
+      </div>
+
+      <div class="module-card fade-up" data-num="02">
+        <div class="module-icon" style="background:rgba(16,185,129,0.15)">📍</div>
+        <div class="module-title">GPS Attendance & Employee Management</div>
+        <div class="module-desc">Mobile GPS punch-in/out with geofence validation for up to 25 employees. Daily records, late tracking, EOD reports and anomaly flagging for suspicious check-ins.</div>
+        <div class="module-tags">
+          <span class="tag tag-green">GPS Geofence</span>
+          <span class="tag tag-amber">EOD Reports</span>
+          <span class="tag tag-purple">25 Employees</span>
+        </div>
+      </div>
+
+      <div class="module-card fade-up" data-num="03">
+        <div class="module-icon" style="background:rgba(59,130,246,0.15)">⚙️</div>
+        <div class="module-title">Test-wise Task Allocation & Workflow</div>
+        <div class="module-desc">Configure any number of testing operations. Each operator sees only their assigned queue. Real-time pipeline: Scheduled → Assigned → In Progress → Completed → Verified.</div>
+        <div class="module-tags">
+          <span class="tag tag-blue">Configurable Ops</span>
+          <span class="tag tag-amber">Real-time</span>
+          <span class="tag tag-green">Role Isolated</span>
+        </div>
+      </div>
+
+      <div class="module-card fade-up" data-num="04">
+        <div class="module-icon" style="background:rgba(139,92,246,0.15)">🤖</div>
+        <div class="module-title">AI Camera & Number Plate OCR</div>
+        <div class="module-desc">Snap a vehicle photo on mobile — AI extracts the registration number instantly. Confidence scoring, booking auto-match, duplicate detection and original evidence retained.</div>
+        <div class="module-tags">
+          <span class="tag tag-purple">AI / OCR</span>
+          <span class="tag tag-amber">Indian Formats</span>
+          <span class="tag tag-blue">Confidence Score</span>
+        </div>
+      </div>
+
+      <div class="module-card fade-up" data-num="05">
+        <div class="module-icon" style="background:rgba(245,158,11,0.15)">📄</div>
+        <div class="module-title">Test Reports & Documentation</div>
+        <div class="module-desc">Configurable report templates per test type. Submit readings, photos and observations. Admin review, approval or return for correction — full history preserved.</div>
+        <div class="module-tags">
+          <span class="tag tag-amber">PDF Export</span>
+          <span class="tag tag-green">Tamper-proof</span>
+          <span class="tag tag-blue">Per Test Type</span>
+        </div>
+      </div>
+
+      <div class="module-card fade-up" data-num="06">
+        <div class="module-icon" style="background:rgba(16,185,129,0.15)">🎖️</div>
+        <div class="module-title">Fitness Certificate & Expiry Tracking</div>
+        <div class="module-desc">Record certificate details and validity dates. Automated reminders at 30, 15, 7 and 1 day before expiry. Dashboard view of upcoming and expired certificates.</div>
+        <div class="module-tags">
+          <span class="tag tag-green">Auto Reminders</span>
+          <span class="tag tag-amber">Expiry Alerts</span>
+          <span class="tag tag-blue">History</span>
+        </div>
+      </div>
+
+      <div class="module-card fade-up" data-num="07">
+        <div class="module-icon" style="background:rgba(37,211,102,0.12)">💬</div>
+        <div class="module-title">WhatsApp Business API</div>
+        <div class="module-desc">Official Meta WhatsApp integration. Automated booking confirmations, test reminders, completion alerts and expiry reminders. Delivery tracking and failed message queue.</div>
+        <div class="module-tags">
+          <span class="tag tag-green">Meta Official API</span>
+          <span class="tag tag-amber">Bulk Messaging</span>
+          <span class="tag tag-purple">Scheduled</span>
+        </div>
+      </div>
+
+      <div class="module-card fade-up" data-num="08">
+        <div class="module-icon" style="background:rgba(59,130,246,0.15)">📊</div>
+        <div class="module-title">Admin Dashboard & Analytics</div>
+        <div class="module-desc">Real-time KPIs: bookings, arrivals, test progress, attendance and expiry alerts. Date-wise analytics, employee productivity, Excel/PDF export and full activity audit logs.</div>
+        <div class="module-tags">
+          <span class="tag tag-blue">Real-time KPIs</span>
+          <span class="tag tag-amber">Excel / PDF</span>
+          <span class="tag tag-green">Audit Logs</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ DASHBOARD PREVIEW ══ -->
+<section class="section workflow-section" id="dashboard">
+  <div class="container">
+    <div class="fade-up" style="text-align:center">
+      <div class="section-label">📊 Live Preview</div>
+      <h2 class="section-title">Admin Dashboard —<br><span class="highlight">Complete Operational View</span></h2>
+      <p class="section-desc" style="margin:0 auto">Real-time visibility into every booking, test, employee and certificate from one screen.</p>
+    </div>
+
+    <div class="dashboard-preview fade-up">
+      <div class="db-topbar">
+        <div class="db-dot" style="background:#ff5f57"></div>
+        <div class="db-dot" style="background:#febc2e"></div>
+        <div class="db-dot" style="background:#28c840"></div>
+        <div class="db-title">ATS Pro — Admin Dashboard</div>
+        <div class="db-time" id="live-time">Loading...</div>
+      </div>
+      <div class="db-body">
+        <div class="db-kpis">
+          <div class="kpi">
+            <div class="kpi-label">Today's Bookings</div>
+            <div class="kpi-value kpi-amber">24</div>
+            <div class="kpi-sub">↑ 4 more than yesterday</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Testing Completed</div>
+            <div class="kpi-value kpi-green">18</div>
+            <div class="kpi-sub">75% completion rate</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Pending Tests</div>
+            <div class="kpi-value kpi-amber">6</div>
+            <div class="kpi-sub">3 in progress now</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Absent Today</div>
+            <div class="kpi-value kpi-red">2</div>
+            <div class="kpi-sub">23 / 25 present</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Expiry Alerts</div>
+            <div class="kpi-value kpi-red">7</div>
+            <div class="kpi-sub">3 expire this week</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Reports Pending</div>
+            <div class="kpi-value kpi-blue">4</div>
+            <div class="kpi-sub">Awaiting approval</div>
+          </div>
+        </div>
+
+        <div class="db-row">
+          <div class="db-panel">
+            <div class="db-panel-title">Today's Vehicles</div>
+            <div class="vehicle-row">
+              <span>MP04 AB 1234</span>
+              <span class="status-pill s-done">Completed</span>
+            </div>
+            <div class="vehicle-row">
+              <span>CG16 CD 5678</span>
+              <span class="status-pill s-prog">In Progress</span>
+            </div>
+            <div class="vehicle-row">
+              <span>MP09 EF 9012</span>
+              <span class="status-pill s-pend">Pending</span>
+            </div>
+            <div class="vehicle-row">
+              <span>UP32 GH 3456</span>
+              <span class="status-pill s-done">Completed</span>
+            </div>
+            <div class="vehicle-row">
+              <span>MH12 KL 7890</span>
+              <span class="status-pill s-sched">Scheduled</span>
+            </div>
+          </div>
+
+          <div class="db-panel">
+            <div class="db-panel-title">Test-wise Progress</div>
+            <div class="progress-row">
+              <div class="progress-label"><span>🛑 Brake Test</span><span>16 / 20</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--green)"></div></div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label"><span>💡 Light Test</span><span>14 / 20</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:70%;background:var(--amber)"></div></div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label"><span>⚡ Speed Test</span><span>18 / 20</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--blue)"></div></div>
+            </div>
+            <div class="progress-row">
+              <div class="progress-label"><span>🔧 Suspension</span><span>12 / 20</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--purple)"></div></div>
+            </div>
+            <div class="progress-row" style="margin:0">
+              <div class="progress-label"><span>📋 Other Inspection</span><span>8 / 10</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--green)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WORKFLOW ══ -->
+<section class="section" id="workflow">
+  <div class="container">
+    <div class="fade-up" style="text-align:center">
+      <div class="section-label">🔄 End-to-End Workflow</div>
+      <h2 class="section-title">From Booking to <span class="highlight">Certificate</span></h2>
+      <p class="section-desc" style="margin:0 auto">Seven-stage pipeline — every step tracked, every action logged.</p>
+    </div>
+    <div class="workflow-steps fade-up">
+      <div class="workflow-step">
+        <div class="step-icon">📋</div>
+        <div class="step-num">1</div>
+        <div class="step-title">Customer Booking</div>
+        <div class="step-desc">Vehicle & customer registered. Booking ID generated.</div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-icon">👷</div>
+        <div class="step-num">2</div>
+        <div class="step-title">Test Assignment</div>
+        <div class="step-desc">Operations assigned to brake, light, speed operators.</div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-icon">🔬</div>
+        <div class="step-num">3</div>
+        <div class="step-title">Inspection</div>
+        <div class="step-desc">Operators perform tests, enter readings.</div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-icon">🤖</div>
+        <div class="step-num">4</div>
+        <div class="step-title">AI Evidence</div>
+        <div class="step-desc">Camera OCR, photos and documents attached.</div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-icon">📄</div>
+        <div class="step-num">5</div>
+        <div class="step-title">Test Reports</div>
+        <div class="step-desc">Individual reports submitted and reviewed.</div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-icon">🎖️</div>
+        <div class="step-num">6</div>
+        <div class="step-title">Final Approval</div>
+        <div class="step-desc">Certificate details recorded with expiry date.</div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-icon">💬</div>
+        <div class="step-num">7</div>
+        <div class="step-title">Expiry & Alerts</div>
+        <div class="step-desc">WhatsApp reminders at 30, 15, 7, 1 day before.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ROLES ══ -->
+<section class="section workflow-section" id="roles">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">🔐 Access Control</div>
+      <h2 class="section-title">Role-Based Access —<br><span class="highlight">Right Person, Right Data.</span></h2>
+      <p class="section-desc">8 roles with scoped permissions. Operators never see another department's records.</p>
+    </div>
+    <div class="roles-grid fade-up" style="margin-top:48px">
+      <div class="role-card">
+        <span class="role-icon">👑</span>
+        <div class="role-name">Super Admin</div>
+        <div class="role-perms">Full system access, configuration, all records & user management</div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">🧑‍💼</span>
+        <div class="role-name">Admin / Manager</div>
+        <div class="role-perms">Bookings, employees, reports, payroll and dashboards</div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">🖥️</span>
+        <div class="role-name">Reception Staff</div>
+        <div class="role-perms">Customer & vehicle registration, booking creation</div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">🛑</span>
+        <div class="role-name">Brake Test Op.</div>
+        <div class="role-perms">Only assigned brake-test queue, readings & reports</div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">💡</span>
+        <div class="role-name">Light Test Op.</div>
+        <div class="role-perms">Only assigned light-test queue, readings & reports</div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">⚡</span>
+        <div class="role-name">Speed Test Op.</div>
+        <div class="role-perms">Only assigned speed-test queue, readings & reports</div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">🔧</span>
+        <div class="role-name">Other Operators</div>
+        <div class="role-perms">Only their configured testing operations</div>
+      </div>
+      <div class="role-card">
+        <span class="role-icon">💰</span>
+        <div class="role-name">HR / Payroll</div>
+        <div class="role-perms">Attendance, leave, salary configuration & payroll</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TECH STACK ══ -->
+<section class="section" id="tech">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">🛠️ Technology Stack</div>
+      <h2 class="section-title">Built on <span class="highlight">Modern Infrastructure</span></h2>
+      <p class="section-desc">Production-grade technologies — scalable, secure and maintainable.</p>
+    </div>
+    <div class="tech-wrap fade-up">
+      <div class="tech-pill"><span>⚛️</span> React + TypeScript</div>
+      <div class="tech-pill"><span>🎨</span> Tailwind CSS + shadcn/ui</div>
+      <div class="tech-pill"><span>🟢</span> Node.js + Express</div>
+      <div class="tech-pill"><span>🐘</span> PostgreSQL</div>
+      <div class="tech-pill"><span>🔐</span> JWT + RBAC Auth</div>
+      <div class="tech-pill"><span>🗄️</span> S3-Compatible Storage</div>
+      <div class="tech-pill"><span>🤖</span> Google Vision / OCR</div>
+      <div class="tech-pill"><span>💬</span> Meta WhatsApp Cloud API</div>
+      <div class="tech-pill"><span>📍</span> GPS Geofence API</div>
+      <div class="tech-pill"><span>📱</span> Progressive Web App (PWA)</div>
+      <div class="tech-pill"><span>☁️</span> Cloud VPS + TLS</div>
+      <div class="tech-pill"><span>🔄</span> Background Job Queue</div>
+    </div>
+
+    <!-- Architecture visual -->
+    <div class="card fade-up" style="margin-top:40px;padding:40px">
+      <div style="text-align:center;margin-bottom:32px">
+        <div class="section-label" style="margin:0 auto 0">Architecture Overview</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--blue)">🖥️ Admin Dashboard<br><span style="font-weight:400;font-size:11px;color:var(--muted)">React + TypeScript</span></div>
+          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--blue)">📱 Employee PWA<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Mobile-first PWA</span></div>
+          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--blue)">🖥️ Reception Portal<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Web Interface</span></div>
+        </div>
+        <div style="font-size:28px;color:var(--amber)">⇄</div>
+        <div style="background:rgba(245,158,11,0.1);border:2px solid rgba(245,158,11,0.4);border-radius:16px;padding:20px 28px;text-align:center">
+          <div style="font-size:14px;font-weight:800;color:var(--amber);margin-bottom:8px">⚙️ Backend API</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.8">Node.js + Express<br>Auth · RBAC · Workflows<br>Background Jobs</div>
+        </div>
+        <div style="font-size:28px;color:var(--amber)">⇄</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--green)">🐘 PostgreSQL<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Primary Database</span></div>
+          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--green)">🗄️ S3 Storage<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Images & Reports</span></div>
+          <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--purple)">🤖 AI / OCR · 💬 WhatsApp · 📍 GPS<br><span style="font-weight:400;font-size:11px;color:var(--muted)">External Services</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PHASES ══ -->
+<section class="section workflow-section" id="phases">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">🗺️ Implementation Roadmap</div>
+      <h2 class="section-title">Phased Delivery —<br><span class="highlight">Structured & Predictable</span></h2>
+      <p class="section-desc">6 clearly defined phases from discovery to production rollout.</p>
+    </div>
+    <div class="phases fade-up">
+      <div class="phase-item">
+        <div class="phase-num">1</div>
+        <div class="phase-content">
+          <div class="phase-title">🔍 Discovery & Validation</div>
+          <div class="phase-desc">Confirm ATS regulatory context, test types, equipment interfaces, report formats, existing workflows and government API requirements.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">2</div>
+        <div class="phase-content">
+          <div class="phase-title">⚙️ Core Operations</div>
+          <div class="phase-desc">Authentication, RBAC, customer/vehicle records, booking system, test-wise task allocation, operator dashboards and admin dashboard.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">3</div>
+        <div class="phase-content">
+          <div class="phase-title">👥 Workforce Management</div>
+          <div class="phase-desc">GPS attendance with geofence validation, EOD reporting, payroll configuration and payslip generation.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">4</div>
+        <div class="phase-content">
+          <div class="phase-title">🔬 Testing & Evidence</div>
+          <div class="phase-desc">Test forms, camera capture, OCR-assisted number plate extraction, test report submission and admin review workflow.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">5</div>
+        <div class="phase-content">
+          <div class="phase-title">🤖 Follow-up Automation</div>
+          <div class="phase-desc">Certificate validity tracking, background expiry jobs (30/15/7/1 day reminders) and official WhatsApp Business API integration.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num">6</div>
+        <div class="phase-content">
+          <div class="phase-title">✅ Validation & Rollout</div>
+          <div class="phase-desc">Role permission testing, audit trail verification, backup/restore testing, UAT with client, edge-case handling and production deployment.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label" style="margin:0 auto 20px">🚀 Get Started</div>
+      <h2>Ready to Digitize Your <span class="highlight">ATS Operations?</span></h2>
+      <p>From booking to certificate — manage everything from one platform.</p>
+      <div class="cta-cards">
+        <div class="cta-card">
+          <div class="cta-card-num">8</div>
+          <div class="cta-card-label">Integrated Modules</div>
+        </div>
+        <div class="cta-card">
+          <div class="cta-card-num">6</div>
+          <div class="cta-card-label">Delivery Phases</div>
+        </div>
+        <div class="cta-card">
+          <div class="cta-card-num">25+</div>
+          <div class="cta-card-label">Employee Capacity</div>
+        </div>
+        <div class="cta-card">
+          <div class="cta-card-num">AI</div>
+          <div class="cta-card-label">Powered OCR</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a href="../ats-app/index.html" class="btn btn-primary" style="font-size:16px;padding:16px 36px">🚀 Open ATS Operations App →</a>
+        <a href="#modules" class="btn btn-outline" style="font-size:16px;padding:16px 36px">Browse All 8 Modules</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo-area">
+        <div class="logo">
+          <div class="logo-icon">🚗</div>
+          <div>
+            <div class="logo-text">ATS<span style="color:var(--amber)">Pro</span></div>
+            <span class="logo-sub">Operations Management System</span>
+          </div>
+        </div>
+        <div class="footer-desc">A complete digital platform for government-authorized vehicle fitness testing stations. Booking · Workforce · AI · Reporting.</div>
+      </div>
+      <div class="footer-links">
+        <h4>Modules</h4>
+        <ul>
+          <li><a href="#modules">Vehicle Booking</a></li>
+          <li><a href="#modules">GPS Attendance</a></li>
+          <li><a href="#modules">Task Allocation</a></li>
+          <li><a href="#modules">AI OCR</a></li>
+          <li><a href="#modules">Test Reports</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>System</h4>
+        <ul>
+          <li><a href="#modules">Fitness Certificates</a></li>
+          <li><a href="#modules">WhatsApp API</a></li>
+          <li><a href="#modules">Admin Dashboard</a></li>
+          <li><a href="#roles">User Roles</a></li>
+          <li><a href="#tech">Tech Stack</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Project</h4>
+        <ul>
+          <li><a href="#workflow">Workflow</a></li>
+          <li><a href="#phases">Roadmap</a></li>
+          <li><a href="#cta">SRS Document</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ATS Operations Management System. Initial scope draft — subject to client validation.</p>
+      <div class="footer-badges">
+        <span class="fbadge">Web + PWA</span>
+        <span class="fbadge">AI-Powered</span>
+        <span class="fbadge">GPS Verified</span>
+        <span class="fbadge">WhatsApp API</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Live clock
+  function updateTime() {
+    const el = document.getElementById('live-time');
+    if(el) {
+      const now = new Date();
+      el.textContent = now.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' — Live';
+    }
+  }
+  updateTime(); setInterval(updateTime, 1000);
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // stagger children
+        entry.target.querySelectorAll('.module-card, .role-card, .tech-pill, .kpi, .phase-item, .workflow-step').forEach((el,i) => {
+          setTimeout(() => el.style.opacity = '1', i * 80);
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Smooth active nav link highlighting
+  window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    let current = '';
+    sections.forEach(s => {
+      if(window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#'+current ? 'var(--amber)' : '';
+    });
+  });
+
+  // Animate progress bars on scroll
+  const progObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        e.target.querySelectorAll('.progress-fill').forEach(bar => {
+          const w = bar.style.width; bar.style.width = '0';
+          setTimeout(() => bar.style.width = w, 100);
+        });
+        progObs.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.3});
+  document.querySelectorAll('.db-panel').forEach(p => progObs.observe(p));
+</script>
+</body>
+</html>
+
