@@ -3,1024 +3,2244 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ATS Operations Management System</title>
+  <title>ATS Pro — Automated Testing Station Operations Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ══════════════════════════════════════════════════════
+       DESIGN SYSTEM & COLOR SPECIFICATIONS
+       Graphite Black: #10151C | Deep Charcoal: #171D25
+       Porcelain White: #F2F1ED | Champagne Gold: #DBA65C
+       Precision Teal: #39C7B0 | Steel Grey: #8B949E
+       ══════════════════════════════════════════════════════ */
     :root {
-      --navy:   #0b1829;
-      --navy2:  #102035;
-      --navy3:  #162d47;
-      --amber:  #f59e0b;
-      --amber2: #fbbf24;
-      --amber3: #fcd34d;
-      --text:   #e2e8f0;
-      --muted:  #94a3b8;
-      --card:   #132236;
-      --border: #1e3a5f;
-      --green:  #10b981;
-      --red:    #ef4444;
-      --blue:   #3b82f6;
-      --purple: #8b5cf6;
+      --bg-graphite: #10151C;
+      --bg-charcoal: #171D25;
+      --bg-charcoal-card: #1C232D;
+      --bg-porcelain: #F2F1ED;
+      --bg-porcelain-card: #FFFFFF;
+      --bg-porcelain-muted: #E8E7E2;
+      
+      --accent-gold: #DBA65C;
+      --accent-gold-glow: rgba(219, 166, 92, 0.25);
+      --accent-gold-muted: rgba(219, 166, 92, 0.12);
+      
+      --accent-teal: #39C7B0;
+      --accent-teal-glow: rgba(57, 199, 176, 0.25);
+      --accent-teal-muted: rgba(57, 199, 176, 0.12);
+      
+      --text-dark-primary: #FFFFFF;
+      --text-dark-secondary: #8B949E;
+      --text-dark-muted: #586069;
+      
+      --text-light-primary: #10151C;
+      --text-light-secondary: #57606A;
+      --text-light-muted: #8C959F;
+      
+      --border-dark: rgba(255, 255, 255, 0.08);
+      --border-dark-hover: rgba(219, 166, 92, 0.4);
+      --border-light: rgba(16, 21, 28, 0.12);
+      --border-light-hover: rgba(16, 21, 28, 0.35);
+
+      --font-display: 'Manrope', 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
-    html { scroll-behavior: smooth; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--navy);
-      color: var(--text);
+      font-family: var(--font-body);
+      background-color: var(--bg-graphite);
+      color: var(--text-dark-primary);
       line-height: 1.6;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
     a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
 
-    /* ── Utility ── */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    .section { padding: 96px 0; }
-    .section-label {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
-      color: var(--amber); font-size: 13px; font-weight: 600;
-      padding: 4px 14px; border-radius: 999px; letter-spacing: 0.08em;
-      text-transform: uppercase; margin-bottom: 16px;
+    /* ── TYPOGRAPHY HIERARCHY ── */
+    .editorial-headline {
+      font-family: var(--font-display);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      font-size: clamp(38px, 5.5vw, 74px);
     }
-    .section-title {
-      font-size: clamp(28px, 4vw, 42px); font-weight: 800;
-      line-height: 1.2; margin-bottom: 16px;
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
     }
-    .section-desc { font-size: 17px; color: var(--muted); max-width: 600px; }
-    .highlight { color: var(--amber); }
+    .eyebrow-dark { color: var(--accent-gold); }
+    .eyebrow-light { color: #8F6B38; }
+    .eyebrow-teal { color: var(--accent-teal); }
+    .eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor; display: inline-block;
+    }
+
+    .editorial-subhead {
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.65;
+      font-weight: 400;
+      max-width: 680px;
+    }
+    .subhead-dark { color: var(--text-dark-secondary); }
+    .subhead-light { color: var(--text-light-secondary); }
+
+    /* ── LAYOUT UTILITIES ── */
+    .scene-wrap {
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .scene-wrap-sm { padding: 80px 0; }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    @media (max-width: 768px) {
+      .scene-wrap { padding: 80px 0; }
+      .container { padding: 0 20px; }
+    }
+
+    /* ── BUTTON SYSTEM ── */
     .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; border-radius: 10px;
-      font-size: 15px; font-weight: 600; cursor: pointer;
-      border: none; transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: var(--font-display);
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
     }
-    .btn-primary {
-      background: var(--amber); color: var(--navy);
+    .btn-gold {
+      background: var(--accent-gold);
+      color: #0C1017;
+      font-weight: 700;
+      border-color: var(--accent-gold);
+      box-shadow: 0 4px 20px rgba(219, 166, 92, 0.2);
     }
-    .btn-primary:hover { background: var(--amber2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.35); }
-    .btn-outline {
-      background: transparent; color: var(--text);
-      border: 1px solid var(--border);
+    .btn-gold:hover {
+      background: #E5B46D;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(219, 166, 92, 0.4);
     }
-    .btn-outline:hover { border-color: var(--amber); color: var(--amber); transform: translateY(-2px); }
-    .grid { display: grid; gap: 24px; }
-    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 28px; transition: all 0.25s;
+    .btn-outline-gold {
+      background: transparent;
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
     }
-    .card:hover { border-color: rgba(245,158,11,0.4); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+    .btn-outline-gold:hover {
+      background: var(--accent-gold-muted);
+      transform: translateY(-2px);
+    }
+    .btn-outline-light {
+      background: transparent;
+      border-color: var(--border-light);
+      color: var(--text-light-primary);
+    }
+    .btn-outline-light:hover {
+      border-color: var(--text-light-primary);
+      transform: translateY(-2px);
+    }
+    .btn-dark-subtle {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-dark);
+      color: var(--text-dark-primary);
+    }
+    .btn-dark-subtle:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
 
-    /* ── Navbar ── */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(11,24,41,0.92); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 0;
+    /* ── ICONS SYSTEM (INLINE SVG) ── */
+    .svg-icon {
+      width: 20px; height: 20px;
+      stroke-width: 1.5;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
     }
-    .nav-inner {
-      display: flex; align-items: center; justify-content: space-between;
+    .svg-icon-lg { width: 32px; height: 32px; stroke-width: 1.3; }
+    .svg-icon-xl { width: 44px; height: 44px; stroke-width: 1.2; }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 1: CINEMATIC HERO (GRAPHITE BLACK)
+       ══════════════════════════════════════════════════════ */
+    .hero-scene {
+      background: var(--bg-graphite);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border-bottom: 1px solid var(--border-dark);
     }
-    .logo {
-      display: flex; align-items: center; gap: 10px;
+
+    /* Luxury Header */
+    .navbar {
+      height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-dark);
+      position: relative;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(16, 21, 28, 0.85);
     }
-    .logo-icon {
-      width: 38px; height: 38px; background: var(--amber);
-      border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .logo-text { font-size: 16px; font-weight: 800; letter-spacing: -0.5px; }
-    .logo-sub { font-size: 11px; color: var(--muted); font-weight: 400; display: block; }
-    .nav-links {
-      display: flex; align-items: center; gap: 32px;
+    .nav-brand-logo {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .brand-mark {
+      width: 10px; height: 10px;
+      background: var(--accent-gold);
+      border-radius: 2px;
+      transform: rotate(45deg);
+    }
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dark-secondary);
+      letter-spacing: 0.12em;
+      border-left: 1px solid var(--border-dark);
+      padding-left: 12px;
+      text-transform: uppercase;
+    }
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 36px;
       list-style: none;
     }
-    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color 0.2s; }
-    .nav-links a:hover { color: var(--amber); }
-    .nav-cta { display: flex; gap: 10px; align-items: center; }
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .nav-cta .btn-outline { display: none; }
+    .nav-menu a {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-dark-secondary);
+      transition: color 0.2s ease;
+      letter-spacing: 0.01em;
+    }
+    .nav-menu a:hover { color: #FFFFFF; }
+    @media (max-width: 900px) { .nav-menu { display: none; } }
+
+    /* Hero Body */
+    .hero-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 70px 0 50px;
+      position: relative;
+      z-index: 10;
+    }
+    .hero-content {
+      max-width: 780px;
+      margin-bottom: 48px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    /* ── Hero ── */
-    .hero {
-      position: relative; padding: 100px 0 80px; overflow: hidden;
-      text-align: center;
+    /* Cinematic Vehicle Stage */
+    .hero-vehicle-stage {
+      position: relative;
+      margin-top: 24px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: radial-gradient(circle at 50% 30%, #1c2633 0%, #0d1218 80%);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8);
     }
-    .hero::before {
-      content: '';
-      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
-      width: 800px; height: 800px;
-      background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);
+    .hero-vehicle-stage img {
+      width: 100%;
+      height: 440px;
+      object-fit: cover;
+      object-position: center;
+      filter: contrast(1.05) brightness(0.95);
+    }
+    .hero-stage-lighting {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(180deg, rgba(219, 166, 92, 0.12) 0%, transparent 100%);
       pointer-events: none;
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
-      color: var(--amber2); font-size: 13px; font-weight: 600;
-      padding: 6px 16px; border-radius: 999px; margin-bottom: 28px;
+    .hero-laser-sweep {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, var(--accent-teal), transparent);
+      box-shadow: 0 0 16px var(--accent-teal);
+      animation: laserSweep 6s infinite ease-in-out;
+      opacity: 0.7;
     }
-    .hero-badge span { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
-    .hero h1 {
-      font-size: clamp(36px, 6vw, 70px); font-weight: 900;
-      line-height: 1.08; letter-spacing: -2px; margin-bottom: 24px;
+    @keyframes laserSweep {
+      0% { left: 5%; opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { left: 95%; opacity: 0; }
     }
-    .hero h1 em { font-style: normal; color: var(--amber); }
-    .hero p {
-      font-size: 18px; color: var(--muted); max-width: 620px;
-      margin: 0 auto 40px;
+    .hero-stage-badge {
+      position: absolute;
+      bottom: 24px; left: 24px;
+      background: rgba(16, 21, 28, 0.85);
+      border: 1px solid var(--border-dark);
+      padding: 10px 16px;
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-dark-secondary);
     }
-    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .hero-stats {
-      display: flex; justify-content: center; gap: 48px;
-      margin-top: 72px; padding-top: 40px;
-      border-top: 1px solid var(--border); flex-wrap: wrap;
-    }
-    .stat-item { text-align: center; }
-    .stat-num { font-size: 36px; font-weight: 900; color: var(--amber); display: block; }
-    .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .hero-stage-badge strong { color: var(--accent-teal); }
 
-    /* ── Scroll ticker ── */
-    .ticker-wrap {
-      background: var(--navy2); border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 0; overflow: hidden; white-space: nowrap;
+    /* Hero Bottom Stats Strip */
+    .hero-stats-strip {
+      border-top: 1px solid var(--border-dark);
+      padding: 24px 0;
+      background: rgba(16, 21, 28, 0.5);
     }
-    .ticker-track {
-      display: inline-flex; gap: 0;
-      animation: ticker 25s linear infinite;
+    .stats-strip-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
     }
-    .ticker-track:hover { animation-play-state: paused; }
-    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    .ticker-item {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 13px; color: var(--muted); padding: 0 32px;
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+      color: var(--text-dark-secondary);
+      border-right: 1px solid var(--border-dark);
+      padding-right: 20px;
     }
-    .ticker-item span.dot { color: var(--amber); font-size: 18px; line-height: 1; }
+    .stat-pill:last-child { border-right: none; }
+    .stat-pill strong { color: #FFFFFF; font-weight: 600; }
+    @media (max-width: 900px) {
+      .stats-strip-grid { grid-template-columns: 1fr 1fr; }
+      .stat-pill:nth-child(2) { border-right: none; }
+    }
+    @media (max-width: 580px) {
+      .stats-strip-grid { grid-template-columns: 1fr; }
+      .stat-pill { border-right: none; }
+    }
 
-    /* ── Modules ── */
-    .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px,1fr)); gap: 24px; }
-    .module-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 20px; padding: 32px; position: relative; overflow: hidden;
-      transition: all 0.3s;
+    /* ══════════════════════════════════════════════════════
+       SCENE 2: PLATFORM OVERVIEW (PORCELAIN WHITE)
+       ══════════════════════════════════════════════════════ */
+    .porcelain-scene {
+      background-color: var(--bg-porcelain);
+      color: var(--text-light-primary);
+      border-bottom: 1px solid var(--border-light);
     }
-    .module-card::before {
-      content: attr(data-num);
-      position: absolute; top: -10px; right: 20px;
-      font-size: 80px; font-weight: 900; color: rgba(255,255,255,0.03);
-      line-height: 1; pointer-events: none;
+    .editorial-header {
+      margin-bottom: 64px;
     }
-    .module-card:hover { border-color: rgba(245,158,11,0.5); transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.4); }
-    .module-icon {
-      width: 52px; height: 52px; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; margin-bottom: 20px;
+    .editorial-header-flex {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
     }
-    .module-title { font-size: 19px; font-weight: 700; margin-bottom: 10px; }
-    .module-desc { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
-    .module-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-    .tag {
-      font-size: 11px; font-weight: 600; padding: 3px 10px;
-      border-radius: 999px; border: 1px solid;
-    }
-    .tag-amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: var(--amber2); }
-    .tag-green { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: var(--green); }
-    .tag-blue  { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: var(--blue); }
-    .tag-purple{ background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.3); color: var(--purple); }
 
-    /* ── Workflow ── */
-    .workflow-section { background: var(--navy2); }
-    .workflow-steps {
-      display: flex; flex-wrap: wrap; gap: 0;
-      position: relative; margin-top: 56px;
+    /* Asymmetric Modules Composition */
+    .modules-composition {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
     }
-    .workflow-step {
-      flex: 1; min-width: 150px; text-align: center; padding: 24px 16px;
+    @media (max-width: 980px) {
+      .modules-composition { grid-template-columns: 1fr; }
+    }
+
+    .module-item {
+      background: var(--bg-porcelain-card);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 36px 32px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .module-item:last-child { margin-bottom: 0; }
+    .module-item:hover {
+      border-color: var(--border-light-hover);
+      box-shadow: 0 16px 40px rgba(16, 21, 28, 0.06);
+      transform: translateY(-3px);
+    }
+
+    .module-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .module-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .module-icon-wrap {
+      width: 44px; height: 44px;
+      border-radius: 6px;
+      background: var(--bg-porcelain-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light-primary);
+      transition: all 0.25s ease;
+    }
+    .module-item:hover .module-icon-wrap {
+      background: var(--text-light-primary);
+      color: #FFFFFF;
+    }
+    .module-title {
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--text-light-primary);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .module-desc {
+      font-size: 14.5px;
+      color: var(--text-light-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .module-micro-graphic {
+      background: var(--bg-porcelain-muted);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-light-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .module-micro-graphic strong { color: var(--text-light-primary); }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 3: THE COMMAND CENTER (GRAPHITE BLACK)
+       ══════════════════════════════════════════════════════ */
+    .command-center-scene {
+      background: var(--bg-graphite);
       position: relative;
     }
-    .workflow-step:not(:last-child)::after {
-      content: '→';
-      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
-      color: var(--amber); font-size: 20px; font-weight: 900; z-index: 1;
-    }
-    @media(max-width:640px){ .workflow-step:not(:last-child)::after{display:none} }
-    .step-num {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: var(--amber); color: var(--navy);
-      font-size: 18px; font-weight: 900;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 12px;
-    }
-    .step-icon { font-size: 28px; margin-bottom: 10px; }
-    .step-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-    .step-desc { font-size: 12px; color: var(--muted); }
-
-    /* ── Live Dashboard Preview ── */
-    .dashboard-preview {
-      background: var(--navy2); border: 1px solid var(--border);
-      border-radius: 24px; overflow: hidden; margin-top: 56px;
-    }
-    .db-topbar {
-      background: var(--navy3); border-bottom: 1px solid var(--border);
-      padding: 14px 24px; display: flex; align-items: center; gap: 10px;
-    }
-    .db-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .db-title { font-size: 14px; font-weight: 600; margin-left: 10px; color: var(--muted); }
-    .db-time { margin-left: auto; font-size: 12px; color: var(--muted); }
-    .db-body { padding: 24px; }
-    .db-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 16px; margin-bottom: 24px; }
-    .kpi {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 20px 18px;
-    }
-    .kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-    .kpi-value { font-size: 32px; font-weight: 900; line-height: 1; }
-    .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .kpi-green { color: var(--green); }
-    .kpi-amber { color: var(--amber); }
-    .kpi-red   { color: var(--red); }
-    .kpi-blue  { color: var(--blue); }
-    .db-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media(max-width:640px){ .db-row{grid-template-columns:1fr} }
-    .db-panel {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 20px;
-    }
-    .db-panel-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
-    .vehicle-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px;
-    }
-    .vehicle-row:last-child { border-bottom: none; }
-    .status-pill {
-      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
-    }
-    .s-done { background: rgba(16,185,129,0.15); color: var(--green); }
-    .s-prog { background: rgba(245,158,11,0.15); color: var(--amber); }
-    .s-pend { background: rgba(239,68,68,0.15); color: var(--red); }
-    .s-sched{ background: rgba(59,130,246,0.15); color: var(--blue); }
-    .progress-row { margin-bottom: 14px; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
-    .progress-label span:last-child { color: var(--muted); font-size: 12px; }
-    .progress-bar { height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 999px; transition: width 1.5s ease; }
-
-    /* ── Roles ── */
-    .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; }
-    .role-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px 20px; text-align: center;
-      transition: all 0.25s;
-    }
-    .role-card:hover { border-color: rgba(245,158,11,0.4); transform: translateY(-3px); }
-    .role-icon { font-size: 36px; margin-bottom: 12px; display: block; }
-    .role-name { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-    .role-perms { font-size: 12px; color: var(--muted); line-height: 1.6; }
-
-    /* ── Tech Stack ── */
-    .tech-wrap {
-      display: flex; flex-wrap: wrap; gap: 16px; margin-top: 48px;
-    }
-    .tech-pill {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 12px 20px;
-      font-size: 14px; font-weight: 600; transition: all 0.2s;
-    }
-    .tech-pill:hover { border-color: var(--amber); color: var(--amber); }
-    .tech-pill span { font-size: 20px; }
-
-    /* ── Timeline / Phases ── */
-    .phases { margin-top: 56px; }
-    .phase-item {
-      display: flex; gap: 24px; margin-bottom: 32px;
+    .browser-frame {
+      background: var(--bg-charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85);
       position: relative;
     }
-    .phase-item:not(:last-child)::after {
-      content: '';
-      position: absolute; left: 23px; top: 50px;
-      width: 2px; height: calc(100% + 8px);
-      background: var(--border);
+    .browser-topbar {
+      height: 48px;
+      background: #131920;
+      border-bottom: 1px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 14px;
     }
-    .phase-num {
-      flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
-      border: 2px solid var(--amber); background: var(--navy);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; font-weight: 900; color: var(--amber);
-      position: relative; z-index: 1;
+    .traffic-dots {
+      display: flex;
+      gap: 6px;
     }
-    .phase-content { padding-top: 8px; }
-    .phase-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-    .phase-desc { font-size: 14px; color: var(--muted); }
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .dot-red { background: #E05252; }
+    .dot-amber { background: #E5A93C; }
+    .dot-green { background: #3EC972; }
+    .browser-address {
+      flex: 1;
+      max-width: 440px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-dark);
+      border-radius: 4px;
+      padding: 4px 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dark-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-    /* ── CTA ── */
-    .cta-section {
-      background: linear-gradient(135deg, var(--navy2) 0%, var(--navy3) 100%);
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      text-align: center; padding: 96px 0;
+    /* Dashboard Inner Layout */
+    .db-container {
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 28px;
+      background: var(--bg-charcoal);
     }
-    .cta-section h2 { font-size: clamp(28px,4vw,48px); font-weight: 900; margin-bottom: 16px; }
-    .cta-section p { font-size: 17px; color: var(--muted); margin-bottom: 40px; }
-    .cta-cards {
-      display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;
+    @media (max-width: 900px) {
+      .db-container { grid-template-columns: 1fr; padding: 20px; }
     }
-    .cta-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px 32px; min-width: 200px;
-    }
-    .cta-card-num { font-size: 36px; font-weight: 900; color: var(--amber); }
-    .cta-card-label { font-size: 13px; color: var(--muted); }
 
-    /* ── Footer ── */
+    .db-sidebar {
+      border-right: 1px solid var(--border-dark);
+      padding-right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .db-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dark-secondary);
+      transition: all 0.2s ease;
+    }
+    .db-nav-link.active {
+      background: rgba(219, 166, 92, 0.1);
+      color: var(--accent-gold);
+      border-left: 2px solid var(--accent-gold);
+    }
+    .db-nav-link:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.03); }
+
+    /* KPI Metrics 6 Grid */
+    .db-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) {
+      .db-metrics-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .db-metrics-grid { grid-template-columns: 1fr; }
+    }
+
+    .db-metric-card {
+      background: var(--bg-charcoal-card);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 18px 20px;
+      position: relative;
+    }
+    .db-metric-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dark-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .db-metric-val {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+    .db-metric-meta {
+      font-size: 12px;
+      color: var(--text-dark-secondary);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .meta-teal { color: var(--accent-teal); }
+    .meta-gold { color: var(--accent-gold); }
+
+    /* Dashboard Activity & Bay Performance Split */
+    .db-content-split {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 20px;
+    }
+    @media (max-width: 900px) {
+      .db-content-split { grid-template-columns: 1fr; }
+    }
+
+    .db-card-panel {
+      background: var(--bg-charcoal-card);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 22px;
+    }
+    .db-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-family: var(--font-display);
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    /* Live Bay Progress Bars */
+    .bay-row {
+      margin-bottom: 14px;
+    }
+    .bay-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      margin-bottom: 6px;
+    }
+    .bay-track {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bay-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+    .fill-gold { background: var(--accent-gold); }
+    .fill-teal { background: var(--accent-teal); }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 4: VEHICLE INTELLIGENCE & BOOKING (PORCELAIN)
+       ══════════════════════════════════════════════════════ */
+    .vehicle-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 980px) {
+      .vehicle-split-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+
+    .vehicle-profile-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(16, 21, 28, 0.08);
+    }
+    .vehicle-profile-img {
+      height: 220px;
+      width: 100%;
+      object-fit: cover;
+      background: #111;
+    }
+    .vehicle-profile-body {
+      padding: 28px;
+    }
+    .vehicle-id-badge {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-light-primary);
+      background: var(--bg-porcelain-muted);
+      padding: 6px 14px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-light);
+    }
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      font-size: 13px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 16px;
+    }
+    .spec-item span {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-light-muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .spec-item strong {
+      color: var(--text-light-primary);
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 5: AI INSPECTION EXPERIENCE (DARK GRAPHITE)
+       ══════════════════════════════════════════════════════ */
+    .ai-scene {
+      background: var(--bg-graphite);
+      position: relative;
+    }
+    .ai-interface-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
+    }
+    @media (max-width: 980px) {
+      .ai-interface-grid { grid-template-columns: 1fr; }
+    }
+
+    .ai-scanner-frame {
+      position: relative;
+      border: 1px solid rgba(57, 199, 176, 0.35);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #080C10;
+      box-shadow: 0 0 50px rgba(57, 199, 176, 0.15);
+    }
+    .ai-scanner-frame img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      opacity: 0.88;
+    }
+    .ai-crosshairs {
+      position: absolute;
+      top: 55%; left: 35%;
+      width: 30%; height: 18%;
+      border: 2px solid var(--accent-teal);
+      border-radius: 4px;
+      box-shadow: 0 0 20px rgba(57, 199, 176, 0.5);
+      pointer-events: none;
+    }
+    .ai-crosshairs::after {
+      content: 'OCR TARGET LOCKED';
+      position: absolute;
+      top: -18px; left: 0;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--accent-teal);
+      letter-spacing: 0.1em;
+      background: rgba(8, 12, 16, 0.9);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+
+    .ai-telemetry-panel {
+      background: var(--bg-charcoal-card);
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 32px;
+    }
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-dark);
+      font-size: 13.5px;
+    }
+    .telemetry-row:last-child { border-bottom: none; }
+    .telemetry-row span { color: var(--text-dark-secondary); }
+    .telemetry-row strong { font-family: var(--font-mono); color: #FFFFFF; }
+    .status-pill-teal {
+      background: var(--accent-teal-muted);
+      color: var(--accent-teal);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 6: OPERATIONAL WORKFLOW (PORCELAIN WHITE)
+       ══════════════════════════════════════════════════════ */
+    .timeline-strip {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 900px) {
+      .timeline-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .timeline-strip { grid-template-columns: 1fr; }
+    }
+
+    .stage-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 22px 16px;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .stage-card:hover {
+      border-color: var(--text-light-primary);
+      transform: translateY(-2px);
+    }
+    .stage-num {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+    .stage-name {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-light-primary);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .stage-desc {
+      font-size: 11.5px;
+      color: var(--text-light-secondary);
+      line-height: 1.5;
+    }
+
+    /* Testing Bays Telemetry Cards 4 Grid */
+    .bays-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .bays-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .bays-grid { grid-template-columns: 1fr; }
+    }
+
+    .bay-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .bay-card-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-light-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bay-reading {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--text-light-secondary);
+      line-height: 1.6;
+    }
+    .bay-pass-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #0E8065;
+      background: rgba(14, 128, 101, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 7: WORKFORCE & GPS INTELLIGENCE (DARK)
+       ══════════════════════════════════════════════════════ */
+    .workforce-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .workforce-split { grid-template-columns: 1fr; }
+    }
+
+    .gps-console-frame {
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-charcoal);
+      position: relative;
+    }
+    .gps-console-frame img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      opacity: 0.85;
+    }
+    .geofence-overlay-box {
+      position: absolute;
+      top: 20px; left: 20px; right: 20px;
+      background: rgba(16, 21, 28, 0.85);
+      border: 1px solid var(--border-dark);
+      padding: 14px 18px;
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+    }
+
+    .staff-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      margin-top: 20px;
+    }
+    .staff-table th {
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--text-dark-secondary);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      border-bottom: 1px solid var(--border-dark);
+    }
+    .staff-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-dark);
+      color: #FFFFFF;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 8: DOCUMENTATION & DIGITAL CERTIFICATES (PORCELAIN)
+       ══════════════════════════════════════════════════════ */
+    .doc-panels-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 900px) {
+      .doc-panels-grid { grid-template-columns: 1fr; }
+    }
+
+    .doc-sheet {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 36px;
+      box-shadow: 0 16px 40px rgba(16, 21, 28, 0.05);
+      font-family: var(--font-body);
+    }
+    .doc-sheet-head {
+      border-bottom: 2px solid var(--text-light-primary);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .doc-stamp {
+      border: 1.5px solid var(--accent-gold);
+      color: #8F6B38;
+      padding: 2px 10px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      border-radius: 4px;
+    }
+
+    .reminder-strip {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .reminder-nodes {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .rem-node {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      padding: 6px 14px;
+      border-radius: 4px;
+      background: var(--bg-porcelain-muted);
+      border: 1px solid var(--border-light);
+      color: var(--text-light-secondary);
+    }
+    .rem-node.urgent {
+      background: rgba(224, 82, 82, 0.1);
+      border-color: rgba(224, 82, 82, 0.3);
+      color: #C0392B;
+      font-weight: 700;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 9: ARCHITECTURE & ACCESS CONTROL (CHARCOAL)
+       ══════════════════════════════════════════════════════ */
+    .arch-scene {
+      background: var(--bg-charcoal);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    .arch-diagram-wrap {
+      background: var(--bg-graphite);
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 40px;
+      margin-bottom: 48px;
+    }
+    .arch-tiers-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .arch-node-block {
+      background: var(--bg-charcoal-card);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 20px 24px;
+      text-align: center;
+      flex: 1;
+      min-width: 180px;
+    }
+    .arch-node-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 4px;
+    }
+    .arch-node-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dark-secondary);
+    }
+    .arch-connector-arrow {
+      color: var(--accent-gold);
+      font-family: var(--font-mono);
+      font-size: 18px;
+    }
+
+    /* Access Matrix Horizontal Cards */
+    .roles-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .roles-matrix-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .roles-matrix-grid { grid-template-columns: 1fr; }
+    }
+
+    .role-matrix-card {
+      background: var(--bg-graphite);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.25s ease;
+    }
+    .role-matrix-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+    .role-card-name {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .role-card-scope {
+      font-size: 12px;
+      color: var(--text-dark-secondary);
+      line-height: 1.5;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SCENE 10: SIGNATURE ENDING & CALL TO ACTION (GRAPHITE)
+       ══════════════════════════════════════════════════════ */
+    .ending-scene {
+      background: var(--bg-graphite);
+      text-align: center;
+      padding: 140px 0 100px;
+      position: relative;
+    }
+    .ending-vehicle-silhouette {
+      max-width: 840px;
+      margin: 0 auto 48px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-dark);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+      position: relative;
+    }
+    .ending-vehicle-silhouette img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+    }
+
+    /* Premium Corporate Footer */
     footer {
-      background: var(--navy); border-top: 1px solid var(--border);
-      padding: 48px 0 32px;
+      background: #0A0D12;
+      border-top: 1px solid var(--border-dark);
+      padding: 60px 0 40px;
+      font-size: 13.5px;
     }
-    .footer-inner {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      flex-wrap: wrap; gap: 32px; margin-bottom: 40px;
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      gap: 32px;
     }
-    .footer-logo-area .logo-text { font-size: 20px; }
-    .footer-desc { font-size: 14px; color: var(--muted); margin-top: 10px; max-width: 300px; }
-    .footer-links h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 14px; }
-    .footer-links ul { list-style: none; }
-    .footer-links li { margin-bottom: 10px; }
-    .footer-links a { font-size: 14px; color: var(--muted); transition: color 0.2s; }
-    .footer-links a:hover { color: var(--amber); }
-    .footer-bottom {
-      display: flex; justify-content: space-between; align-items: center;
-      padding-top: 24px; border-top: 1px solid var(--border);
-      flex-wrap: wrap; gap: 12px;
+    .footer-col h4 {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
     }
-    .footer-bottom p { font-size: 13px; color: var(--muted); }
-    .footer-badges { display: flex; gap: 10px; }
-    .fbadge {
-      font-size: 11px; font-weight: 600; padding: 4px 10px;
-      border-radius: 6px; background: var(--card); border: 1px solid var(--border);
-      color: var(--muted);
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a {
+      color: var(--text-dark-secondary);
+      transition: color 0.2s ease;
     }
-
-    /* ── Animations ── */
-    .fade-up { opacity: 0; transform: translateY(32px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .footer-col a:hover { color: #FFFFFF; }
+    .footer-bottom-bar {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-dark-muted);
+      font-size: 12px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
   </style>
 </head>
 <body>
 
-<!-- ══ NAVBAR ══ -->
-<nav>
-  <div class="container nav-inner">
-    <div class="logo">
-      <div class="logo-icon">🚗</div>
-      <div>
-        <div class="logo-text">ATS<span style="color:var(--amber)">Pro</span></div>
-        <span class="logo-sub">Operations Management System</span>
-      </div>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#modules">Modules</a></li>
-      <li><a href="#dashboard">Dashboard</a></li>
-      <li><a href="#workflow">Workflow</a></li>
-      <li><a href="#roles">Roles</a></li>
-      <li><a href="#tech">Tech Stack</a></li>
-      <li><a href="#phases">Phases</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="#phases" class="btn btn-outline">View Roadmap</a>
-      <a href="ats-app/index.html" class="btn btn-primary" style="background:#10b981;color:#fff">🚀 Launch Live App →</a>
-    </div>
-  </div>
-</nav>
-
-<!-- ══ HERO ══ -->
-<section class="hero">
-  <div class="container">
-    <div class="hero-badge"><span></span> Government-Authorized ATS Platform</div>
-    <h1>Vehicle Fitness Testing<br><em>Fully Digitized.</em></h1>
-    <p>A centralized operations platform for Automated Testing Stations — managing bookings, workforce, AI-powered inspections, test reports and customer communication in one place.</p>
-    <div class="hero-btns">
-      <a href="ats-app/index.html" class="btn btn-primary" style="background:var(--amber);color:#0b1523;font-size:16px;padding:16px 32px">🚀 Launch Working ATS App →</a>
-      <a href="#modules" class="btn btn-outline" style="font-size:16px;padding:16px 28px">Explore Modules</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-num">8</span>
-        <span class="stat-label">Integrated Modules</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">25+</span>
-        <span class="stat-label">Employee Capacity</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">AI</span>
-        <span class="stat-label">OCR Number Plate</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">GPS</span>
-        <span class="stat-label">Attendance Verified</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">WA</span>
-        <span class="stat-label">WhatsApp Automated</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ TICKER ══ -->
-<div class="ticker-wrap">
-  <div class="ticker-track" id="ticker">
-    <span class="ticker-item"><span class="dot">●</span> Vehicle Booking & Scheduling</span>
-    <span class="ticker-item"><span class="dot">●</span> GPS-Verified Attendance</span>
-    <span class="ticker-item"><span class="dot">●</span> Brake · Light · Speed · Suspension Tests</span>
-    <span class="ticker-item"><span class="dot">●</span> AI Number Plate OCR</span>
-    <span class="ticker-item"><span class="dot">●</span> Payroll & Leave Management</span>
-    <span class="ticker-item"><span class="dot">●</span> WhatsApp Business API</span>
-    <span class="ticker-item"><span class="dot">●</span> Fitness Certificate Expiry Tracking</span>
-    <span class="ticker-item"><span class="dot">●</span> Admin Dashboard & Analytics</span>
-    <span class="ticker-item"><span class="dot">●</span> EOD Reporting</span>
-    <span class="ticker-item"><span class="dot">●</span> Role-Based Access Control</span>
-    <!-- duplicate for seamless loop -->
-    <span class="ticker-item"><span class="dot">●</span> Vehicle Booking & Scheduling</span>
-    <span class="ticker-item"><span class="dot">●</span> GPS-Verified Attendance</span>
-    <span class="ticker-item"><span class="dot">●</span> Brake · Light · Speed · Suspension Tests</span>
-    <span class="ticker-item"><span class="dot">●</span> AI Number Plate OCR</span>
-    <span class="ticker-item"><span class="dot">●</span> Payroll & Leave Management</span>
-    <span class="ticker-item"><span class="dot">●</span> WhatsApp Business API</span>
-    <span class="ticker-item"><span class="dot">●</span> Fitness Certificate Expiry Tracking</span>
-    <span class="ticker-item"><span class="dot">●</span> Admin Dashboard & Analytics</span>
-    <span class="ticker-item"><span class="dot">●</span> EOD Reporting</span>
-    <span class="ticker-item"><span class="dot">●</span> Role-Based Access Control</span>
-  </div>
-</div>
-
-<!-- ══ MODULES ══ -->
-<section class="section" id="modules">
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">📦 Functional Modules</div>
-      <h2 class="section-title">Everything an ATS Needs —<br><span class="highlight">One Platform.</span></h2>
-      <p class="section-desc">8 deeply integrated modules covering every aspect of vehicle fitness testing operations.</p>
-    </div>
-    <div class="module-grid" style="margin-top:48px">
-
-      <div class="module-card fade-up" data-num="01">
-        <div class="module-icon" style="background:rgba(245,158,11,0.15)">📋</div>
-        <div class="module-title">Vehicle Booking & Customer Management</div>
-        <div class="module-desc">Register customers and vehicles, schedule fitness test appointments, generate unique booking IDs, assign operators and track booking status end-to-end.</div>
-        <div class="module-tags">
-          <span class="tag tag-amber">Booking ID</span>
-          <span class="tag tag-green">LMV / HMV</span>
-          <span class="tag tag-blue">Audit Trail</span>
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 1: CINEMATIC HERO (0–10 SECONDS)
+       ══════════════════════════════════════════════════════ -->
+  <header class="hero-scene" id="hero">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+        <div class="nav-brand">
+          <div class="brand-mark"></div>
+          <span class="nav-brand-logo">ATS PRO</span>
+          <span class="brand-sub">PRECISION IN MOTION</span>
         </div>
-      </div>
-
-      <div class="module-card fade-up" data-num="02">
-        <div class="module-icon" style="background:rgba(16,185,129,0.15)">📍</div>
-        <div class="module-title">GPS Attendance & Employee Management</div>
-        <div class="module-desc">Mobile GPS punch-in/out with geofence validation for up to 25 employees. Daily records, late tracking, EOD reports and anomaly flagging for suspicious check-ins.</div>
-        <div class="module-tags">
-          <span class="tag tag-green">GPS Geofence</span>
-          <span class="tag tag-amber">EOD Reports</span>
-          <span class="tag tag-purple">25 Employees</span>
-        </div>
-      </div>
-
-      <div class="module-card fade-up" data-num="03">
-        <div class="module-icon" style="background:rgba(59,130,246,0.15)">⚙️</div>
-        <div class="module-title">Test-wise Task Allocation & Workflow</div>
-        <div class="module-desc">Configure any number of testing operations. Each operator sees only their assigned queue. Real-time pipeline: Scheduled → Assigned → In Progress → Completed → Verified.</div>
-        <div class="module-tags">
-          <span class="tag tag-blue">Configurable Ops</span>
-          <span class="tag tag-amber">Real-time</span>
-          <span class="tag tag-green">Role Isolated</span>
-        </div>
-      </div>
-
-      <div class="module-card fade-up" data-num="04">
-        <div class="module-icon" style="background:rgba(139,92,246,0.15)">🤖</div>
-        <div class="module-title">AI Camera & Number Plate OCR</div>
-        <div class="module-desc">Snap a vehicle photo on mobile — AI extracts the registration number instantly. Confidence scoring, booking auto-match, duplicate detection and original evidence retained.</div>
-        <div class="module-tags">
-          <span class="tag tag-purple">AI / OCR</span>
-          <span class="tag tag-amber">Indian Formats</span>
-          <span class="tag tag-blue">Confidence Score</span>
-        </div>
-      </div>
-
-      <div class="module-card fade-up" data-num="05">
-        <div class="module-icon" style="background:rgba(245,158,11,0.15)">📄</div>
-        <div class="module-title">Test Reports & Documentation</div>
-        <div class="module-desc">Configurable report templates per test type. Submit readings, photos and observations. Admin review, approval or return for correction — full history preserved.</div>
-        <div class="module-tags">
-          <span class="tag tag-amber">PDF Export</span>
-          <span class="tag tag-green">Tamper-proof</span>
-          <span class="tag tag-blue">Per Test Type</span>
-        </div>
-      </div>
-
-      <div class="module-card fade-up" data-num="06">
-        <div class="module-icon" style="background:rgba(16,185,129,0.15)">🎖️</div>
-        <div class="module-title">Fitness Certificate & Expiry Tracking</div>
-        <div class="module-desc">Record certificate details and validity dates. Automated reminders at 30, 15, 7 and 1 day before expiry. Dashboard view of upcoming and expired certificates.</div>
-        <div class="module-tags">
-          <span class="tag tag-green">Auto Reminders</span>
-          <span class="tag tag-amber">Expiry Alerts</span>
-          <span class="tag tag-blue">History</span>
-        </div>
-      </div>
-
-      <div class="module-card fade-up" data-num="07">
-        <div class="module-icon" style="background:rgba(37,211,102,0.12)">💬</div>
-        <div class="module-title">WhatsApp Business API</div>
-        <div class="module-desc">Official Meta WhatsApp integration. Automated booking confirmations, test reminders, completion alerts and expiry reminders. Delivery tracking and failed message queue.</div>
-        <div class="module-tags">
-          <span class="tag tag-green">Meta Official API</span>
-          <span class="tag tag-amber">Bulk Messaging</span>
-          <span class="tag tag-purple">Scheduled</span>
-        </div>
-      </div>
-
-      <div class="module-card fade-up" data-num="08">
-        <div class="module-icon" style="background:rgba(59,130,246,0.15)">📊</div>
-        <div class="module-title">Admin Dashboard & Analytics</div>
-        <div class="module-desc">Real-time KPIs: bookings, arrivals, test progress, attendance and expiry alerts. Date-wise analytics, employee productivity, Excel/PDF export and full activity audit logs.</div>
-        <div class="module-tags">
-          <span class="tag tag-blue">Real-time KPIs</span>
-          <span class="tag tag-amber">Excel / PDF</span>
-          <span class="tag tag-green">Audit Logs</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══ DASHBOARD PREVIEW ══ -->
-<section class="section workflow-section" id="dashboard">
-  <div class="container">
-    <div class="fade-up" style="text-align:center">
-      <div class="section-label">📊 Live Preview</div>
-      <h2 class="section-title">Admin Dashboard —<br><span class="highlight">Complete Operational View</span></h2>
-      <p class="section-desc" style="margin:0 auto">Real-time visibility into every booking, test, employee and certificate from one screen.</p>
-    </div>
-
-    <div class="dashboard-preview fade-up">
-      <div class="db-topbar">
-        <div class="db-dot" style="background:#ff5f57"></div>
-        <div class="db-dot" style="background:#febc2e"></div>
-        <div class="db-dot" style="background:#28c840"></div>
-        <div class="db-title">ATS Pro — Admin Dashboard</div>
-        <div class="db-time" id="live-time">Loading...</div>
-      </div>
-      <div class="db-body">
-        <div class="db-kpis">
-          <div class="kpi">
-            <div class="kpi-label">Today's Bookings</div>
-            <div class="kpi-value kpi-amber">24</div>
-            <div class="kpi-sub">↑ 4 more than yesterday</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Testing Completed</div>
-            <div class="kpi-value kpi-green">18</div>
-            <div class="kpi-sub">75% completion rate</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Pending Tests</div>
-            <div class="kpi-value kpi-amber">6</div>
-            <div class="kpi-sub">3 in progress now</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Absent Today</div>
-            <div class="kpi-value kpi-red">2</div>
-            <div class="kpi-sub">23 / 25 present</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Expiry Alerts</div>
-            <div class="kpi-value kpi-red">7</div>
-            <div class="kpi-sub">3 expire this week</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Reports Pending</div>
-            <div class="kpi-value kpi-blue">4</div>
-            <div class="kpi-sub">Awaiting approval</div>
-          </div>
-        </div>
-
-        <div class="db-row">
-          <div class="db-panel">
-            <div class="db-panel-title">Today's Vehicles</div>
-            <div class="vehicle-row">
-              <span>MP04 AB 1234</span>
-              <span class="status-pill s-done">Completed</span>
-            </div>
-            <div class="vehicle-row">
-              <span>CG16 CD 5678</span>
-              <span class="status-pill s-prog">In Progress</span>
-            </div>
-            <div class="vehicle-row">
-              <span>MP09 EF 9012</span>
-              <span class="status-pill s-pend">Pending</span>
-            </div>
-            <div class="vehicle-row">
-              <span>UP32 GH 3456</span>
-              <span class="status-pill s-done">Completed</span>
-            </div>
-            <div class="vehicle-row">
-              <span>MH12 KL 7890</span>
-              <span class="status-pill s-sched">Scheduled</span>
-            </div>
-          </div>
-
-          <div class="db-panel">
-            <div class="db-panel-title">Test-wise Progress</div>
-            <div class="progress-row">
-              <div class="progress-label"><span>🛑 Brake Test</span><span>16 / 20</span></div>
-              <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--green)"></div></div>
-            </div>
-            <div class="progress-row">
-              <div class="progress-label"><span>💡 Light Test</span><span>14 / 20</span></div>
-              <div class="progress-bar"><div class="progress-fill" style="width:70%;background:var(--amber)"></div></div>
-            </div>
-            <div class="progress-row">
-              <div class="progress-label"><span>⚡ Speed Test</span><span>18 / 20</span></div>
-              <div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--blue)"></div></div>
-            </div>
-            <div class="progress-row">
-              <div class="progress-label"><span>🔧 Suspension</span><span>12 / 20</span></div>
-              <div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--purple)"></div></div>
-            </div>
-            <div class="progress-row" style="margin:0">
-              <div class="progress-label"><span>📋 Other Inspection</span><span>8 / 10</span></div>
-              <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--green)"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ WORKFLOW ══ -->
-<section class="section" id="workflow">
-  <div class="container">
-    <div class="fade-up" style="text-align:center">
-      <div class="section-label">🔄 End-to-End Workflow</div>
-      <h2 class="section-title">From Booking to <span class="highlight">Certificate</span></h2>
-      <p class="section-desc" style="margin:0 auto">Seven-stage pipeline — every step tracked, every action logged.</p>
-    </div>
-    <div class="workflow-steps fade-up">
-      <div class="workflow-step">
-        <div class="step-icon">📋</div>
-        <div class="step-num">1</div>
-        <div class="step-title">Customer Booking</div>
-        <div class="step-desc">Vehicle & customer registered. Booking ID generated.</div>
-      </div>
-      <div class="workflow-step">
-        <div class="step-icon">👷</div>
-        <div class="step-num">2</div>
-        <div class="step-title">Test Assignment</div>
-        <div class="step-desc">Operations assigned to brake, light, speed operators.</div>
-      </div>
-      <div class="workflow-step">
-        <div class="step-icon">🔬</div>
-        <div class="step-num">3</div>
-        <div class="step-title">Inspection</div>
-        <div class="step-desc">Operators perform tests, enter readings.</div>
-      </div>
-      <div class="workflow-step">
-        <div class="step-icon">🤖</div>
-        <div class="step-num">4</div>
-        <div class="step-title">AI Evidence</div>
-        <div class="step-desc">Camera OCR, photos and documents attached.</div>
-      </div>
-      <div class="workflow-step">
-        <div class="step-icon">📄</div>
-        <div class="step-num">5</div>
-        <div class="step-title">Test Reports</div>
-        <div class="step-desc">Individual reports submitted and reviewed.</div>
-      </div>
-      <div class="workflow-step">
-        <div class="step-icon">🎖️</div>
-        <div class="step-num">6</div>
-        <div class="step-title">Final Approval</div>
-        <div class="step-desc">Certificate details recorded with expiry date.</div>
-      </div>
-      <div class="workflow-step">
-        <div class="step-icon">💬</div>
-        <div class="step-num">7</div>
-        <div class="step-title">Expiry & Alerts</div>
-        <div class="step-desc">WhatsApp reminders at 30, 15, 7, 1 day before.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ ROLES ══ -->
-<section class="section workflow-section" id="roles">
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">🔐 Access Control</div>
-      <h2 class="section-title">Role-Based Access —<br><span class="highlight">Right Person, Right Data.</span></h2>
-      <p class="section-desc">8 roles with scoped permissions. Operators never see another department's records.</p>
-    </div>
-    <div class="roles-grid fade-up" style="margin-top:48px">
-      <div class="role-card">
-        <span class="role-icon">👑</span>
-        <div class="role-name">Super Admin</div>
-        <div class="role-perms">Full system access, configuration, all records & user management</div>
-      </div>
-      <div class="role-card">
-        <span class="role-icon">🧑‍💼</span>
-        <div class="role-name">Admin / Manager</div>
-        <div class="role-perms">Bookings, employees, reports, payroll and dashboards</div>
-      </div>
-      <div class="role-card">
-        <span class="role-icon">🖥️</span>
-        <div class="role-name">Reception Staff</div>
-        <div class="role-perms">Customer & vehicle registration, booking creation</div>
-      </div>
-      <div class="role-card">
-        <span class="role-icon">🛑</span>
-        <div class="role-name">Brake Test Op.</div>
-        <div class="role-perms">Only assigned brake-test queue, readings & reports</div>
-      </div>
-      <div class="role-card">
-        <span class="role-icon">💡</span>
-        <div class="role-name">Light Test Op.</div>
-        <div class="role-perms">Only assigned light-test queue, readings & reports</div>
-      </div>
-      <div class="role-card">
-        <span class="role-icon">⚡</span>
-        <div class="role-name">Speed Test Op.</div>
-        <div class="role-perms">Only assigned speed-test queue, readings & reports</div>
-      </div>
-      <div class="role-card">
-        <span class="role-icon">🔧</span>
-        <div class="role-name">Other Operators</div>
-        <div class="role-perms">Only their configured testing operations</div>
-      </div>
-      <div class="role-card">
-        <span class="role-icon">💰</span>
-        <div class="role-name">HR / Payroll</div>
-        <div class="role-perms">Attendance, leave, salary configuration & payroll</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ TECH STACK ══ -->
-<section class="section" id="tech">
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">🛠️ Technology Stack</div>
-      <h2 class="section-title">Built on <span class="highlight">Modern Infrastructure</span></h2>
-      <p class="section-desc">Production-grade technologies — scalable, secure and maintainable.</p>
-    </div>
-    <div class="tech-wrap fade-up">
-      <div class="tech-pill"><span>⚛️</span> React + TypeScript</div>
-      <div class="tech-pill"><span>🎨</span> Tailwind CSS + shadcn/ui</div>
-      <div class="tech-pill"><span>🟢</span> Node.js + Express</div>
-      <div class="tech-pill"><span>🐘</span> PostgreSQL</div>
-      <div class="tech-pill"><span>🔐</span> JWT + RBAC Auth</div>
-      <div class="tech-pill"><span>🗄️</span> S3-Compatible Storage</div>
-      <div class="tech-pill"><span>🤖</span> Google Vision / OCR</div>
-      <div class="tech-pill"><span>💬</span> Meta WhatsApp Cloud API</div>
-      <div class="tech-pill"><span>📍</span> GPS Geofence API</div>
-      <div class="tech-pill"><span>📱</span> Progressive Web App (PWA)</div>
-      <div class="tech-pill"><span>☁️</span> Cloud VPS + TLS</div>
-      <div class="tech-pill"><span>🔄</span> Background Job Queue</div>
-    </div>
-
-    <!-- Architecture visual -->
-    <div class="card fade-up" style="margin-top:40px;padding:40px">
-      <div style="text-align:center;margin-bottom:32px">
-        <div class="section-label" style="margin:0 auto 0">Architecture Overview</div>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;align-items:center">
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--blue)">🖥️ Admin Dashboard<br><span style="font-weight:400;font-size:11px;color:var(--muted)">React + TypeScript</span></div>
-          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--blue)">📱 Employee PWA<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Mobile-first PWA</span></div>
-          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--blue)">🖥️ Reception Portal<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Web Interface</span></div>
-        </div>
-        <div style="font-size:28px;color:var(--amber)">⇄</div>
-        <div style="background:rgba(245,158,11,0.1);border:2px solid rgba(245,158,11,0.4);border-radius:16px;padding:20px 28px;text-align:center">
-          <div style="font-size:14px;font-weight:800;color:var(--amber);margin-bottom:8px">⚙️ Backend API</div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.8">Node.js + Express<br>Auth · RBAC · Workflows<br>Background Jobs</div>
-        </div>
-        <div style="font-size:28px;color:var(--amber)">⇄</div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--green)">🐘 PostgreSQL<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Primary Database</span></div>
-          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--green)">🗄️ S3 Storage<br><span style="font-weight:400;font-size:11px;color:var(--muted)">Images & Reports</span></div>
-          <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:12px 20px;text-align:center;font-size:13px;font-weight:700;color:var(--purple)">🤖 AI / OCR · 💬 WhatsApp · 📍 GPS<br><span style="font-weight:400;font-size:11px;color:var(--muted)">External Services</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ PHASES ══ -->
-<section class="section workflow-section" id="phases">
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">🗺️ Implementation Roadmap</div>
-      <h2 class="section-title">Phased Delivery —<br><span class="highlight">Structured & Predictable</span></h2>
-      <p class="section-desc">6 clearly defined phases from discovery to production rollout.</p>
-    </div>
-    <div class="phases fade-up">
-      <div class="phase-item">
-        <div class="phase-num">1</div>
-        <div class="phase-content">
-          <div class="phase-title">🔍 Discovery & Validation</div>
-          <div class="phase-desc">Confirm ATS regulatory context, test types, equipment interfaces, report formats, existing workflows and government API requirements.</div>
-        </div>
-      </div>
-      <div class="phase-item">
-        <div class="phase-num">2</div>
-        <div class="phase-content">
-          <div class="phase-title">⚙️ Core Operations</div>
-          <div class="phase-desc">Authentication, RBAC, customer/vehicle records, booking system, test-wise task allocation, operator dashboards and admin dashboard.</div>
-        </div>
-      </div>
-      <div class="phase-item">
-        <div class="phase-num">3</div>
-        <div class="phase-content">
-          <div class="phase-title">👥 Workforce Management</div>
-          <div class="phase-desc">GPS attendance with geofence validation, EOD reporting, payroll configuration and payslip generation.</div>
-        </div>
-      </div>
-      <div class="phase-item">
-        <div class="phase-num">4</div>
-        <div class="phase-content">
-          <div class="phase-title">🔬 Testing & Evidence</div>
-          <div class="phase-desc">Test forms, camera capture, OCR-assisted number plate extraction, test report submission and admin review workflow.</div>
-        </div>
-      </div>
-      <div class="phase-item">
-        <div class="phase-num">5</div>
-        <div class="phase-content">
-          <div class="phase-title">🤖 Follow-up Automation</div>
-          <div class="phase-desc">Certificate validity tracking, background expiry jobs (30/15/7/1 day reminders) and official WhatsApp Business API integration.</div>
-        </div>
-      </div>
-      <div class="phase-item">
-        <div class="phase-num">6</div>
-        <div class="phase-content">
-          <div class="phase-title">✅ Validation & Rollout</div>
-          <div class="phase-desc">Role permission testing, audit trail verification, backup/restore testing, UAT with client, edge-case handling and production deployment.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ CTA ══ -->
-<section class="cta-section" id="cta">
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label" style="margin:0 auto 20px">🚀 Get Started</div>
-      <h2>Ready to Digitize Your <span class="highlight">ATS Operations?</span></h2>
-      <p>From booking to certificate — manage everything from one platform.</p>
-      <div class="cta-cards">
-        <div class="cta-card">
-          <div class="cta-card-num">8</div>
-          <div class="cta-card-label">Integrated Modules</div>
-        </div>
-        <div class="cta-card">
-          <div class="cta-card-num">6</div>
-          <div class="cta-card-label">Delivery Phases</div>
-        </div>
-        <div class="cta-card">
-          <div class="cta-card-num">25+</div>
-          <div class="cta-card-label">Employee Capacity</div>
-        </div>
-        <div class="cta-card">
-          <div class="cta-card-num">AI</div>
-          <div class="cta-card-label">Powered OCR</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-        <a href="ats-app/index.html" class="btn btn-primary" style="font-size:16px;padding:16px 36px">🚀 Open ATS Operations App →</a>
-        <a href="#modules" class="btn btn-outline" style="font-size:16px;padding:16px 36px">Browse All 8 Modules</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FOOTER ══ -->
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-logo-area">
-        <div class="logo">
-          <div class="logo-icon">🚗</div>
-          <div>
-            <div class="logo-text">ATS<span style="color:var(--amber)">Pro</span></div>
-            <span class="logo-sub">Operations Management System</span>
-          </div>
-        </div>
-        <div class="footer-desc">A complete digital platform for government-authorized vehicle fitness testing stations. Booking · Workforce · AI · Reporting.</div>
-      </div>
-      <div class="footer-links">
-        <h4>Modules</h4>
-        <ul>
-          <li><a href="#modules">Vehicle Booking</a></li>
-          <li><a href="#modules">GPS Attendance</a></li>
-          <li><a href="#modules">Task Allocation</a></li>
-          <li><a href="#modules">AI OCR</a></li>
-          <li><a href="#modules">Test Reports</a></li>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>System</h4>
-        <ul>
-          <li><a href="#modules">Fitness Certificates</a></li>
-          <li><a href="#modules">WhatsApp API</a></li>
-          <li><a href="#modules">Admin Dashboard</a></li>
-          <li><a href="#roles">User Roles</a></li>
-          <li><a href="#tech">Tech Stack</a></li>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Project</h4>
-        <ul>
+        <ul class="nav-menu">
+          <li><a href="#overview">Platform</a></li>
+          <li><a href="#command-center">Command Center</a></li>
           <li><a href="#workflow">Workflow</a></li>
-          <li><a href="#phases">Roadmap</a></li>
-          <li><a href="#cta">SRS Document</a></li>
+          <li><a href="#workforce">Workforce</a></li>
+          <li><a href="#architecture">Architecture</a></li>
         </ul>
+        <div style="display:flex;align-items:center;gap:12px">
+          <a href="ats-app/index.html" class="btn btn-outline-gold" style="font-size:12.5px;padding:9px 18px">
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+            Launch Application
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="container hero-body">
+      <div class="hero-content">
+        <div class="section-eyebrow eyebrow-dark">
+          <span class="eyebrow-dot"></span> AUTOMATED TESTING STATION MANAGEMENT
+        </div>
+        <h1 class="editorial-headline" style="margin-bottom:24px">
+          Engineering Trust.<br>
+          <span style="color:var(--accent-gold)">Driving Safer Roads.</span>
+        </h1>
+        <p class="editorial-subhead subhead-dark" style="margin-bottom:36px">
+          An intelligent operating platform connecting vehicle fitness testing, workforce management, AI-powered inspections and compliance workflows into one unified operational architecture.
+        </p>
+        <div class="hero-actions">
+          <a href="#overview" class="btn btn-dark-subtle">
+            Explore the Platform
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          </a>
+          <a href="ats-app/index.html" class="btn btn-gold">
+            Launch ATS Operations
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Vehicle Stage Visual -->
+      <div class="hero-vehicle-stage">
+        <div class="hero-stage-lighting"></div>
+        <div class="hero-laser-sweep"></div>
+        <img src="assets/images/hero-car.jpg" alt="Automated Testing Facility Vehicle" />
+        <div class="hero-stage-badge">
+          <span>STATION ID: <strong>ATS-MP-BPL-004</strong></span>
+          <span>|</span>
+          <span>CALIBRATED BAY 01 ACTIVE</span>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2026 ATS Operations Management System. Initial scope draft — subject to client validation.</p>
-      <div class="footer-badges">
-        <span class="fbadge">Web + PWA</span>
-        <span class="fbadge">AI-Powered</span>
-        <span class="fbadge">GPS Verified</span>
-        <span class="fbadge">WhatsApp API</span>
+
+    <!-- Slim Stats Strip -->
+    <div class="hero-stats-strip">
+      <div class="container stats-strip-grid">
+        <div class="stat-pill">
+          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-gold)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span><strong>8 Integrated Modules</strong> Architecture</span>
+        </div>
+        <div class="stat-pill">
+          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-teal)"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          <span><strong>AI-Assisted OCR</strong> Neural Engine</span>
+        </div>
+        <div class="stat-pill">
+          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-gold)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span><strong>GPS Geofenced</strong> Workforce Tracking</span>
+        </div>
+        <div class="stat-pill">
+          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-teal)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span><strong>Cryptographic</strong> Statutory Reports</span>
+        </div>
       </div>
     </div>
-  </div>
-</footer>
+  </header>
 
-<script>
-  // Live clock
-  function updateTime() {
-    const el = document.getElementById('live-time');
-    if(el) {
-      const now = new Date();
-      el.textContent = now.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' — Live';
-    }
-  }
-  updateTime(); setInterval(updateTime, 1000);
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 2: THE PLATFORM OVERVIEW (10–20 SECONDS)
+       PORCELAIN WHITE SECTION
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap porcelain-scene" id="overview">
+    <div class="container">
+      <div class="editorial-header editorial-header-flex">
+        <div>
+          <div class="section-eyebrow eyebrow-light">
+            <span class="eyebrow-dot"></span> PLATFORM CAPABILITIES
+          </div>
+          <h2 class="editorial-headline" style="color:var(--text-light-primary)">
+            Every Operation.<br>
+            One Intelligent System.
+          </h2>
+        </div>
+        <p class="editorial-subhead subhead-light" style="max-width:440px">
+          Replacing fragmented spreadsheets and paper slips with a cohesive, government-compliant testing station operating system.
+        </p>
+      </div>
 
-  // Scroll animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        // stagger children
-        entry.target.querySelectorAll('.module-card, .role-card, .tech-pill, .kpi, .phase-item, .workflow-step').forEach((el,i) => {
-          setTimeout(() => el.style.opacity = '1', i * 80);
-        });
-      }
-    });
-  }, { threshold: 0.1 });
+      <!-- Asymmetric Editorial Composition (8 Modules) -->
+      <div class="modules-composition">
+        <!-- Column 1 -->
+        <div>
+          <!-- Module 01 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">01 / QUEUE INTELLIGENCE</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">Vehicle Booking & Customer Management</h3>
+              <p class="module-desc">Centralized profile lifecycle managing registration numbers, transport categories (LMV, HMV, passenger fleets), appointment slot scheduling and full audit trail history.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>ACTIVE PIPELINE QUEUE</span>
+              <strong>ATS-2026-1041 • 24 SCHEDULED</strong>
+            </div>
+          </div>
 
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+          <!-- Module 03 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">03 / TASK ENGINE</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">Test-wise Task Allocation & Workflow</h3>
+              <p class="module-desc">Strict bay-isolated queues preventing cross-operator data modification. Real-time transition machine: Scheduled → Assigned → In Progress → Completed → Verified.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>BAYS CONFIGURATION</span>
+              <strong>ROLLER BRAKE · HEADLIGHT · SPEEDOMETER</strong>
+            </div>
+          </div>
 
-  // Smooth active nav link highlighting
-  window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    let current = '';
-    sections.forEach(s => {
-      if(window.scrollY >= s.offsetTop - 120) current = s.id;
-    });
-    navLinks.forEach(a => {
-      a.style.color = a.getAttribute('href') === '#'+current ? 'var(--amber)' : '';
-    });
-  });
+          <!-- Module 05 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">05 / AUDIT ARCHIVE</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">Test Reports & Documentation</h3>
+              <p class="module-desc">Structured statutory inspection reports with machine telemetry, photographic evidence attachments, supervisor sign-offs, and immutable SHA-256 validation.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>REGULATORY FORMAT</span>
+              <strong>ATS-MP-BPL-004 STANDARD COMPLIANT</strong>
+            </div>
+          </div>
 
-  // Animate progress bars on scroll
-  const progObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if(e.isIntersecting) {
-        e.target.querySelectorAll('.progress-fill').forEach(bar => {
-          const w = bar.style.width; bar.style.width = '0';
-          setTimeout(() => bar.style.width = w, 100);
-        });
-        progObs.unobserve(e.target);
-      }
-    });
-  }, {threshold:0.3});
-  document.querySelectorAll('.db-panel').forEach(p => progObs.observe(p));
-</script>
+          <!-- Module 07 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">07 / MESSAGING API</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">WhatsApp Business Platform Automation</h3>
+              <p class="module-desc">Direct Meta Cloud API pipeline dispatching pre-approved transactional templates for appointment reminders, fitness pass notices, and renewal alerts with delivery logs.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>META CLOUD API</span>
+              <strong>OFFICIAL VERIFIED DISPATCH</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2 -->
+        <div>
+          <!-- Module 02 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">02 / WORKFORCE TELEMETRY</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">GPS Attendance & Employee Payroll</h3>
+              <p class="module-desc">Mobile punch-in with device coordinate validation against a 200m station geofence. Automated shift EOD logging, overtime tracking, and one-click salary payslips.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>GEOFENCE VALIDATION</span>
+              <strong>200M RADIUS • ANTI-SPOOF ACTIVE</strong>
+            </div>
+          </div>
+
+          <!-- Module 04 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">04 / COMPUTER VISION</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">AI Camera & Number Plate OCR</h3>
+              <p class="module-desc">Instantaneous optical character recognition configured for all Indian registration plate formats. Automatic matching with active database records to eliminate typing.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>NEURAL ACCURACY</span>
+              <strong>99.2% CONFIDENCE SCORE</strong>
+            </div>
+          </div>
+
+          <!-- Module 06 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">06 / COMPLIANCE CYCLE</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">Fitness Certificate Expiry Tracking</h3>
+              <p class="module-desc">Tracks legally mandated validity intervals. Periodic background sweeps trigger stepped customer reminders at 30, 15, 7, and 1 day before expiration.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>VALIDITY AUTOMATION</span>
+              <strong>30 · 15 · 7 · 1 DAY REMINDERS</strong>
+            </div>
+          </div>
+
+          <!-- Module 08 -->
+          <div class="module-item">
+            <div>
+              <div class="module-top">
+                <span class="module-num">08 / TELEMETRY DASHBOARD</span>
+                <div class="module-icon-wrap">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+              </div>
+              <h3 class="module-title">Administrative Analytics & Operations</h3>
+              <p class="module-desc">Real-time KPI telemetry monitoring testing bay throughput, employee performance, pass/fail ratios, and statutory audit exports in Excel and PDF formats.</p>
+            </div>
+            <div class="module-micro-graphic">
+              <span>EXECUTIVE REPORTING</span>
+              <strong>LIVE STATION KPI SUITE</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 3: THE COMMAND CENTER (20–30 SECONDS)
+       GRAPHITE BLACK ENTERPRISE DASHBOARD
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap command-center-scene" id="command-center">
+    <div class="container">
+      <div class="editorial-header" style="text-align:center;max-width:760px;margin:0 auto 60px">
+        <div class="section-eyebrow eyebrow-dark" style="justify-content:center">
+          <span class="eyebrow-dot"></span> COMMAND CENTER
+        </div>
+        <h2 class="editorial-headline" style="margin-bottom:20px">Total Operational Visibility.</h2>
+        <p class="editorial-subhead subhead-dark" style="margin:0 auto">
+          From incoming vehicle registration to final certificate issuance. Command every bay, sensor reading and operator workflow from one high-precision interface.
+        </p>
+      </div>
+
+      <!-- Large Browser Mockup -->
+      <div class="browser-frame">
+        <div class="browser-topbar">
+          <div class="traffic-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-amber"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="browser-address">
+            <svg class="svg-icon" style="width:14px;height:14px;color:var(--accent-teal)" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            https://station-mp-bpl-004.ats.internal/command-center
+          </div>
+          <span style="margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--accent-teal)">SYSTEM LIVE • 99.98% UPTIME</span>
+        </div>
+
+        <div class="db-container">
+          <!-- Sidebar in mockup -->
+          <div class="db-sidebar">
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dark-secondary);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">
+              STATION NAVIGATION
+            </div>
+            <div class="db-nav-link active">
+              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Command Overview
+            </div>
+            <div class="db-nav-link">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+              Vehicles Queue (24)
+            </div>
+            <div class="db-nav-link">
+              <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Testing Bays (4)
+            </div>
+            <div class="db-nav-link">
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Staff Attendance
+            </div>
+            <div class="db-nav-link">
+              <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              Expiry Alerts (7)
+            </div>
+          </div>
+
+          <!-- Dashboard Main Panel -->
+          <div>
+            <!-- High-Contrast Metrics (6) -->
+            <div class="db-metrics-grid">
+              <div class="db-metric-card">
+                <div class="db-metric-label">Today's Bookings</div>
+                <div class="db-metric-val">24</div>
+                <div class="db-metric-meta"><span class="meta-gold">↑ +16.6%</span> vs yesterday</div>
+              </div>
+              <div class="db-metric-card">
+                <div class="db-metric-label">Testing Completed</div>
+                <div class="db-metric-val">18</div>
+                <div class="db-metric-meta"><span class="meta-teal">75.0%</span> pass clearance rate</div>
+              </div>
+              <div class="db-metric-card">
+                <div class="db-metric-label">Pending In Queue</div>
+                <div class="db-metric-val">6</div>
+                <div class="db-metric-meta">3 currently inside bays</div>
+              </div>
+              <div class="db-metric-card">
+                <div class="db-metric-label">Staff On Duty</div>
+                <div class="db-metric-val">23<span style="font-size:18px;color:var(--text-dark-secondary)">/25</span></div>
+                <div class="db-metric-meta"><span class="meta-teal">✓</span> GPS Geofence verified</div>
+              </div>
+              <div class="db-metric-card">
+                <div class="db-metric-label">Expiry Alerts</div>
+                <div class="db-metric-val">7</div>
+                <div class="db-metric-meta" style="color:#E05252">3 expire within 7 days</div>
+              </div>
+              <div class="db-metric-card">
+                <div class="db-metric-label">Reports In Review</div>
+                <div class="db-metric-val">4</div>
+                <div class="db-metric-meta">Supervisor queue</div>
+              </div>
+            </div>
+
+            <!-- Activity Split -->
+            <div class="db-content-split">
+              <!-- Live Queue Table -->
+              <div class="db-card-panel">
+                <div class="db-panel-head">
+                  <span>Live Vehicle Inspection Pipeline</span>
+                  <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent-teal)">REAL-TIME FEED</span>
+                </div>
+                <div style="font-family:var(--font-mono);font-size:12.5px">
+                  <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
+                    <span style="color:#FFFFFF;font-weight:700">MP 04 AB 1234</span>
+                    <span style="color:var(--text-dark-secondary)">HMV Cargo Truck</span>
+                    <span style="color:var(--accent-teal)">Bay 1 (Brake Test)</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
+                    <span style="color:#FFFFFF;font-weight:700">CG 16 CD 5678</span>
+                    <span style="color:var(--text-dark-secondary)">Passenger Bus</span>
+                    <span style="color:var(--accent-gold)">Bay 2 (Headlight Dip)</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
+                    <span style="color:#FFFFFF;font-weight:700">DL 10 CA 9988</span>
+                    <span style="color:var(--text-dark-secondary)">Multi-Axle Trailer</span>
+                    <span style="color:var(--accent-teal)">PASSED • CERT READY</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;padding:10px 0">
+                    <span style="color:#FFFFFF;font-weight:700">MP 09 EF 9012</span>
+                    <span style="color:var(--text-dark-secondary)">Light Delivery Van</span>
+                    <span style="color:var(--text-dark-secondary)">Queued in Waiting Lane</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bay Utilization Gauges -->
+              <div class="db-card-panel">
+                <div class="db-panel-head">
+                  <span>Testing Bay Utilization</span>
+                  <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent-gold)">4 BAYS ONLINE</span>
+                </div>
+
+                <div class="bay-row">
+                  <div class="bay-info">
+                    <span>Bay 1: Roller Brake Bench</span>
+                    <strong style="color:var(--accent-teal)">85% Busy</strong>
+                  </div>
+                  <div class="bay-track"><div class="bay-fill fill-teal" style="width:85%"></div></div>
+                </div>
+
+                <div class="bay-row">
+                  <div class="bay-info">
+                    <span>Bay 2: Optical Headlamp Aligner</span>
+                    <strong style="color:var(--accent-gold)">65% Busy</strong>
+                  </div>
+                  <div class="bay-track"><div class="bay-fill fill-gold" style="width:65%"></div></div>
+                </div>
+
+                <div class="bay-row">
+                  <div class="bay-info">
+                    <span>Bay 3: Speedometer Dynamometer</span>
+                    <strong style="color:var(--accent-teal)">40% Standby</strong>
+                  </div>
+                  <div class="bay-track"><div class="bay-fill fill-teal" style="width:40%"></div></div>
+                </div>
+
+                <div class="bay-row" style="margin-bottom:0">
+                  <div class="bay-info">
+                    <span>Bay 4: Side Slip & Suspension</span>
+                    <strong style="color:var(--accent-gold)">90% Busy</strong>
+                  </div>
+                  <div class="bay-track"><div class="bay-fill fill-gold" style="width:90%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 4: VEHICLE INTELLIGENCE & BOOKING (30–40 SECONDS)
+       PORCELAIN WHITE SECTION
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap porcelain-scene" id="vehicles">
+    <div class="container">
+      <div class="vehicle-split-grid">
+        <!-- Left Side: Copy -->
+        <div>
+          <div class="section-eyebrow eyebrow-light">
+            <span class="eyebrow-dot"></span> VEHICLE INTELLIGENCE
+          </div>
+          <h2 class="editorial-headline" style="color:var(--text-light-primary);margin-bottom:24px">
+            Every Vehicle.<br>
+            A Complete Digital Record.
+          </h2>
+          <p class="editorial-subhead subhead-light" style="margin-bottom:32px">
+            Manage registrations, appointment scheduling, fleet customer histories, and statutory fitness records in a single connected pipeline.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;align-items:flex-start;gap:14px">
+              <div style="width:28px;height:28px;border-radius:4px;background:var(--accent-gold-muted);color:#8F6B38;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div>
+                <strong style="color:var(--text-light-primary);font-size:15px;display:block">Permanent Vehicle Record Architecture</strong>
+                <span style="color:var(--text-light-secondary);font-size:13.5px">Historical testing data, ownership transfers, and compliance certificates remain linked across years.</span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:14px">
+              <div style="width:28px;height:28px;border-radius:4px;background:rgba(57,199,176,0.15);color:#0E8065;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div>
+                <strong style="color:var(--text-light-primary);font-size:15px;display:block">Slot Optimization & Lane Balancing</strong>
+                <span style="color:var(--text-light-secondary);font-size:13.5px">Intelligently schedules high-axle commercial transport to prevent bottlenecks at testing lanes.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Luxury Vehicle Profile Card -->
+        <div class="vehicle-profile-card">
+          <img src="assets/images/vehicle-profile.jpg" class="vehicle-profile-img" alt="Commercial Fleet Vehicle Profile" />
+          <div class="vehicle-profile-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span class="vehicle-id-badge">MP 04 AB 1234</span>
+              <span style="font-family:var(--font-mono);font-size:11.5px;color:#0E8065;font-weight:700">● IN TESTING BAY 01</span>
+            </div>
+
+            <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text-light-primary);margin-bottom:4px">
+              Heavy Commercial Multi-Axle Carrier
+            </div>
+            <div style="font-size:13px;color:var(--text-light-secondary);margin-bottom:16px">
+              Owner: Rajesh Transport Corporation • Ref: ATS-2026-1041
+            </div>
+
+            <div class="spec-grid">
+              <div class="spec-item">
+                <span>RTO Registration</span>
+                <strong>Bhopal (MP-04)</strong>
+              </div>
+              <div class="spec-item">
+                <span>Fuel / Emission</span>
+                <strong>Diesel / BS-VI Standard</strong>
+              </div>
+              <div class="spec-item">
+                <span>Inspection Scope</span>
+                <strong>Full 4-Point Regulatory</strong>
+              </div>
+              <div class="spec-item">
+                <span>Appointment Slot</span>
+                <strong>Today, 10:30 AM</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 5: AI INSPECTION EXPERIENCE (40–50 SECONDS)
+       DARK GRAPHITE WITH PRECISION TEAL SCANNER
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap ai-scene" id="ai-inspection">
+    <div class="container">
+      <div class="editorial-header" style="max-width:700px;margin-bottom:54px">
+        <div class="section-eyebrow eyebrow-teal">
+          <span class="eyebrow-dot"></span> NEURAL COMPUTER VISION
+        </div>
+        <h2 class="editorial-headline" style="margin-bottom:16px">
+          Precision Powered<br>
+          <span style="color:var(--accent-teal)">by Intelligence.</span>
+        </h2>
+        <p class="editorial-subhead subhead-dark">
+          Sub-second license plate recognition, automated document field parsing and real-time database matching built directly into the operator mobile interface.
+        </p>
+      </div>
+
+      <div class="ai-interface-grid">
+        <!-- Left: Neural Scanning Frame -->
+        <div class="ai-scanner-frame">
+          <img src="assets/images/ai-wireframe-car.jpg" alt="AI Neural Scanning Engine" />
+          <div class="ai-crosshairs"></div>
+          <div style="position:absolute;bottom:16px;left:16px;right:16px;background:rgba(8,12,16,0.85);padding:10px 14px;border-radius:4px;display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px">
+            <span style="color:var(--accent-teal)">ANPR INFERENCE: 42ms</span>
+            <span style="color:#FFFFFF">INDIAN STANDARD HIGH SECURITY PLATE</span>
+          </div>
+        </div>
+
+        <!-- Right: Telemetry Panel -->
+        <div class="ai-telemetry-panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid var(--border-dark);padding-bottom:14px">
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dark-secondary);letter-spacing:0.1em">EXTRACTION TELEMETRY</span>
+            <span class="status-pill-teal">VEHICLE IDENTIFIED</span>
+          </div>
+
+          <div class="telemetry-row">
+            <span>Detected Plate Number</span>
+            <strong style="color:var(--accent-teal);font-size:18px">MP 04 AB 1234</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Neural OCR Confidence</span>
+            <strong style="color:var(--accent-teal)">99.2% (High Certainty)</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Jurisdiction & RTO Code</span>
+            <strong>Madhya Pradesh / Bhopal</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Database Matching Result</span>
+            <strong style="color:var(--accent-gold)">MATCH FOUND: ATS-2026-1041</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Registered Fleet Owner</span>
+            <strong>Rajesh Transport Corporation</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Inspection Evidence Photo</span>
+            <strong style="color:var(--accent-teal)">✓ Cryptographically Stamped</strong>
+          </div>
+
+          <div style="margin-top:24px;padding:14px;background:rgba(57,199,176,0.06);border:1px solid rgba(57,199,176,0.25);border-radius:6px;font-size:12.5px;color:var(--text-dark-secondary)">
+            <strong style="color:var(--accent-teal);display:block;margin-bottom:2px">Zero Manual Entry Protocol</strong>
+            Plate capture instantly identifies vehicle file, links photo evidence, and authorizes operator to commence bay testing with single tap.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 6: OPERATIONAL WORKFLOW (50–60 SECONDS)
+       PORCELAIN WHITE SECTION
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap porcelain-scene" id="workflow">
+    <div class="container">
+      <div class="editorial-header editorial-header-flex">
+        <div>
+          <div class="section-eyebrow eyebrow-light">
+            <span class="eyebrow-dot"></span> OPERATIONAL DISCIPLINE
+          </div>
+          <h2 class="editorial-headline" style="color:var(--text-light-primary)">
+            From First Booking<br>
+            to Final Certification.
+          </h2>
+        </div>
+        <p class="editorial-subhead subhead-light" style="max-width:440px">
+          A seamless 7-stage operational lifecycle ensuring strict regulatory compliance, traceable operator signatures, and zero data loss.
+        </p>
+      </div>
+
+      <!-- 7-Stage Horizontal Timeline -->
+      <div class="timeline-strip">
+        <div class="stage-card">
+          <div class="stage-num">01 / DISPATCH</div>
+          <div class="stage-name">Customer Booking</div>
+          <div class="stage-desc">Vehicle specs & contact registered. Unique booking ID assigned.</div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-num">02 / ALLOCATE</div>
+          <div class="stage-name">Test Assignment</div>
+          <div class="stage-desc">Automated task routing to qualified operators per bay.</div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-num">03 / TEST</div>
+          <div class="stage-name">Vehicle Inspection</div>
+          <div class="stage-desc">Automated testing machines capture brake, light & speed data.</div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-num">04 / VISION</div>
+          <div class="stage-name">AI Evidence</div>
+          <div class="stage-desc">Camera OCR extracts plate data and locks photographic proof.</div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-num">05 / AUDIT</div>
+          <div class="stage-name">Test Reports</div>
+          <div class="stage-desc">Individual bay reports generated and reviewed by manager.</div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-num">06 / CERTIFY</div>
+          <div class="stage-name">Final Approval</div>
+          <div class="stage-desc">Statutory approval granted and digital certificate issued.</div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-num">07 / RETENTION</div>
+          <div class="stage-name">Expiry & Alerts</div>
+          <div class="stage-desc">Lifecycle tracking triggers stepped WhatsApp alerts.</div>
+        </div>
+      </div>
+
+      <!-- Testing Operations Bays Telemetry Cards -->
+      <div class="bays-grid">
+        <div class="bay-card">
+          <div class="bay-card-title">
+            <span>Brake Bench</span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:#0E8065"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div class="bay-reading">
+            Left Wheel: <strong>6.8 kN</strong><br>
+            Right Wheel: <strong>6.3 kN</strong><br>
+            Imbalance: <strong>7.3% (<30%)</strong>
+          </div>
+          <span class="bay-pass-tag">✓ STATUTORY PASS</span>
+        </div>
+
+        <div class="bay-card">
+          <div class="bay-card-title">
+            <span>Headlight Tester</span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:#0E8065"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </div>
+          <div class="bay-reading">
+            Intensity: <strong>26,500 cd</strong><br>
+            Vertical Dip: <strong>-1.2%</strong><br>
+            Alignment: <strong>Compliant</strong>
+          </div>
+          <span class="bay-pass-tag">✓ STATUTORY PASS</span>
+        </div>
+
+        <div class="bay-card">
+          <div class="bay-card-title">
+            <span>Speed Dynamometer</span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:#0E8065"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="bay-reading">
+            Roller: <strong>40.0 km/h</strong><br>
+            Speedo: <strong>41.0 km/h</strong><br>
+            Variance: <strong>+2.5%</strong>
+          </div>
+          <span class="bay-pass-tag">✓ STATUTORY PASS</span>
+        </div>
+
+        <div class="bay-card">
+          <div class="bay-card-title">
+            <span>Suspension Bench</span>
+            <svg class="svg-icon" viewBox="0 0 24 24" style="color:#0E8065"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="bay-reading">
+            Damping Ratio: <strong>0.62</strong><br>
+            Side Slip: <strong>+1.8 m/km</strong><br>
+            Axle Play: <strong>Normal</strong>
+          </div>
+          <span class="bay-pass-tag">✓ STATUTORY PASS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 7: WORKFORCE & GPS INTELLIGENCE (60–70 SECONDS)
+       GRAPHITE BLACK SECTION
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap" style="background:var(--bg-graphite);border-bottom:1px solid var(--border-dark)" id="workforce">
+    <div class="container">
+      <div class="workforce-split">
+        <!-- Left Side: Workforce Stats & Table -->
+        <div>
+          <div class="section-eyebrow eyebrow-dark">
+            <span class="eyebrow-dot"></span> WORKFORCE & COMPLIANCE
+          </div>
+          <h2 class="editorial-headline" style="margin-bottom:20px">
+            People. Precision.<br>
+            <span style="color:var(--accent-gold)">Accountability.</span>
+          </h2>
+          <p class="editorial-subhead subhead-dark" style="margin-bottom:32px">
+            Guarantee station operational readiness with mobile GPS punch-in, tamper-evident coordinate verification, and daily End-of-Day (EOD) logs.
+          </p>
+
+          <!-- Stat Row -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px">
+            <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);padding:14px;border-radius:6px">
+              <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dark-secondary);display:block">STAFF PRESENT</span>
+              <strong style="font-size:24px;color:#FFFFFF;font-family:var(--font-display)">23 / 25</strong>
+            </div>
+            <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);padding:14px;border-radius:6px">
+              <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dark-secondary);display:block">VERIFIED GEOFENCE</span>
+              <strong style="font-size:24px;color:var(--accent-teal);font-family:var(--font-display)">100%</strong>
+            </div>
+            <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);padding:14px;border-radius:6px">
+              <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dark-secondary);display:block">ACTIVE BAYS</span>
+              <strong style="font-size:24px;color:var(--accent-gold);font-family:var(--font-display)">4 Lanes</strong>
+            </div>
+          </div>
+
+          <!-- Staff Attendance Table -->
+          <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);border-radius:8px;overflow:hidden">
+            <table class="staff-table">
+              <thead>
+                <tr>
+                  <th>OPERATOR</th>
+                  <th>ASSIGNED BAY</th>
+                  <th>PUNCH IN</th>
+                  <th>GPS STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Amit Kumar</strong></td>
+                  <td>Brake Test Lane 01</td>
+                  <td style="font-family:var(--font-mono)">08:52 AM</td>
+                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
+                </tr>
+                <tr>
+                  <td><strong>Ravi Patel</strong></td>
+                  <td>Headlight Lane 02</td>
+                  <td style="font-family:var(--font-mono)">08:58 AM</td>
+                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
+                </tr>
+                <tr>
+                  <td><strong>Suresh Yadav</strong></td>
+                  <td>Speed Dynamometer</td>
+                  <td style="font-family:var(--font-mono)">09:05 AM</td>
+                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
+                </tr>
+                <tr>
+                  <td><strong>Dinesh Verma</strong></td>
+                  <td>Suspension Bench</td>
+                  <td style="font-family:var(--font-mono)">08:45 AM</td>
+                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right Side: GPS Console Display -->
+        <div class="gps-console-frame">
+          <div class="geofence-overlay-box">
+            <span>STATION COORD: <strong>23.2599° N, 77.4126° E</strong></span>
+            <span style="color:var(--accent-teal)">PERIMETER: 200M RADIUS ACTIVE</span>
+          </div>
+          <img src="assets/images/radar-dashboard.jpg" alt="GPS Geofence Radar Monitoring Console" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 8: DOCUMENTATION & DIGITAL CERTIFICATES (70–80 SEC)
+       PORCELAIN WHITE SECTION
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap porcelain-scene" id="documentation">
+    <div class="container">
+      <div class="editorial-header" style="max-width:720px">
+        <div class="section-eyebrow eyebrow-light">
+          <span class="eyebrow-dot"></span> REGULATORY OUTPUTS
+        </div>
+        <h2 class="editorial-headline" style="color:var(--text-light-primary);margin-bottom:16px">
+          Every Result.<br>
+          Properly Documented.
+        </h2>
+        <p class="editorial-subhead subhead-light">
+          Government-authorized statutory test reports and digital fitness certificates formatted strictly to transport authority requirements.
+        </p>
+      </div>
+
+      <!-- Dual Document Panels -->
+      <div class="doc-panels-grid">
+        <!-- Panel 1: Formal Test Report -->
+        <div class="doc-sheet">
+          <div class="doc-sheet-head">
+            <div>
+              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted);letter-spacing:0.1em;display:block">STATUTORY INSPECTION RECORD</span>
+              <strong style="font-family:var(--font-display);font-size:18px;color:var(--text-light-primary)">Vehicle Fitness Test Report</strong>
+            </div>
+            <span class="doc-stamp">ATS-MP-BPL-004</span>
+          </div>
+
+          <div style="font-size:13px;line-height:1.7;color:var(--text-light-secondary);margin-bottom:20px">
+            Vehicle Reg No: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">MP 04 AB 1234</strong><br>
+            Chassis Ref: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">MA3EWD81S0019284</strong><br>
+            Inspection Bay: <strong style="color:var(--text-light-primary)">Lane 1, Automated Roller Bench</strong><br>
+            Supervising Engineer: <strong style="color:var(--text-light-primary)">Vikram Malhotra (ID #ENG-04)</strong>
+          </div>
+
+          <div style="background:var(--bg-porcelain-muted);border:1px solid var(--border-light);padding:14px;border-radius:6px;font-family:var(--font-mono);font-size:11.5px;color:var(--text-light-secondary);margin-bottom:20px">
+            [+] ROLLER BRAKE FORCE: 6.8 kN (THRESHOLD >4.5 kN) — PASS<br>
+            [+] BRAKE AXLE IMBALANCE: 7.3% (LIMIT <30%) — PASS<br>
+            [+] BEAM INTENSITY: 26,500 cd — PASS<br>
+            [+] SPEED VARIANCE: +2.1% (TOLERANCE ±5%) — PASS
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-light);padding-top:14px;font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted)">
+            <span>HASH: <strong>SHA256:7f9a12c4b...</strong></span>
+            <span style="color:#0E8065;font-weight:700">✓ CERTIFIED AUTHENTIC</span>
+          </div>
+        </div>
+
+        <!-- Panel 2: Digital Certificate -->
+        <div class="doc-sheet" style="border-top:4px solid var(--accent-gold)">
+          <div class="doc-sheet-head">
+            <div>
+              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted);letter-spacing:0.1em;display:block">MINISTRY OF ROAD TRANSPORT</span>
+              <strong style="font-family:var(--font-display);font-size:18px;color:var(--text-light-primary)">Digital Fitness Certificate</strong>
+            </div>
+            <span class="doc-stamp" style="border-color:#0E8065;color:#0E8065">LEGAL VALIDITY</span>
+          </div>
+
+          <div style="font-size:13px;line-height:1.7;color:var(--text-light-secondary);margin-bottom:20px">
+            Certificate Number: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">ATS-FC-2026-8801</strong><br>
+            Vehicle Number: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">MP 04 AB 1234</strong><br>
+            Category: <strong style="color:var(--text-light-primary)">Heavy Motor Vehicle (HMV) Goods</strong><br>
+            Issue Date: <strong style="color:var(--text-light-primary)">20 November 2026</strong><br>
+            Expiry Date: <strong style="color:#C0392B;font-weight:700">19 November 2027</strong>
+          </div>
+
+          <div style="background:rgba(219,166,92,0.1);border:1px solid rgba(219,166,92,0.3);padding:14px;border-radius:6px;font-size:12.5px;color:#8F6B38;margin-bottom:20px">
+            <strong>QR Code Tamper-Proof Seal:</strong> This certificate is cryptographically stored in the national ATS registry and verifiable by enforcement agencies via RTO scanner.
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-light);padding-top:14px;font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted)">
+            <span>STATUS: <strong>ACTIVE & VALID</strong></span>
+            <span>NEXT TEST: <strong>OCT 2027</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expiry Reminder Timeline Strip & WhatsApp Card -->
+      <div class="reminder-strip">
+        <div>
+          <strong style="font-size:14px;color:var(--text-light-primary);display:block;margin-bottom:4px">Automated WhatsApp Reminder Schedule</strong>
+          <span style="font-size:12.5px;color:var(--text-light-secondary)">Pre-scheduled alerts keep vehicle operators ahead of certificate expiration.</span>
+        </div>
+        <div class="reminder-nodes">
+          <span class="rem-node">30 DAYS BEFORE (First Notice)</span>
+          <span class="rem-node">15 DAYS BEFORE (Follow-up)</span>
+          <span class="rem-node urgent">7 DAYS BEFORE (Urgent Alert)</span>
+          <span class="rem-node urgent">1 DAY BEFORE (Final Notice)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 9: ARCHITECTURE & ACCESS CONTROL (80–90 SEC)
+       DEEP CHARCOAL SECTION
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap arch-scene" id="architecture">
+    <div class="container">
+      <div class="editorial-header" style="max-width:720px;margin-bottom:54px">
+        <div class="section-eyebrow eyebrow-dark">
+          <span class="eyebrow-dot"></span> SYSTEM ARCHITECTURE & RBAC
+        </div>
+        <h2 class="editorial-headline" style="margin-bottom:16px">
+          Built for Precision.<br>
+          <span style="color:var(--accent-gold)">Designed for Scale.</span>
+        </h2>
+        <p class="editorial-subhead subhead-dark">
+          Decoupled backend services, secure role-based access control, and dedicated storage pipelines ensuring sub-second response times across factory bays.
+        </p>
+      </div>
+
+      <!-- Architectural Tiers Diagram -->
+      <div class="arch-diagram-wrap">
+        <div class="arch-tiers-flex">
+          <div class="arch-node-block">
+            <div class="arch-node-title">Client Tier</div>
+            <div class="arch-node-sub">Admin Web • Employee PWA • Reception Portal</div>
+          </div>
+          <div class="arch-connector-arrow">⇄</div>
+          <div class="arch-node-block" style="border-color:var(--accent-gold)">
+            <div class="arch-node-title" style="color:var(--accent-gold)">Core API Engine</div>
+            <div class="arch-node-sub">Node.js • RBAC Middleware • Workflow Engine</div>
+          </div>
+          <div class="arch-connector-arrow">⇄</div>
+          <div class="arch-node-block">
+            <div class="arch-node-title">Data Storage</div>
+            <div class="arch-node-sub">PostgreSQL • S3 Object Storage</div>
+          </div>
+          <div class="arch-connector-arrow">⇄</div>
+          <div class="arch-node-block" style="border-color:var(--accent-teal)">
+            <div class="arch-node-title" style="color:var(--accent-teal)">External Services</div>
+            <div class="arch-node-sub">Neural ANPR • WhatsApp API • Geofence</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role-Based Access Control Matrix (8 Roles) -->
+      <div class="roles-matrix-grid">
+        <div class="role-matrix-card">
+          <div class="role-card-name">Super Admin</div>
+          <div class="role-card-scope">Full configuration, system audit trail, database exports, user credentials.</div>
+        </div>
+        <div class="role-matrix-card">
+          <div class="role-card-name">Admin / Manager</div>
+          <div class="role-card-scope">Bookings, staff oversight, test approvals, payroll processing, analytics.</div>
+        </div>
+        <div class="role-matrix-card">
+          <div class="role-card-name">Reception Staff</div>
+          <div class="role-card-scope">Customer onboarding, vehicle registration, slot allocation, appointments.</div>
+        </div>
+        <div class="role-matrix-card">
+          <div class="role-card-name">Brake Operator</div>
+          <div class="role-card-scope">Isolated access strictly to assigned roller brake queue & readings.</div>
+        </div>
+        <div class="role-matrix-card">
+          <div class="role-card-name">Light Operator</div>
+          <div class="role-card-scope">Optical headlamp alignment readings, dip angles, beam lux proof.</div>
+        </div>
+        <div class="role-matrix-card">
+          <div class="role-card-name">Speed Operator</div>
+          <div class="role-card-scope">Dynamometer roller variance measurements, cluster verification.</div>
+        </div>
+        <div class="role-matrix-card">
+          <div class="role-card-name">Other Bay Ops</div>
+          <div class="role-card-scope">Configurable access to suspension benches and emission probes.</div>
+        </div>
+        <div class="role-matrix-card">
+          <div class="role-card-name">HR / Payroll</div>
+          <div class="role-card-scope">GPS attendance verification, leave approvals, salary slip distribution.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCENE 10: SIGNATURE ENDING & CALL TO ACTION (90–100 SEC)
+       GRAPHITE BLACK CINEMATIC FINALE
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap ending-scene" id="cta">
+    <div class="container">
+      <div class="section-eyebrow eyebrow-dark" style="justify-content:center">
+        <span class="eyebrow-dot"></span> NEXT-GENERATION VEHICLE COMPLIANCE
+      </div>
+      <h2 class="editorial-headline" style="max-width:860px;margin:0 auto 20px">
+        Transforming Vehicle Testing<br>
+        <span style="color:var(--accent-gold)">Into Intelligent Operations.</span>
+      </h2>
+      <p class="editorial-subhead subhead-dark" style="max-width:620px;margin:0 auto 40px">
+        One unified platform for bookings, workforce management, multi-bay inspection execution, statutory documentation and customer lifecycle retention.
+      </p>
+
+      <!-- Centered Silhouette Visual -->
+      <div class="ending-vehicle-silhouette">
+        <img src="assets/images/hero-car.jpg" alt="ATS Pro Industrial Automotive Platform" />
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+        <a href="ats-app/index.html" class="btn btn-gold" style="font-size:15px;padding:16px 36px">
+          Launch Live Application ↗
+        </a>
+        <a href="#overview" class="btn btn-dark-subtle" style="font-size:15px;padding:16px 32px">
+          Explore ATS Pro Modules
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       PREMIUM CORPORATE FOOTER
+       ══════════════════════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div style="max-width:320px">
+          <div class="nav-brand" style="margin-bottom:12px">
+            <div class="brand-mark"></div>
+            <span class="nav-brand-logo">ATS PRO</span>
+          </div>
+          <p style="color:var(--text-dark-secondary);font-size:13px;line-height:1.6">
+            Centralized operational management platform for government-authorized vehicle fitness testing facilities.
+          </p>
+          <div style="margin-top:16px;font-family:var(--font-mono);font-size:11px;color:var(--accent-gold)">
+            STATION CODE: ATS-MP-BPL-004
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="#overview">Vehicle Bookings</a></li>
+            <li><a href="#overview">Testing Task Engine</a></li>
+            <li><a href="#ai-inspection">Neural ANPR OCR</a></li>
+            <li><a href="#workforce">GPS Attendance</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Architecture</h4>
+          <ul>
+            <li><a href="#command-center">Command Center</a></li>
+            <li><a href="#workflow">7-Stage Pipeline</a></li>
+            <li><a href="#architecture">RBAC Permission Matrix</a></li>
+            <li><a href="#documentation">Statutory Reports</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="ATS_Management_System_SRS.md">Technical SRS Document</a></li>
+            <li><a href="ats-app/index.html">Live Application Portal</a></li>
+            <li><a href="#hero">Station Telemetry</a></li>
+            <li><a href="https://github.com/Siddhant2622/ats-vechile" target="_blank">GitHub Repository</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2026 ATS Pro Operations Management System. All rights reserved.</span>
+        <span>Engineered with Node.js, Web PWA & Neural OCR. Precision in Motion.</span>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
-
