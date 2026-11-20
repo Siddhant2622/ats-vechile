@@ -8,41 +8,51 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Production CDNs: Three.js & GSAP ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
   <style>
     /* ══════════════════════════════════════════════════════
-       DESIGN SYSTEM & COLOR SPECIFICATIONS
-       Graphite Black: #10151C | Deep Charcoal: #171D25
-       Porcelain White: #F2F1ED | Champagne Gold: #DBA65C
-       Precision Teal: #39C7B0 | Steel Grey: #8B949E
+       ATS PRO LUXURY DESIGN SYSTEM
+       Graphite: #101419 | Deep Black: #080B10 | Steel: #26303B
+       Silver: #C8CDD2 | Porcelain: #F4F5F3 | Precision Teal: #36D6C1
+       Champagne Gold: #DCA65B
        ══════════════════════════════════════════════════════ */
     :root {
-      --bg-graphite: #10151C;
-      --bg-charcoal: #171D25;
-      --bg-charcoal-card: #1C232D;
-      --bg-porcelain: #F2F1ED;
+      --bg-graphite: #101419;
+      --bg-black: #080B10;
+      --bg-charcoal: #171E26;
+      --bg-charcoal-card: #1D2530;
+      --bg-steel: #26303B;
+      --bg-porcelain: #F4F5F3;
       --bg-porcelain-card: #FFFFFF;
-      --bg-porcelain-muted: #E8E7E2;
-      
-      --accent-gold: #DBA65C;
-      --accent-gold-glow: rgba(219, 166, 92, 0.25);
-      --accent-gold-muted: rgba(219, 166, 92, 0.12);
-      
-      --accent-teal: #39C7B0;
-      --accent-teal-glow: rgba(57, 199, 176, 0.25);
-      --accent-teal-muted: rgba(57, 199, 176, 0.12);
-      
+      --bg-porcelain-muted: #E8EAE6;
+
+      --accent-gold: #DCA65B;
+      --accent-gold-glow: rgba(220, 166, 91, 0.25);
+      --accent-gold-muted: rgba(220, 166, 91, 0.12);
+
+      --accent-teal: #36D6C1;
+      --accent-teal-glow: rgba(54, 214, 193, 0.25);
+      --accent-teal-muted: rgba(54, 214, 193, 0.12);
+
+      --silver: #C8CDD2;
+      --steel-grey: #8A94A0;
+
       --text-dark-primary: #FFFFFF;
-      --text-dark-secondary: #8B949E;
-      --text-dark-muted: #586069;
-      
-      --text-light-primary: #10151C;
-      --text-light-secondary: #57606A;
-      --text-light-muted: #8C959F;
-      
+      --text-dark-secondary: #8A94A0;
+      --text-dark-muted: #535C68;
+
+      --text-light-primary: #101419;
+      --text-light-secondary: #535C68;
+      --text-light-muted: #8A94A0;
+
       --border-dark: rgba(255, 255, 255, 0.08);
-      --border-dark-hover: rgba(219, 166, 92, 0.4);
-      --border-light: rgba(16, 21, 28, 0.12);
-      --border-light-hover: rgba(16, 21, 28, 0.35);
+      --border-dark-hover: rgba(220, 166, 91, 0.4);
+      --border-light: rgba(16, 20, 25, 0.12);
+      --border-light-hover: rgba(16, 20, 25, 0.35);
 
       --font-display: 'Manrope', 'Plus Jakarta Sans', system-ui, sans-serif;
       --font-body: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
@@ -64,13 +74,13 @@
     a { text-decoration: none; color: inherit; }
     img { max-width: 100%; display: block; }
 
-    /* ── TYPOGRAPHY HIERARCHY ── */
+    /* ── TYPOGRAPHY ── */
     .editorial-headline {
       font-family: var(--font-display);
       font-weight: 800;
       letter-spacing: -0.035em;
       line-height: 1.05;
-      font-size: clamp(38px, 5.5vw, 74px);
+      font-size: clamp(38px, 5.2vw, 72px);
     }
     .section-eyebrow {
       display: inline-flex;
@@ -84,7 +94,7 @@
       margin-bottom: 20px;
     }
     .eyebrow-dark { color: var(--accent-gold); }
-    .eyebrow-light { color: #8F6B38; }
+    .eyebrow-light { color: #9A6D2C; }
     .eyebrow-teal { color: var(--accent-teal); }
     .eyebrow-dot {
       width: 6px; height: 6px; border-radius: 50%;
@@ -92,7 +102,7 @@
     }
 
     .editorial-subhead {
-      font-size: clamp(16px, 1.8vw, 20px);
+      font-size: clamp(15.5px, 1.6vw, 19px);
       line-height: 1.65;
       font-weight: 400;
       max-width: 680px;
@@ -100,20 +110,19 @@
     .subhead-dark { color: var(--text-dark-secondary); }
     .subhead-light { color: var(--text-light-secondary); }
 
-    /* ── LAYOUT UTILITIES ── */
+    /* ── LAYOUT ── */
     .scene-wrap {
-      padding: 120px 0;
+      padding: 110px 0;
       position: relative;
       overflow: hidden;
     }
-    .scene-wrap-sm { padding: 80px 0; }
     .container {
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 32px;
     }
     @media (max-width: 768px) {
-      .scene-wrap { padding: 80px 0; }
+      .scene-wrap { padding: 75px 0; }
       .container { padding: 0 20px; }
     }
 
@@ -136,15 +145,15 @@
     }
     .btn-gold {
       background: var(--accent-gold);
-      color: #0C1017;
+      color: #080B10;
       font-weight: 700;
       border-color: var(--accent-gold);
-      box-shadow: 0 4px 20px rgba(219, 166, 92, 0.2);
+      box-shadow: 0 4px 20px rgba(220, 166, 91, 0.25);
     }
     .btn-gold:hover {
-      background: #E5B46D;
+      background: #E8B66F;
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(219, 166, 92, 0.4);
+      box-shadow: 0 8px 30px rgba(220, 166, 91, 0.45);
     }
     .btn-outline-gold {
       background: transparent;
@@ -153,15 +162,6 @@
     }
     .btn-outline-gold:hover {
       background: var(--accent-gold-muted);
-      transform: translateY(-2px);
-    }
-    .btn-outline-light {
-      background: transparent;
-      border-color: var(--border-light);
-      color: var(--text-light-primary);
-    }
-    .btn-outline-light:hover {
-      border-color: var(--text-light-primary);
       transform: translateY(-2px);
     }
     .btn-dark-subtle {
@@ -175,7 +175,7 @@
       transform: translateY(-2px);
     }
 
-    /* ── ICONS SYSTEM (INLINE SVG) ── */
+    /* ── CUSTOM SVG ICONS ── */
     .svg-icon {
       width: 20px; height: 20px;
       stroke-width: 1.5;
@@ -187,53 +187,50 @@
       vertical-align: middle;
       flex-shrink: 0;
     }
-    .svg-icon-lg { width: 32px; height: 32px; stroke-width: 1.3; }
-    .svg-icon-xl { width: 44px; height: 44px; stroke-width: 1.2; }
 
     /* ══════════════════════════════════════════════════════
-       SCENE 1: CINEMATIC HERO (GRAPHITE BLACK)
+       SECTION 01: FLOATING NAVIGATION BAR
        ══════════════════════════════════════════════════════ */
-    .hero-scene {
-      background: var(--bg-graphite);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      border-bottom: 1px solid var(--border-dark);
-    }
-
-    /* Luxury Header */
     .navbar {
-      height: 84px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 78px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border-dark);
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(16, 20, 25, 0.82);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .navbar.scrolled {
+      background: rgba(10, 13, 17, 0.94);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border-dark);
-      position: relative;
-      z-index: 50;
-      backdrop-filter: blur(12px);
-      background: rgba(16, 21, 28, 0.85);
+      width: 100%;
     }
     .nav-brand {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .nav-brand-logo {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      color: #FFFFFF;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
     .brand-mark {
       width: 10px; height: 10px;
       background: var(--accent-gold);
       border-radius: 2px;
       transform: rotate(45deg);
+    }
+    .nav-brand-logo {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #FFFFFF;
     }
     .brand-sub {
       font-family: var(--font-mono);
@@ -247,7 +244,7 @@
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 32px;
       list-style: none;
     }
     .nav-menu a {
@@ -255,98 +252,87 @@
       font-weight: 500;
       color: var(--text-dark-secondary);
       transition: color 0.2s ease;
-      letter-spacing: 0.01em;
+      position: relative;
     }
     .nav-menu a:hover { color: #FFFFFF; }
-    @media (max-width: 900px) { .nav-menu { display: none; } }
+    @media (max-width: 960px) { .nav-menu { display: none; } }
 
-    /* Hero Body */
-    .hero-body {
-      flex: 1;
+    /* ══════════════════════════════════════════════════════
+       SECTION 02: CINEMATIC 3D HERO (GRAPHITE BLACK)
+       ══════════════════════════════════════════════════════ */
+    .hero-scene {
+      background: var(--bg-graphite);
+      min-height: 100vh;
+      padding-top: 100px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 70px 0 50px;
+      justify-content: space-between;
       position: relative;
-      z-index: 10;
-    }
-    .hero-content {
-      max-width: 780px;
-      margin-bottom: 48px;
-    }
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border-dark);
     }
 
-    /* Cinematic Vehicle Stage */
-    .hero-vehicle-stage {
+    .hero-content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 40px;
+      align-items: center;
+      margin-top: 40px;
+    }
+    @media (max-width: 980px) {
+      .hero-content-grid { grid-template-columns: 1fr; }
+    }
+
+    /* 3D Canvas Stage in Hero */
+    .hero-3d-stage {
       position: relative;
-      margin-top: 24px;
+      height: 520px;
       border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      background: radial-gradient(circle at 50% 30%, #1c2633 0%, #0d1218 80%);
-      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: radial-gradient(circle at 50% 35%, #18202A 0%, #080B10 85%);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85);
     }
-    .hero-vehicle-stage img {
+    #heroCanvas {
       width: 100%;
-      height: 440px;
-      object-fit: cover;
-      object-position: center;
-      filter: contrast(1.05) brightness(0.95);
+      height: 100%;
+      display: block;
     }
-    .hero-stage-lighting {
+    .hero-stage-annotations {
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 120px;
-      background: linear-gradient(180deg, rgba(219, 166, 92, 0.12) 0%, transparent 100%);
+      top: 16px; left: 16px; right: 16px;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dark-secondary);
       pointer-events: none;
-    }
-    .hero-laser-sweep {
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, transparent, var(--accent-teal), transparent);
-      box-shadow: 0 0 16px var(--accent-teal);
-      animation: laserSweep 6s infinite ease-in-out;
-      opacity: 0.7;
-    }
-    @keyframes laserSweep {
-      0% { left: 5%; opacity: 0; }
-      10% { opacity: 0.8; }
-      90% { opacity: 0.8; }
-      100% { left: 95%; opacity: 0; }
     }
     .hero-stage-badge {
       position: absolute;
-      bottom: 24px; left: 24px;
-      background: rgba(16, 21, 28, 0.85);
+      bottom: 20px; left: 20px;
+      background: rgba(8, 11, 16, 0.88);
       border: 1px solid var(--border-dark);
-      padding: 10px 16px;
-      border-radius: 6px;
+      padding: 8px 14px;
+      border-radius: 4px;
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       gap: 12px;
       font-family: var(--font-mono);
-      font-size: 11.5px;
-      color: var(--text-dark-secondary);
+      font-size: 11px;
     }
     .hero-stage-badge strong { color: var(--accent-teal); }
 
-    /* Hero Bottom Stats Strip */
     .hero-stats-strip {
       border-top: 1px solid var(--border-dark);
-      padding: 24px 0;
-      background: rgba(16, 21, 28, 0.5);
+      padding: 22px 0;
+      background: rgba(8, 11, 16, 0.6);
+      margin-top: 40px;
     }
     .stats-strip-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
+      gap: 20px;
     }
     .stat-pill {
       display: flex;
@@ -355,7 +341,7 @@
       font-size: 13.5px;
       color: var(--text-dark-secondary);
       border-right: 1px solid var(--border-dark);
-      padding-right: 20px;
+      padding-right: 16px;
     }
     .stat-pill:last-child { border-right: none; }
     .stat-pill strong { color: #FFFFFF; font-weight: 600; }
@@ -369,28 +355,123 @@
     }
 
     /* ══════════════════════════════════════════════════════
-       SCENE 2: PLATFORM OVERVIEW (PORCELAIN WHITE)
+       SECTION 03: SCROLL-DRIVEN VEHICLE JOURNEY (PINNED)
+       ══════════════════════════════════════════════════════ */
+    .journey-pinned-section {
+      position: relative;
+      height: 500vh; /* 5 Stages pinned scroll */
+      background: var(--bg-black);
+    }
+    .journey-sticky-viewport {
+      position: sticky;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #journeyCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+    }
+
+    /* Floating Glass HUD Overlay */
+    .journey-hud-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 100px 48px 48px;
+    }
+    .journey-stage-content {
+      max-width: 440px;
+      background: rgba(16, 20, 25, 0.88);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 24px 28px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .journey-stage-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .journey-stage-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .journey-stage-desc {
+      font-size: 13.5px;
+      color: var(--text-dark-secondary);
+      line-height: 1.6;
+    }
+
+    /* Stage Navigation Dots on Right */
+    .journey-progress-rail {
+      position: absolute;
+      right: 36px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      z-index: 20;
+    }
+    .rail-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-dark-muted);
+      cursor: pointer;
+      transition: color 0.25s ease;
+    }
+    .rail-step.active {
+      color: var(--accent-teal);
+    }
+    .rail-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--text-dark-muted);
+      transition: all 0.25s ease;
+    }
+    .rail-step.active .rail-dot {
+      background: var(--accent-teal);
+      box-shadow: 0 0 10px var(--accent-teal);
+      transform: scale(1.3);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SECTION 04: EIGHT INTEGRATED MODULES (PORCELAIN)
        ══════════════════════════════════════════════════════ */
     .porcelain-scene {
       background-color: var(--bg-porcelain);
       color: var(--text-light-primary);
       border-bottom: 1px solid var(--border-light);
     }
-    .editorial-header {
-      margin-bottom: 64px;
-    }
-    .editorial-header-flex {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    /* Asymmetric Modules Composition */
     .modules-composition {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
+      grid-template-columns: 1.1fr 0.9fr;
       gap: 24px;
     }
     @media (max-width: 980px) {
@@ -401,7 +482,7 @@
       background: var(--bg-porcelain-card);
       border: 1px solid var(--border-light);
       border-radius: 8px;
-      padding: 36px 32px;
+      padding: 34px 30px;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       display: flex;
@@ -412,7 +493,7 @@
     .module-item:last-child { margin-bottom: 0; }
     .module-item:hover {
       border-color: var(--border-light-hover);
-      box-shadow: 0 16px 40px rgba(16, 21, 28, 0.06);
+      box-shadow: 0 16px 40px rgba(16, 20, 25, 0.07);
       transform: translateY(-3px);
     }
 
@@ -420,11 +501,11 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .module-num {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--accent-gold);
       font-weight: 700;
       letter-spacing: 0.08em;
@@ -448,23 +529,23 @@
       font-size: 21px;
       font-weight: 700;
       color: var(--text-light-primary);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       letter-spacing: -0.02em;
     }
     .module-desc {
       font-size: 14.5px;
       color: var(--text-light-secondary);
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .module-micro-graphic {
       background: var(--bg-porcelain-muted);
       border: 1px solid var(--border-light);
       border-radius: 6px;
-      padding: 14px 18px;
+      padding: 12px 16px;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-light-secondary);
       display: flex;
       align-items: center;
@@ -473,12 +554,8 @@
     .module-micro-graphic strong { color: var(--text-light-primary); }
 
     /* ══════════════════════════════════════════════════════
-       SCENE 3: THE COMMAND CENTER (GRAPHITE BLACK)
+       SECTION 05: ADMIN DASHBOARD (GRAPHITE BLACK)
        ══════════════════════════════════════════════════════ */
-    .command-center-scene {
-      background: var(--bg-graphite);
-      position: relative;
-    }
     .browser-frame {
       background: var(--bg-charcoal);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -489,20 +566,15 @@
     }
     .browser-topbar {
       height: 48px;
-      background: #131920;
+      background: #111720;
       border-bottom: 1px solid var(--border-dark);
       display: flex;
       align-items: center;
       padding: 0 20px;
       gap: 14px;
     }
-    .traffic-dots {
-      display: flex;
-      gap: 6px;
-    }
-    .dot {
-      width: 10px; height: 10px; border-radius: 50%;
-    }
+    .traffic-dots { display: flex; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
     .dot-red { background: #E05252; }
     .dot-amber { background: #E5A93C; }
     .dot-green { background: #3EC972; }
@@ -521,7 +593,6 @@
       gap: 8px;
     }
 
-    /* Dashboard Inner Layout */
     .db-container {
       padding: 32px;
       display: grid;
@@ -549,35 +620,27 @@
       font-size: 13px;
       font-weight: 500;
       color: var(--text-dark-secondary);
-      transition: all 0.2s ease;
     }
     .db-nav-link.active {
-      background: rgba(219, 166, 92, 0.1);
+      background: rgba(220, 166, 91, 0.1);
       color: var(--accent-gold);
       border-left: 2px solid var(--accent-gold);
     }
-    .db-nav-link:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.03); }
 
-    /* KPI Metrics 6 Grid */
     .db-metrics-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin-bottom: 24px;
     }
-    @media (max-width: 768px) {
-      .db-metrics-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 480px) {
-      .db-metrics-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 768px) { .db-metrics-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .db-metrics-grid { grid-template-columns: 1fr; } }
 
     .db-metric-card {
       background: var(--bg-charcoal-card);
       border: 1px solid var(--border-dark);
       border-radius: 8px;
       padding: 18px 20px;
-      position: relative;
     }
     .db-metric-label {
       font-family: var(--font-mono);
@@ -585,7 +648,7 @@
       color: var(--text-dark-secondary);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .db-metric-val {
       font-family: var(--font-display);
@@ -602,202 +665,9 @@
       align-items: center;
       gap: 6px;
     }
-    .meta-teal { color: var(--accent-teal); }
-    .meta-gold { color: var(--accent-gold); }
-
-    /* Dashboard Activity & Bay Performance Split */
-    .db-content-split {
-      display: grid;
-      grid-template-columns: 1.3fr 0.9fr;
-      gap: 20px;
-    }
-    @media (max-width: 900px) {
-      .db-content-split { grid-template-columns: 1fr; }
-    }
-
-    .db-card-panel {
-      background: var(--bg-charcoal-card);
-      border: 1px solid var(--border-dark);
-      border-radius: 8px;
-      padding: 22px;
-    }
-    .db-panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      font-family: var(--font-display);
-      font-size: 14.5px;
-      font-weight: 700;
-    }
-
-    /* Live Bay Progress Bars */
-    .bay-row {
-      margin-bottom: 14px;
-    }
-    .bay-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12.5px;
-      margin-bottom: 6px;
-    }
-    .bay-track {
-      height: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .bay-fill {
-      height: 100%;
-      border-radius: 3px;
-    }
-    .fill-gold { background: var(--accent-gold); }
-    .fill-teal { background: var(--accent-teal); }
 
     /* ══════════════════════════════════════════════════════
-       SCENE 4: VEHICLE INTELLIGENCE & BOOKING (PORCELAIN)
-       ══════════════════════════════════════════════════════ */
-    .vehicle-split-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.15fr;
-      gap: 48px;
-      align-items: center;
-    }
-    @media (max-width: 980px) {
-      .vehicle-split-grid { grid-template-columns: 1fr; gap: 36px; }
-    }
-
-    .vehicle-profile-card {
-      background: #FFFFFF;
-      border: 1px solid var(--border-light);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(16, 21, 28, 0.08);
-    }
-    .vehicle-profile-img {
-      height: 220px;
-      width: 100%;
-      object-fit: cover;
-      background: #111;
-    }
-    .vehicle-profile-body {
-      padding: 28px;
-    }
-    .vehicle-id-badge {
-      font-family: var(--font-mono);
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-light-primary);
-      background: var(--bg-porcelain-muted);
-      padding: 6px 14px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-bottom: 16px;
-      border: 1px solid var(--border-light);
-    }
-    .spec-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      font-size: 13px;
-      border-top: 1px solid var(--border-light);
-      padding-top: 16px;
-    }
-    .spec-item span {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      color: var(--text-light-muted);
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-    .spec-item strong {
-      color: var(--text-light-primary);
-      font-weight: 600;
-    }
-
-    /* ══════════════════════════════════════════════════════
-       SCENE 5: AI INSPECTION EXPERIENCE (DARK GRAPHITE)
-       ══════════════════════════════════════════════════════ */
-    .ai-scene {
-      background: var(--bg-graphite);
-      position: relative;
-    }
-    .ai-interface-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 36px;
-      align-items: center;
-    }
-    @media (max-width: 980px) {
-      .ai-interface-grid { grid-template-columns: 1fr; }
-    }
-
-    .ai-scanner-frame {
-      position: relative;
-      border: 1px solid rgba(57, 199, 176, 0.35);
-      border-radius: 10px;
-      overflow: hidden;
-      background: #080C10;
-      box-shadow: 0 0 50px rgba(57, 199, 176, 0.15);
-    }
-    .ai-scanner-frame img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      opacity: 0.88;
-    }
-    .ai-crosshairs {
-      position: absolute;
-      top: 55%; left: 35%;
-      width: 30%; height: 18%;
-      border: 2px solid var(--accent-teal);
-      border-radius: 4px;
-      box-shadow: 0 0 20px rgba(57, 199, 176, 0.5);
-      pointer-events: none;
-    }
-    .ai-crosshairs::after {
-      content: 'OCR TARGET LOCKED';
-      position: absolute;
-      top: -18px; left: 0;
-      font-family: var(--font-mono);
-      font-size: 9px;
-      color: var(--accent-teal);
-      letter-spacing: 0.1em;
-      background: rgba(8, 12, 16, 0.9);
-      padding: 1px 6px;
-      border-radius: 2px;
-    }
-
-    .ai-telemetry-panel {
-      background: var(--bg-charcoal-card);
-      border: 1px solid var(--border-dark);
-      border-radius: 10px;
-      padding: 32px;
-    }
-    .telemetry-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border-dark);
-      font-size: 13.5px;
-    }
-    .telemetry-row:last-child { border-bottom: none; }
-    .telemetry-row span { color: var(--text-dark-secondary); }
-    .telemetry-row strong { font-family: var(--font-mono); color: #FFFFFF; }
-    .status-pill-teal {
-      background: var(--accent-teal-muted);
-      color: var(--accent-teal);
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    /* ══════════════════════════════════════════════════════
-       SCENE 6: OPERATIONAL WORKFLOW (PORCELAIN WHITE)
+       SECTION 06: TESTING WORKFLOW (PORCELAIN WHITE)
        ══════════════════════════════════════════════════════ */
     .timeline-strip {
       display: grid;
@@ -805,19 +675,14 @@
       gap: 12px;
       margin-bottom: 48px;
     }
-    @media (max-width: 900px) {
-      .timeline-strip { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 520px) {
-      .timeline-strip { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .timeline-strip { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .timeline-strip { grid-template-columns: 1fr; } }
 
     .stage-card {
       background: #FFFFFF;
       border: 1px solid var(--border-light);
       border-radius: 8px;
       padding: 22px 16px;
-      position: relative;
       transition: all 0.25s ease;
     }
     .stage-card:hover {
@@ -837,7 +702,6 @@
       font-weight: 700;
       color: var(--text-light-primary);
       margin-bottom: 6px;
-      line-height: 1.3;
     }
     .stage-desc {
       font-size: 11.5px;
@@ -845,18 +709,13 @@
       line-height: 1.5;
     }
 
-    /* Testing Bays Telemetry Cards 4 Grid */
     .bays-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
     }
-    @media (max-width: 900px) {
-      .bays-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 500px) {
-      .bays-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .bays-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 500px) { .bays-grid { grid-template-columns: 1fr; } }
 
     .bay-card {
       background: #FFFFFF;
@@ -893,199 +752,84 @@
     }
 
     /* ══════════════════════════════════════════════════════
-       SCENE 7: WORKFORCE & GPS INTELLIGENCE (DARK)
+       SECTION 07: AI OCR EXPERIENCE (GRAPHITE BLACK)
+       ══════════════════════════════════════════════════════ */
+    .ai-interface-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
+    }
+    @media (max-width: 980px) { .ai-interface-grid { grid-template-columns: 1fr; } }
+
+    .ai-scanner-frame {
+      position: relative;
+      border: 1px solid rgba(54, 214, 193, 0.35);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #080B10;
+      box-shadow: 0 0 50px rgba(54, 214, 193, 0.15);
+    }
+    .ai-scanner-frame img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      opacity: 0.9;
+    }
+    .ai-laser-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: var(--accent-teal);
+      box-shadow: 0 0 14px var(--accent-teal);
+      animation: anprLaser 3s infinite ease-in-out;
+    }
+    @keyframes anprLaser {
+      0% { top: 30%; opacity: 0.2; }
+      50% { top: 75%; opacity: 1; }
+      100% { top: 30%; opacity: 0.2; }
+    }
+
+    .ai-telemetry-panel {
+      background: var(--bg-charcoal-card);
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 30px;
+    }
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-dark);
+      font-size: 13.5px;
+    }
+    .telemetry-row:last-child { border-bottom: none; }
+    .telemetry-row span { color: var(--text-dark-secondary); }
+    .telemetry-row strong { font-family: var(--font-mono); color: #FFFFFF; }
+
+    /* ══════════════════════════════════════════════════════
+       SECTION 08: GPS WORKFORCE & ROLES (GRAPHITE)
        ══════════════════════════════════════════════════════ */
     .workforce-split {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 36px;
       align-items: center;
+      margin-bottom: 56px;
     }
-    @media (max-width: 900px) {
-      .workforce-split { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .workforce-split { grid-template-columns: 1fr; } }
 
-    .gps-console-frame {
-      border: 1px solid var(--border-dark);
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--bg-charcoal);
-      position: relative;
-    }
-    .gps-console-frame img {
-      width: 100%;
-      height: 360px;
-      object-fit: cover;
-      opacity: 0.85;
-    }
-    .geofence-overlay-box {
-      position: absolute;
-      top: 20px; left: 20px; right: 20px;
-      background: rgba(16, 21, 28, 0.85);
-      border: 1px solid var(--border-dark);
-      padding: 14px 18px;
-      border-radius: 6px;
-      backdrop-filter: blur(8px);
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-    }
-
-    .staff-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12.5px;
-      margin-top: 20px;
-    }
-    .staff-table th {
-      text-align: left;
-      padding: 10px 14px;
-      color: var(--text-dark-secondary);
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      border-bottom: 1px solid var(--border-dark);
-    }
-    .staff-table td {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border-dark);
-      color: #FFFFFF;
-    }
-
-    /* ══════════════════════════════════════════════════════
-       SCENE 8: DOCUMENTATION & DIGITAL CERTIFICATES (PORCELAIN)
-       ══════════════════════════════════════════════════════ */
-    .doc-panels-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-bottom: 40px;
-    }
-    @media (max-width: 900px) {
-      .doc-panels-grid { grid-template-columns: 1fr; }
-    }
-
-    .doc-sheet {
-      background: #FFFFFF;
-      border: 1px solid var(--border-light);
-      border-radius: 10px;
-      padding: 36px;
-      box-shadow: 0 16px 40px rgba(16, 21, 28, 0.05);
-      font-family: var(--font-body);
-    }
-    .doc-sheet-head {
-      border-bottom: 2px solid var(--text-light-primary);
-      padding-bottom: 14px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-    .doc-stamp {
-      border: 1.5px solid var(--accent-gold);
-      color: #8F6B38;
-      padding: 2px 10px;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      font-weight: 700;
-      border-radius: 4px;
-    }
-
-    .reminder-strip {
-      background: #FFFFFF;
-      border: 1px solid var(--border-light);
-      border-radius: 8px;
-      padding: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .reminder-nodes {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .rem-node {
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      padding: 6px 14px;
-      border-radius: 4px;
-      background: var(--bg-porcelain-muted);
-      border: 1px solid var(--border-light);
-      color: var(--text-light-secondary);
-    }
-    .rem-node.urgent {
-      background: rgba(224, 82, 82, 0.1);
-      border-color: rgba(224, 82, 82, 0.3);
-      color: #C0392B;
-      font-weight: 700;
-    }
-
-    /* ══════════════════════════════════════════════════════
-       SCENE 9: ARCHITECTURE & ACCESS CONTROL (CHARCOAL)
-       ══════════════════════════════════════════════════════ */
-    .arch-scene {
-      background: var(--bg-charcoal);
-      border-bottom: 1px solid var(--border-dark);
-    }
-    .arch-diagram-wrap {
-      background: var(--bg-graphite);
-      border: 1px solid var(--border-dark);
-      border-radius: 12px;
-      padding: 40px;
-      margin-bottom: 48px;
-    }
-    .arch-tiers-flex {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .arch-node-block {
-      background: var(--bg-charcoal-card);
-      border: 1px solid var(--border-dark);
-      border-radius: 8px;
-      padding: 20px 24px;
-      text-align: center;
-      flex: 1;
-      min-width: 180px;
-    }
-    .arch-node-title {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 4px;
-    }
-    .arch-node-sub {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dark-secondary);
-    }
-    .arch-connector-arrow {
-      color: var(--accent-gold);
-      font-family: var(--font-mono);
-      font-size: 18px;
-    }
-
-    /* Access Matrix Horizontal Cards */
     .roles-matrix-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
     }
-    @media (max-width: 900px) {
-      .roles-matrix-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 500px) {
-      .roles-matrix-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .roles-matrix-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 500px) { .roles-matrix-grid { grid-template-columns: 1fr; } }
 
     .role-matrix-card {
-      background: var(--bg-graphite);
+      background: var(--bg-charcoal-card);
       border: 1px solid var(--border-dark);
       border-radius: 8px;
       padding: 20px;
@@ -1109,32 +853,132 @@
     }
 
     /* ══════════════════════════════════════════════════════
-       SCENE 10: SIGNATURE ENDING & CALL TO ACTION (GRAPHITE)
+       SECTION 09: REPORTS & DIGITAL CERTIFICATES (PORCELAIN)
        ══════════════════════════════════════════════════════ */
-    .ending-scene {
-      background: var(--bg-graphite);
-      text-align: center;
-      padding: 140px 0 100px;
-      position: relative;
+    .doc-panels-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 36px;
     }
-    .ending-vehicle-silhouette {
-      max-width: 840px;
-      margin: 0 auto 48px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border-dark);
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
-      position: relative;
+    @media (max-width: 900px) { .doc-panels-grid { grid-template-columns: 1fr; } }
+
+    .doc-sheet {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 34px;
+      box-shadow: 0 16px 40px rgba(16, 20, 25, 0.05);
     }
-    .ending-vehicle-silhouette img {
-      width: 100%;
-      height: 380px;
-      object-fit: cover;
+    .doc-sheet-head {
+      border-bottom: 2px solid var(--text-light-primary);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .doc-stamp {
+      border: 1.5px solid var(--accent-gold);
+      color: #9A6D2C;
+      padding: 2px 10px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      border-radius: 4px;
     }
 
-    /* Premium Corporate Footer */
+    /* ══════════════════════════════════════════════════════
+       SECTION 10: ARCHITECTURE & ROADMAP
+       ══════════════════════════════════════════════════════ */
+    .arch-diagram-wrap {
+      background: var(--bg-black);
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 40px;
+    }
+    .arch-tiers-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .arch-node-block {
+      background: var(--bg-charcoal-card);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 20px 24px;
+      text-align: center;
+      flex: 1;
+      min-width: 180px;
+      transition: all 0.25s ease;
+    }
+    .arch-node-block:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+    .arch-node-title {
+      font-family: var(--font-display);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 4px;
+    }
+    .arch-node-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dark-secondary);
+    }
+
+    /* 6 Implementation Phases (Roadmap) */
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 900px) { .roadmap-grid { grid-template-columns: 1fr; } }
+
+    .phase-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 26px;
+      position: relative;
+    }
+    .phase-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+    .phase-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-light-primary);
+      margin-bottom: 6px;
+    }
+    .phase-desc {
+      font-size: 13px;
+      color: var(--text-light-secondary);
+      line-height: 1.55;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       SECTION 12: FINAL 3D CTA & FOOTER (GRAPHITE BLACK)
+       ══════════════════════════════════════════════════════ */
+    .final-cta-scene {
+      background: var(--bg-black);
+      text-align: center;
+      padding: 130px 0 90px;
+      position: relative;
+      border-top: 1px solid var(--border-dark);
+    }
+
     footer {
-      background: #0A0D12;
+      background: #06090D;
       border-top: 1px solid var(--border-dark);
       padding: 60px 0 40px;
       font-size: 13.5px;
@@ -1177,133 +1021,188 @@
 <body>
 
   <!-- ══════════════════════════════════════════════════════
-       SCENE 1: CINEMATIC HERO (0–10 SECONDS)
+       SECTION 01: FLOATING NAVIGATION BAR
        ══════════════════════════════════════════════════════ -->
-  <header class="hero-scene" id="hero">
-    <!-- Navbar -->
-    <nav class="navbar">
-      <div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%">
-        <div class="nav-brand">
-          <div class="brand-mark"></div>
-          <span class="nav-brand-logo">ATS PRO</span>
-          <span class="brand-sub">PRECISION IN MOTION</span>
-        </div>
-        <ul class="nav-menu">
-          <li><a href="#overview">Platform</a></li>
-          <li><a href="#command-center">Command Center</a></li>
-          <li><a href="#workflow">Workflow</a></li>
-          <li><a href="#workforce">Workforce</a></li>
-          <li><a href="#architecture">Architecture</a></li>
-        </ul>
-        <div style="display:flex;align-items:center;gap:12px">
-          <a href="../ats-app/index.html" class="btn btn-outline-gold" style="font-size:12.5px;padding:9px 18px">
-            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-            Launch Application
-          </a>
-        </div>
+  <nav class="navbar" id="mainNav">
+    <div class="container nav-inner">
+      <div class="nav-brand">
+        <div class="brand-mark"></div>
+        <span class="nav-brand-logo">ATS PRO</span>
+        <span class="brand-sub">PRECISION IN MOTION</span>
       </div>
-    </nav>
-
-    <!-- Hero Content -->
-    <div class="container hero-body">
-      <div class="hero-content">
-        <div class="section-eyebrow eyebrow-dark">
-          <span class="eyebrow-dot"></span> AUTOMATED TESTING STATION MANAGEMENT
-        </div>
-        <h1 class="editorial-headline" style="margin-bottom:24px">
-          Engineering Trust.<br>
-          <span style="color:var(--accent-gold)">Driving Safer Roads.</span>
-        </h1>
-        <p class="editorial-subhead subhead-dark" style="margin-bottom:36px">
-          An intelligent operating platform connecting vehicle fitness testing, workforce management, AI-powered inspections and compliance workflows into one unified operational architecture.
-        </p>
-        <div class="hero-actions">
-          <a href="#overview" class="btn btn-dark-subtle">
-            Explore the Platform
-            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
-          </a>
-          <a href="../ats-app/index.html" class="btn btn-gold">
-            Launch ATS Operations
-            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
+      <ul class="nav-menu">
+        <li><a href="#overview">Platform</a></li>
+        <li><a href="#journey">3D Journey</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#workflow">Workflow</a></li>
+        <li><a href="#workforce">Roles</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+      </ul>
+      <div>
+        <a href="../ats-app/index.html" class="btn btn-outline-gold" style="font-size:12.5px;padding:9px 18px">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          Launch ATS Application
+        </a>
       </div>
+    </div>
+  </nav>
 
-      <!-- Vehicle Stage Visual -->
-      <div class="hero-vehicle-stage">
-        <div class="hero-stage-lighting"></div>
-        <div class="hero-laser-sweep"></div>
-        <img src="../assets/images/hero-car.jpg" alt="Automated Testing Facility Vehicle" />
-        <div class="hero-stage-badge">
-          <span>STATION ID: <strong>ATS-MP-BPL-004</strong></span>
-          <span>|</span>
-          <span>CALIBRATED BAY 01 ACTIVE</span>
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 02: CINEMATIC 3D HERO
+       ══════════════════════════════════════════════════════ -->
+  <section class="hero-scene" id="hero">
+    <div class="container" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div class="hero-content-grid">
+        <!-- Left: Editorial Typography -->
+        <div>
+          <div class="section-eyebrow eyebrow-dark">
+            <span class="eyebrow-dot"></span> AUTOMATED TESTING STATION MANAGEMENT
+          </div>
+          <h1 class="editorial-headline" style="margin-bottom:22px">
+            Precision in Every<br>
+            <span style="color:var(--accent-gold)">Inspection.</span>
+          </h1>
+          <p class="editorial-subhead subhead-dark" style="margin-bottom:34px">
+            One intelligent operating platform connecting vehicle fitness testing, operational workforce management and automated digital compliance workflows.
+          </p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <a href="#journey" class="btn btn-dark-subtle">
+              Explore ATS Platform
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+            </a>
+            <a href="../ats-app/index.html" class="btn btn-gold">
+              Launch Working Application
+              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Real-time 3D Inspection Environment -->
+        <div class="hero-3d-stage">
+          <div class="hero-stage-annotations">
+            <span>01 — VEHICLE IDENTIFICATION</span>
+            <span>02 — AUTOMATED INSPECTION</span>
+            <span>03 — DIGITAL CERTIFICATION</span>
+          </div>
+          <canvas id="heroCanvas"></canvas>
+          <div class="hero-stage-badge">
+            <span>STATION CODE: <strong>ATS-MP-BPL-004</strong></span>
+            <span>|</span>
+            <span>ROLLER BRAKE BAY 01 ONLINE</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Slim Stats Strip -->
+    <!-- Slim Statistics Strip -->
     <div class="hero-stats-strip">
       <div class="container stats-strip-grid">
         <div class="stat-pill">
           <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-gold)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          <span><strong>8 Integrated Modules</strong> Architecture</span>
+          <span><strong>8 Integrated Modules</strong> System</span>
         </div>
         <div class="stat-pill">
-          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-teal)"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-teal)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span><strong>25 Employee Capacity</strong> Configured</span>
+        </div>
+        <div class="stat-pill">
+          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-gold)"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
           <span><strong>AI-Assisted OCR</strong> Neural Engine</span>
         </div>
         <div class="stat-pill">
-          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-gold)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span><strong>GPS Geofenced</strong> Workforce Tracking</span>
-        </div>
-        <div class="stat-pill">
-          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-teal)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span><strong>Cryptographic</strong> Statutory Reports</span>
+          <svg class="svg-icon" viewBox="0 0 24 24" style="color:var(--accent-teal)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span><strong>GPS-Verified</strong> Attendance Geofence</span>
         </div>
       </div>
     </div>
-  </header>
+  </section>
 
   <!-- ══════════════════════════════════════════════════════
-       SCENE 2: THE PLATFORM OVERVIEW (10–20 SECONDS)
-       PORCELAIN WHITE SECTION
+       SECTION 03: SCROLL-DRIVEN VEHICLE JOURNEY (PINNED)
        ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap porcelain-scene" id="overview">
-    <div class="container">
-      <div class="editorial-header editorial-header-flex">
-        <div>
-          <div class="section-eyebrow eyebrow-light">
-            <span class="eyebrow-dot"></span> PLATFORM CAPABILITIES
-          </div>
-          <h2 class="editorial-headline" style="color:var(--text-light-primary)">
-            Every Operation.<br>
-            One Intelligent System.
-          </h2>
+  <section class="journey-pinned-section" id="journey">
+    <div class="journey-sticky-viewport">
+      <canvas id="journeyCanvas"></canvas>
+
+      <!-- Floating HUD Content Box (Dynamically updated via ScrollTrigger) -->
+      <div class="journey-hud-overlay">
+        <div class="journey-stage-content" id="journeyStageCard">
+          <div class="journey-stage-tag" id="hudStageTag">STAGE A / 05</div>
+          <h2 class="journey-stage-title" id="hudStageTitle">Every Vehicle Has a Journey.</h2>
+          <p class="journey-stage-desc" id="hudStageDesc">
+            Incoming transport arrives at the automated testing facility. The vehicle enters the inspection lane for initial registration verification.
+          </p>
         </div>
-        <p class="editorial-subhead subhead-light" style="max-width:440px">
-          Replacing fragmented spreadsheets and paper slips with a cohesive, government-compliant testing station operating system.
-        </p>
+
+        <!-- Technical Telemetry Footer inside HUD -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;width:100%;font-family:var(--font-mono);font-size:11px;color:var(--text-dark-secondary)">
+          <div style="background:rgba(8,11,16,0.85);padding:8px 14px;border:1px solid var(--border-dark);border-radius:4px">
+            CAMERA TELEMETRY: <strong id="hudCameraCoords" style="color:var(--accent-teal)">X: 3.5m | Y: 1.5m | Z: 4.2m</strong>
+          </div>
+          <div style="background:rgba(8,11,16,0.85);padding:8px 14px;border:1px solid var(--border-dark);border-radius:4px">
+            ACTIVE BAY: <strong style="color:var(--accent-gold)">BAY 1 ROLLER BRAKE DYNAMOMETER</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage Navigation Rail on Right -->
+      <div class="journey-progress-rail">
+        <div class="rail-step active" id="railA">
+          <span class="rail-dot"></span>
+          <span>01 VEHICLE ARRIVAL</span>
+        </div>
+        <div class="rail-step" id="railB">
+          <span class="rail-dot"></span>
+          <span>02 ANPR IDENTIFICATION</span>
+        </div>
+        <div class="rail-step" id="railC">
+          <span class="rail-dot"></span>
+          <span>03 AUTOMATED TESTING</span>
+        </div>
+        <div class="rail-step" id="railD">
+          <span class="rail-dot"></span>
+          <span>04 VERIFICATION</span>
+        </div>
+        <div class="rail-step" id="railE">
+          <span class="rail-dot"></span>
+          <span>05 COMPLETE ATS PLATFORM</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 04: EIGHT INTEGRATED MODULES (PORCELAIN)
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap porcelain-scene" id="modules">
+    <div class="container">
+      <div class="editorial-header" style="margin-bottom:56px">
+        <div class="section-eyebrow eyebrow-light">
+          <span class="eyebrow-dot"></span> PLATFORM CAPABILITIES
+        </div>
+        <h2 class="editorial-headline" style="color:var(--text-light-primary)">
+          Every Operation.<br>
+          One Intelligent System.
+        </h2>
       </div>
 
       <!-- Asymmetric Editorial Composition (8 Modules) -->
       <div class="modules-composition">
-        <!-- Column 1 -->
         <div>
           <!-- Module 01 -->
           <div class="module-item">
             <div>
               <div class="module-top">
-                <span class="module-num">01 / QUEUE INTELLIGENCE</span>
+                <span class="module-num">01 / DISPATCH</span>
                 <div class="module-icon-wrap">
                   <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 </div>
               </div>
               <h3 class="module-title">Vehicle Booking & Customer Management</h3>
-              <p class="module-desc">Centralized profile lifecycle managing registration numbers, transport categories (LMV, HMV, passenger fleets), appointment slot scheduling and full audit trail history.</p>
+              <p class="module-desc">Centralized profile lifecycle managing registration numbers, transport categories (LMV, HMV, commercial fleets), appointment scheduling and full audit trail history.</p>
             </div>
             <div class="module-micro-graphic">
-              <span>ACTIVE PIPELINE QUEUE</span>
+              <span>ACTIVE QUEUE STATUS</span>
               <strong>ATS-2026-1041 • 24 SCHEDULED</strong>
             </div>
           </div>
@@ -1363,13 +1262,12 @@
           </div>
         </div>
 
-        <!-- Column 2 -->
         <div>
           <!-- Module 02 -->
           <div class="module-item">
             <div>
               <div class="module-top">
-                <span class="module-num">02 / WORKFORCE TELEMETRY</span>
+                <span class="module-num">02 / WORKFORCE</span>
                 <div class="module-icon-wrap">
                   <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
@@ -1393,7 +1291,7 @@
                 </div>
               </div>
               <h3 class="module-title">AI Camera & Number Plate OCR</h3>
-              <p class="module-desc">Instantaneous optical character recognition configured for all Indian registration plate formats. Automatic matching with active database records to eliminate typing.</p>
+              <p class="module-desc">Instantaneous optical character recognition configured for all Indian registration plate formats. Automatic matching with active database records to eliminate manual typing.</p>
             </div>
             <div class="module-micro-graphic">
               <span>NEURAL ACCURACY</span>
@@ -1405,7 +1303,7 @@
           <div class="module-item">
             <div>
               <div class="module-top">
-                <span class="module-num">06 / COMPLIANCE CYCLE</span>
+                <span class="module-num">06 / COMPLIANCE</span>
                 <div class="module-icon-wrap">
                   <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
                 </div>
@@ -1423,7 +1321,7 @@
           <div class="module-item">
             <div>
               <div class="module-top">
-                <span class="module-num">08 / TELEMETRY DASHBOARD</span>
+                <span class="module-num">08 / TELEMETRY</span>
                 <div class="module-icon-wrap">
                   <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                 </div>
@@ -1442,22 +1340,21 @@
   </section>
 
   <!-- ══════════════════════════════════════════════════════
-       SCENE 3: THE COMMAND CENTER (20–30 SECONDS)
-       GRAPHITE BLACK ENTERPRISE DASHBOARD
+       SECTION 05: ADMIN DASHBOARD (GRAPHITE BLACK)
        ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap command-center-scene" id="command-center">
+  <section class="scene-wrap" style="background:var(--bg-graphite)" id="dashboard">
     <div class="container">
-      <div class="editorial-header" style="text-align:center;max-width:760px;margin:0 auto 60px">
+      <div class="editorial-header" style="text-align:center;max-width:760px;margin:0 auto 54px">
         <div class="section-eyebrow eyebrow-dark" style="justify-content:center">
           <span class="eyebrow-dot"></span> COMMAND CENTER
         </div>
-        <h2 class="editorial-headline" style="margin-bottom:20px">Total Operational Visibility.</h2>
+        <h2 class="editorial-headline" style="margin-bottom:18px">Total Operational Visibility.</h2>
         <p class="editorial-subhead subhead-dark" style="margin:0 auto">
           From incoming vehicle registration to final certificate issuance. Command every bay, sensor reading and operator workflow from one high-precision interface.
         </p>
       </div>
 
-      <!-- Large Browser Mockup -->
+      <!-- Large Perspective Browser Mockup -->
       <div class="browser-frame">
         <div class="browser-topbar">
           <div class="traffic-dots">
@@ -1469,50 +1366,33 @@
             <svg class="svg-icon" style="width:14px;height:14px;color:var(--accent-teal)" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             https://station-mp-bpl-004.ats.internal/command-center
           </div>
-          <span style="margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--accent-teal)">SYSTEM LIVE • 99.98% UPTIME</span>
+          <span style="margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--accent-teal)">DEMONSTRATION PREVIEW • LIVE TELEMETRY</span>
         </div>
 
         <div class="db-container">
-          <!-- Sidebar in mockup -->
           <div class="db-sidebar">
             <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dark-secondary);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">
               STATION NAVIGATION
             </div>
-            <div class="db-nav-link active">
-              <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              Command Overview
-            </div>
-            <div class="db-nav-link">
-              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
-              Vehicles Queue (24)
-            </div>
-            <div class="db-nav-link">
-              <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              Testing Bays (4)
-            </div>
-            <div class="db-nav-link">
-              <svg class="svg-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              Staff Attendance
-            </div>
-            <div class="db-nav-link">
-              <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-              Expiry Alerts (7)
-            </div>
+            <div class="db-nav-link active">Overview</div>
+            <div class="db-nav-link">Bookings (24)</div>
+            <div class="db-nav-link">Testing Bays (4)</div>
+            <div class="db-nav-link">Staff Attendance</div>
+            <div class="db-nav-link">Expiry Alerts (7)</div>
+            <div class="db-nav-link">Audit Reports</div>
           </div>
 
-          <!-- Dashboard Main Panel -->
           <div>
-            <!-- High-Contrast Metrics (6) -->
             <div class="db-metrics-grid">
               <div class="db-metric-card">
                 <div class="db-metric-label">Today's Bookings</div>
                 <div class="db-metric-val">24</div>
-                <div class="db-metric-meta"><span class="meta-gold">↑ +16.6%</span> vs yesterday</div>
+                <div class="db-metric-meta"><span style="color:var(--accent-gold)">↑ +16.6%</span> vs yesterday</div>
               </div>
               <div class="db-metric-card">
                 <div class="db-metric-label">Testing Completed</div>
                 <div class="db-metric-val">18</div>
-                <div class="db-metric-meta"><span class="meta-teal">75.0%</span> pass clearance rate</div>
+                <div class="db-metric-meta"><span style="color:var(--accent-teal)">75.0%</span> clearance rate</div>
               </div>
               <div class="db-metric-card">
                 <div class="db-metric-label">Pending In Queue</div>
@@ -1520,9 +1400,9 @@
                 <div class="db-metric-meta">3 currently inside bays</div>
               </div>
               <div class="db-metric-card">
-                <div class="db-metric-label">Staff On Duty</div>
+                <div class="db-metric-label">Employee Attendance</div>
                 <div class="db-metric-val">23<span style="font-size:18px;color:var(--text-dark-secondary)">/25</span></div>
-                <div class="db-metric-meta"><span class="meta-teal">✓</span> GPS Geofence verified</div>
+                <div class="db-metric-meta"><span style="color:var(--accent-teal)">✓</span> GPS Geofence verified</div>
               </div>
               <div class="db-metric-card">
                 <div class="db-metric-label">Expiry Alerts</div>
@@ -1536,76 +1416,31 @@
               </div>
             </div>
 
-            <!-- Activity Split -->
-            <div class="db-content-split">
-              <!-- Live Queue Table -->
-              <div class="db-card-panel">
-                <div class="db-panel-head">
-                  <span>Live Vehicle Inspection Pipeline</span>
-                  <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent-teal)">REAL-TIME FEED</span>
-                </div>
-                <div style="font-family:var(--font-mono);font-size:12.5px">
-                  <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
-                    <span style="color:#FFFFFF;font-weight:700">MP 04 AB 1234</span>
-                    <span style="color:var(--text-dark-secondary)">HMV Cargo Truck</span>
-                    <span style="color:var(--accent-teal)">Bay 1 (Brake Test)</span>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
-                    <span style="color:#FFFFFF;font-weight:700">CG 16 CD 5678</span>
-                    <span style="color:var(--text-dark-secondary)">Passenger Bus</span>
-                    <span style="color:var(--accent-gold)">Bay 2 (Headlight Dip)</span>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
-                    <span style="color:#FFFFFF;font-weight:700">DL 10 CA 9988</span>
-                    <span style="color:var(--text-dark-secondary)">Multi-Axle Trailer</span>
-                    <span style="color:var(--accent-teal)">PASSED • CERT READY</span>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;padding:10px 0">
-                    <span style="color:#FFFFFF;font-weight:700">MP 09 EF 9012</span>
-                    <span style="color:var(--text-dark-secondary)">Light Delivery Van</span>
-                    <span style="color:var(--text-dark-secondary)">Queued in Waiting Lane</span>
-                  </div>
-                </div>
+            <!-- Queue Snapshot -->
+            <div style="background:var(--bg-charcoal-card);border:1px solid var(--border-dark);border-radius:8px;padding:20px;font-family:var(--font-mono);font-size:12.5px">
+              <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--border-dark);color:var(--text-dark-secondary);font-size:11px">
+                <span>VEHICLE NO.</span>
+                <span>CATEGORY</span>
+                <span>BAY ASSIGNMENT</span>
+                <span>STATUS</span>
               </div>
-
-              <!-- Bay Utilization Gauges -->
-              <div class="db-card-panel">
-                <div class="db-panel-head">
-                  <span>Testing Bay Utilization</span>
-                  <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent-gold)">4 BAYS ONLINE</span>
-                </div>
-
-                <div class="bay-row">
-                  <div class="bay-info">
-                    <span>Bay 1: Roller Brake Bench</span>
-                    <strong style="color:var(--accent-teal)">85% Busy</strong>
-                  </div>
-                  <div class="bay-track"><div class="bay-fill fill-teal" style="width:85%"></div></div>
-                </div>
-
-                <div class="bay-row">
-                  <div class="bay-info">
-                    <span>Bay 2: Optical Headlamp Aligner</span>
-                    <strong style="color:var(--accent-gold)">65% Busy</strong>
-                  </div>
-                  <div class="bay-track"><div class="bay-fill fill-gold" style="width:65%"></div></div>
-                </div>
-
-                <div class="bay-row">
-                  <div class="bay-info">
-                    <span>Bay 3: Speedometer Dynamometer</span>
-                    <strong style="color:var(--accent-teal)">40% Standby</strong>
-                  </div>
-                  <div class="bay-track"><div class="bay-fill fill-teal" style="width:40%"></div></div>
-                </div>
-
-                <div class="bay-row" style="margin-bottom:0">
-                  <div class="bay-info">
-                    <span>Bay 4: Side Slip & Suspension</span>
-                    <strong style="color:var(--accent-gold)">90% Busy</strong>
-                  </div>
-                  <div class="bay-track"><div class="bay-fill fill-gold" style="width:90%"></div></div>
-                </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
+                <span style="color:#FFFFFF;font-weight:700">MP 04 AB 1234</span>
+                <span style="color:var(--text-dark-secondary)">HMV Cargo Truck</span>
+                <span style="color:var(--accent-teal)">Bay 1 (Roller Brake Bench)</span>
+                <span style="color:var(--accent-gold)">IN PROGRESS</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-dark)">
+                <span style="color:#FFFFFF;font-weight:700">CG 16 CD 5678</span>
+                <span style="color:var(--text-dark-secondary)">Passenger Bus</span>
+                <span style="color:var(--accent-gold)">Bay 2 (Headlight Aligner)</span>
+                <span style="color:var(--accent-gold)">IN PROGRESS</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0">
+                <span style="color:#FFFFFF;font-weight:700">DL 10 CA 9988</span>
+                <span style="color:var(--text-dark-secondary)">Multi-Axle Trailer</span>
+                <span style="color:var(--accent-teal)">Bay 3 & 4 Cleared</span>
+                <span style="color:var(--accent-teal)">PASSED • CERT READY</span>
               </div>
             </div>
           </div>
@@ -1615,181 +1450,20 @@
   </section>
 
   <!-- ══════════════════════════════════════════════════════
-       SCENE 4: VEHICLE INTELLIGENCE & BOOKING (30–40 SECONDS)
-       PORCELAIN WHITE SECTION
-       ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap porcelain-scene" id="vehicles">
-    <div class="container">
-      <div class="vehicle-split-grid">
-        <!-- Left Side: Copy -->
-        <div>
-          <div class="section-eyebrow eyebrow-light">
-            <span class="eyebrow-dot"></span> VEHICLE INTELLIGENCE
-          </div>
-          <h2 class="editorial-headline" style="color:var(--text-light-primary);margin-bottom:24px">
-            Every Vehicle.<br>
-            A Complete Digital Record.
-          </h2>
-          <p class="editorial-subhead subhead-light" style="margin-bottom:32px">
-            Manage registrations, appointment scheduling, fleet customer histories, and statutory fitness records in a single connected pipeline.
-          </p>
-
-          <div style="display:flex;flex-direction:column;gap:18px">
-            <div style="display:flex;align-items:flex-start;gap:14px">
-              <div style="width:28px;height:28px;border-radius:4px;background:var(--accent-gold-muted);color:#8F6B38;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              </div>
-              <div>
-                <strong style="color:var(--text-light-primary);font-size:15px;display:block">Permanent Vehicle Record Architecture</strong>
-                <span style="color:var(--text-light-secondary);font-size:13.5px">Historical testing data, ownership transfers, and compliance certificates remain linked across years.</span>
-              </div>
-            </div>
-
-            <div style="display:flex;align-items:flex-start;gap:14px">
-              <div style="width:28px;height:28px;border-radius:4px;background:rgba(57,199,176,0.15);color:#0E8065;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              </div>
-              <div>
-                <strong style="color:var(--text-light-primary);font-size:15px;display:block">Slot Optimization & Lane Balancing</strong>
-                <span style="color:var(--text-light-secondary);font-size:13.5px">Intelligently schedules high-axle commercial transport to prevent bottlenecks at testing lanes.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Side: Luxury Vehicle Profile Card -->
-        <div class="vehicle-profile-card">
-          <img src="../assets/images/vehicle-profile.jpg" class="vehicle-profile-img" alt="Commercial Fleet Vehicle Profile" />
-          <div class="vehicle-profile-body">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <span class="vehicle-id-badge">MP 04 AB 1234</span>
-              <span style="font-family:var(--font-mono);font-size:11.5px;color:#0E8065;font-weight:700">● IN TESTING BAY 01</span>
-            </div>
-
-            <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text-light-primary);margin-bottom:4px">
-              Heavy Commercial Multi-Axle Carrier
-            </div>
-            <div style="font-size:13px;color:var(--text-light-secondary);margin-bottom:16px">
-              Owner: Rajesh Transport Corporation • Ref: ATS-2026-1041
-            </div>
-
-            <div class="spec-grid">
-              <div class="spec-item">
-                <span>RTO Registration</span>
-                <strong>Bhopal (MP-04)</strong>
-              </div>
-              <div class="spec-item">
-                <span>Fuel / Emission</span>
-                <strong>Diesel / BS-VI Standard</strong>
-              </div>
-              <div class="spec-item">
-                <span>Inspection Scope</span>
-                <strong>Full 4-Point Regulatory</strong>
-              </div>
-              <div class="spec-item">
-                <span>Appointment Slot</span>
-                <strong>Today, 10:30 AM</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════════════════
-       SCENE 5: AI INSPECTION EXPERIENCE (40–50 SECONDS)
-       DARK GRAPHITE WITH PRECISION TEAL SCANNER
-       ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap ai-scene" id="ai-inspection">
-    <div class="container">
-      <div class="editorial-header" style="max-width:700px;margin-bottom:54px">
-        <div class="section-eyebrow eyebrow-teal">
-          <span class="eyebrow-dot"></span> NEURAL COMPUTER VISION
-        </div>
-        <h2 class="editorial-headline" style="margin-bottom:16px">
-          Precision Powered<br>
-          <span style="color:var(--accent-teal)">by Intelligence.</span>
-        </h2>
-        <p class="editorial-subhead subhead-dark">
-          Sub-second license plate recognition, automated document field parsing and real-time database matching built directly into the operator mobile interface.
-        </p>
-      </div>
-
-      <div class="ai-interface-grid">
-        <!-- Left: Neural Scanning Frame -->
-        <div class="ai-scanner-frame">
-          <img src="../assets/images/ai-wireframe-car.jpg" alt="AI Neural Scanning Engine" />
-          <div class="ai-crosshairs"></div>
-          <div style="position:absolute;bottom:16px;left:16px;right:16px;background:rgba(8,12,16,0.85);padding:10px 14px;border-radius:4px;display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px">
-            <span style="color:var(--accent-teal)">ANPR INFERENCE: 42ms</span>
-            <span style="color:#FFFFFF">INDIAN STANDARD HIGH SECURITY PLATE</span>
-          </div>
-        </div>
-
-        <!-- Right: Telemetry Panel -->
-        <div class="ai-telemetry-panel">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid var(--border-dark);padding-bottom:14px">
-            <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dark-secondary);letter-spacing:0.1em">EXTRACTION TELEMETRY</span>
-            <span class="status-pill-teal">VEHICLE IDENTIFIED</span>
-          </div>
-
-          <div class="telemetry-row">
-            <span>Detected Plate Number</span>
-            <strong style="color:var(--accent-teal);font-size:18px">MP 04 AB 1234</strong>
-          </div>
-          <div class="telemetry-row">
-            <span>Neural OCR Confidence</span>
-            <strong style="color:var(--accent-teal)">99.2% (High Certainty)</strong>
-          </div>
-          <div class="telemetry-row">
-            <span>Jurisdiction & RTO Code</span>
-            <strong>Madhya Pradesh / Bhopal</strong>
-          </div>
-          <div class="telemetry-row">
-            <span>Database Matching Result</span>
-            <strong style="color:var(--accent-gold)">MATCH FOUND: ATS-2026-1041</strong>
-          </div>
-          <div class="telemetry-row">
-            <span>Registered Fleet Owner</span>
-            <strong>Rajesh Transport Corporation</strong>
-          </div>
-          <div class="telemetry-row">
-            <span>Inspection Evidence Photo</span>
-            <strong style="color:var(--accent-teal)">✓ Cryptographically Stamped</strong>
-          </div>
-
-          <div style="margin-top:24px;padding:14px;background:rgba(57,199,176,0.06);border:1px solid rgba(57,199,176,0.25);border-radius:6px;font-size:12.5px;color:var(--text-dark-secondary)">
-            <strong style="color:var(--accent-teal);display:block;margin-bottom:2px">Zero Manual Entry Protocol</strong>
-            Plate capture instantly identifies vehicle file, links photo evidence, and authorizes operator to commence bay testing with single tap.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════════════════
-       SCENE 6: OPERATIONAL WORKFLOW (50–60 SECONDS)
-       PORCELAIN WHITE SECTION
+       SECTION 06: TESTING WORKFLOW (PORCELAIN WHITE)
        ══════════════════════════════════════════════════════ -->
   <section class="scene-wrap porcelain-scene" id="workflow">
     <div class="container">
-      <div class="editorial-header editorial-header-flex">
-        <div>
-          <div class="section-eyebrow eyebrow-light">
-            <span class="eyebrow-dot"></span> OPERATIONAL DISCIPLINE
-          </div>
-          <h2 class="editorial-headline" style="color:var(--text-light-primary)">
-            From First Booking<br>
-            to Final Certification.
-          </h2>
+      <div class="editorial-header">
+        <div class="section-eyebrow eyebrow-light">
+          <span class="eyebrow-dot"></span> OPERATIONAL DISCIPLINE
         </div>
-        <p class="editorial-subhead subhead-light" style="max-width:440px">
-          A seamless 7-stage operational lifecycle ensuring strict regulatory compliance, traceable operator signatures, and zero data loss.
-        </p>
+        <h2 class="editorial-headline" style="color:var(--text-light-primary)">
+          From First Booking<br>
+          to Final Certification.
+        </h2>
       </div>
 
-      <!-- 7-Stage Horizontal Timeline -->
       <div class="timeline-strip">
         <div class="stage-card">
           <div class="stage-num">01 / DISPATCH</div>
@@ -1828,7 +1502,7 @@
         </div>
       </div>
 
-      <!-- Testing Operations Bays Telemetry Cards -->
+      <!-- Bays Telemetry Grid -->
       <div class="bays-grid">
         <div class="bay-card">
           <div class="bay-card-title">
@@ -1886,13 +1560,70 @@
   </section>
 
   <!-- ══════════════════════════════════════════════════════
-       SCENE 7: WORKFORCE & GPS INTELLIGENCE (60–70 SECONDS)
-       GRAPHITE BLACK SECTION
+       SECTION 07: AI OCR EXPERIENCE (GRAPHITE BLACK)
        ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap" style="background:var(--bg-graphite);border-bottom:1px solid var(--border-dark)" id="workforce">
+  <section class="scene-wrap" style="background:var(--bg-graphite);border-bottom:1px solid var(--border-dark)">
+    <div class="container">
+      <div class="editorial-header" style="max-width:700px;margin-bottom:48px">
+        <div class="section-eyebrow eyebrow-teal">
+          <span class="eyebrow-dot"></span> NEURAL COMPUTER VISION
+        </div>
+        <h2 class="editorial-headline" style="margin-bottom:16px">
+          Precision Powered<br>
+          <span style="color:var(--accent-teal)">by Intelligence.</span>
+        </h2>
+        <p class="editorial-subhead subhead-dark">
+          Sub-second license plate recognition, automated document field parsing and real-time database matching built directly into the operator mobile interface.
+        </p>
+      </div>
+
+      <div class="ai-interface-grid">
+        <div class="ai-scanner-frame">
+          <div class="ai-laser-line"></div>
+          <img src="../assets/images/ai-wireframe-car.jpg" alt="AI Neural Scanning Engine" />
+        </div>
+
+        <div class="ai-telemetry-panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;border-bottom:1px solid var(--border-dark);padding-bottom:12px">
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-dark-secondary)">EXTRACTION TELEMETRY</span>
+            <span style="background:rgba(54,214,193,0.15);color:var(--accent-teal);padding:4px 10px;border-radius:4px;font-family:var(--font-mono);font-size:11px;font-weight:700">VEHICLE IDENTIFIED</span>
+          </div>
+
+          <div class="telemetry-row">
+            <span>Detected Plate Number</span>
+            <strong style="color:var(--accent-teal);font-size:18px">MP 04 AB 1234</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Neural OCR Confidence</span>
+            <strong style="color:var(--accent-teal)">99.2% (High Certainty)</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Jurisdiction & RTO Code</span>
+            <strong>Madhya Pradesh / Bhopal</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Database Matching Result</span>
+            <strong style="color:var(--accent-gold)">MATCH FOUND: ATS-2026-1041</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Registered Fleet Owner</span>
+            <strong>Rajesh Transport Corporation</strong>
+          </div>
+          <div class="telemetry-row">
+            <span>Inspection Evidence Photo</span>
+            <strong style="color:var(--accent-teal)">✓ Cryptographically Stamped</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 08: GPS WORKFORCE & ROLES (GRAPHITE)
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap" style="background:var(--bg-black);border-bottom:1px solid var(--border-dark)" id="workforce">
     <div class="container">
       <div class="workforce-split">
-        <!-- Left Side: Workforce Stats & Table -->
         <div>
           <div class="section-eyebrow eyebrow-dark">
             <span class="eyebrow-dot"></span> WORKFORCE & COMPLIANCE
@@ -1901,220 +1632,32 @@
             People. Precision.<br>
             <span style="color:var(--accent-gold)">Accountability.</span>
           </h2>
-          <p class="editorial-subhead subhead-dark" style="margin-bottom:32px">
+          <p class="editorial-subhead subhead-dark" style="margin-bottom:28px">
             Guarantee station operational readiness with mobile GPS punch-in, tamper-evident coordinate verification, and daily End-of-Day (EOD) logs.
           </p>
 
-          <!-- Stat Row -->
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px">
             <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);padding:14px;border-radius:6px">
               <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dark-secondary);display:block">STAFF PRESENT</span>
-              <strong style="font-size:24px;color:#FFFFFF;font-family:var(--font-display)">23 / 25</strong>
+              <strong style="font-size:22px;color:#FFFFFF;font-family:var(--font-display)">23 / 25</strong>
             </div>
             <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);padding:14px;border-radius:6px">
               <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dark-secondary);display:block">VERIFIED GEOFENCE</span>
-              <strong style="font-size:24px;color:var(--accent-teal);font-family:var(--font-display)">100%</strong>
+              <strong style="font-size:22px;color:var(--accent-teal);font-family:var(--font-display)">100%</strong>
             </div>
             <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);padding:14px;border-radius:6px">
               <span style="font-family:var(--font-mono);font-size:10.5px;color:var(--text-dark-secondary);display:block">ACTIVE BAYS</span>
-              <strong style="font-size:24px;color:var(--accent-gold);font-family:var(--font-display)">4 Lanes</strong>
+              <strong style="font-size:22px;color:var(--accent-gold);font-family:var(--font-display)">4 Lanes</strong>
             </div>
           </div>
-
-          <!-- Staff Attendance Table -->
-          <div style="background:var(--bg-charcoal);border:1px solid var(--border-dark);border-radius:8px;overflow:hidden">
-            <table class="staff-table">
-              <thead>
-                <tr>
-                  <th>OPERATOR</th>
-                  <th>ASSIGNED BAY</th>
-                  <th>PUNCH IN</th>
-                  <th>GPS STATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Amit Kumar</strong></td>
-                  <td>Brake Test Lane 01</td>
-                  <td style="font-family:var(--font-mono)">08:52 AM</td>
-                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
-                </tr>
-                <tr>
-                  <td><strong>Ravi Patel</strong></td>
-                  <td>Headlight Lane 02</td>
-                  <td style="font-family:var(--font-mono)">08:58 AM</td>
-                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
-                </tr>
-                <tr>
-                  <td><strong>Suresh Yadav</strong></td>
-                  <td>Speed Dynamometer</td>
-                  <td style="font-family:var(--font-mono)">09:05 AM</td>
-                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
-                </tr>
-                <tr>
-                  <td><strong>Dinesh Verma</strong></td>
-                  <td>Suspension Bench</td>
-                  <td style="font-family:var(--font-mono)">08:45 AM</td>
-                  <td style="color:var(--accent-teal);font-family:var(--font-mono)">✓ Inside Geofence</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
 
-        <!-- Right Side: GPS Console Display -->
-        <div class="gps-console-frame">
-          <div class="geofence-overlay-box">
-            <span>STATION COORD: <strong>23.2599° N, 77.4126° E</strong></span>
-            <span style="color:var(--accent-teal)">PERIMETER: 200M RADIUS ACTIVE</span>
-          </div>
-          <img src="../assets/images/radar-dashboard.jpg" alt="GPS Geofence Radar Monitoring Console" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════════════════
-       SCENE 8: DOCUMENTATION & DIGITAL CERTIFICATES (70–80 SEC)
-       PORCELAIN WHITE SECTION
-       ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap porcelain-scene" id="documentation">
-    <div class="container">
-      <div class="editorial-header" style="max-width:720px">
-        <div class="section-eyebrow eyebrow-light">
-          <span class="eyebrow-dot"></span> REGULATORY OUTPUTS
-        </div>
-        <h2 class="editorial-headline" style="color:var(--text-light-primary);margin-bottom:16px">
-          Every Result.<br>
-          Properly Documented.
-        </h2>
-        <p class="editorial-subhead subhead-light">
-          Government-authorized statutory test reports and digital fitness certificates formatted strictly to transport authority requirements.
-        </p>
-      </div>
-
-      <!-- Dual Document Panels -->
-      <div class="doc-panels-grid">
-        <!-- Panel 1: Formal Test Report -->
-        <div class="doc-sheet">
-          <div class="doc-sheet-head">
-            <div>
-              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted);letter-spacing:0.1em;display:block">STATUTORY INSPECTION RECORD</span>
-              <strong style="font-family:var(--font-display);font-size:18px;color:var(--text-light-primary)">Vehicle Fitness Test Report</strong>
-            </div>
-            <span class="doc-stamp">ATS-MP-BPL-004</span>
-          </div>
-
-          <div style="font-size:13px;line-height:1.7;color:var(--text-light-secondary);margin-bottom:20px">
-            Vehicle Reg No: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">MP 04 AB 1234</strong><br>
-            Chassis Ref: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">MA3EWD81S0019284</strong><br>
-            Inspection Bay: <strong style="color:var(--text-light-primary)">Lane 1, Automated Roller Bench</strong><br>
-            Supervising Engineer: <strong style="color:var(--text-light-primary)">Vikram Malhotra (ID #ENG-04)</strong>
-          </div>
-
-          <div style="background:var(--bg-porcelain-muted);border:1px solid var(--border-light);padding:14px;border-radius:6px;font-family:var(--font-mono);font-size:11.5px;color:var(--text-light-secondary);margin-bottom:20px">
-            [+] ROLLER BRAKE FORCE: 6.8 kN (THRESHOLD >4.5 kN) — PASS<br>
-            [+] BRAKE AXLE IMBALANCE: 7.3% (LIMIT <30%) — PASS<br>
-            [+] BEAM INTENSITY: 26,500 cd — PASS<br>
-            [+] SPEED VARIANCE: +2.1% (TOLERANCE ±5%) — PASS
-          </div>
-
-          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-light);padding-top:14px;font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted)">
-            <span>HASH: <strong>SHA256:7f9a12c4b...</strong></span>
-            <span style="color:#0E8065;font-weight:700">✓ CERTIFIED AUTHENTIC</span>
-          </div>
-        </div>
-
-        <!-- Panel 2: Digital Certificate -->
-        <div class="doc-sheet" style="border-top:4px solid var(--accent-gold)">
-          <div class="doc-sheet-head">
-            <div>
-              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted);letter-spacing:0.1em;display:block">MINISTRY OF ROAD TRANSPORT</span>
-              <strong style="font-family:var(--font-display);font-size:18px;color:var(--text-light-primary)">Digital Fitness Certificate</strong>
-            </div>
-            <span class="doc-stamp" style="border-color:#0E8065;color:#0E8065">LEGAL VALIDITY</span>
-          </div>
-
-          <div style="font-size:13px;line-height:1.7;color:var(--text-light-secondary);margin-bottom:20px">
-            Certificate Number: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">ATS-FC-2026-8801</strong><br>
-            Vehicle Number: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">MP 04 AB 1234</strong><br>
-            Category: <strong style="color:var(--text-light-primary)">Heavy Motor Vehicle (HMV) Goods</strong><br>
-            Issue Date: <strong style="color:var(--text-light-primary)">20 November 2026</strong><br>
-            Expiry Date: <strong style="color:#C0392B;font-weight:700">19 November 2027</strong>
-          </div>
-
-          <div style="background:rgba(219,166,92,0.1);border:1px solid rgba(219,166,92,0.3);padding:14px;border-radius:6px;font-size:12.5px;color:#8F6B38;margin-bottom:20px">
-            <strong>QR Code Tamper-Proof Seal:</strong> This certificate is cryptographically stored in the national ATS registry and verifiable by enforcement agencies via RTO scanner.
-          </div>
-
-          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-light);padding-top:14px;font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted)">
-            <span>STATUS: <strong>ACTIVE & VALID</strong></span>
-            <span>NEXT TEST: <strong>OCT 2027</strong></span>
-          </div>
+        <div style="border:1px solid var(--border-dark);border-radius:10px;overflow:hidden;background:var(--bg-charcoal)">
+          <img src="../assets/images/radar-dashboard.jpg" style="width:100%;height:320px;object-fit:cover" alt="GPS Geofence Console" />
         </div>
       </div>
 
-      <!-- Expiry Reminder Timeline Strip & WhatsApp Card -->
-      <div class="reminder-strip">
-        <div>
-          <strong style="font-size:14px;color:var(--text-light-primary);display:block;margin-bottom:4px">Automated WhatsApp Reminder Schedule</strong>
-          <span style="font-size:12.5px;color:var(--text-light-secondary)">Pre-scheduled alerts keep vehicle operators ahead of certificate expiration.</span>
-        </div>
-        <div class="reminder-nodes">
-          <span class="rem-node">30 DAYS BEFORE (First Notice)</span>
-          <span class="rem-node">15 DAYS BEFORE (Follow-up)</span>
-          <span class="rem-node urgent">7 DAYS BEFORE (Urgent Alert)</span>
-          <span class="rem-node urgent">1 DAY BEFORE (Final Notice)</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════════════════
-       SCENE 9: ARCHITECTURE & ACCESS CONTROL (80–90 SEC)
-       DEEP CHARCOAL SECTION
-       ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap arch-scene" id="architecture">
-    <div class="container">
-      <div class="editorial-header" style="max-width:720px;margin-bottom:54px">
-        <div class="section-eyebrow eyebrow-dark">
-          <span class="eyebrow-dot"></span> SYSTEM ARCHITECTURE & RBAC
-        </div>
-        <h2 class="editorial-headline" style="margin-bottom:16px">
-          Built for Precision.<br>
-          <span style="color:var(--accent-gold)">Designed for Scale.</span>
-        </h2>
-        <p class="editorial-subhead subhead-dark">
-          Decoupled backend services, secure role-based access control, and dedicated storage pipelines ensuring sub-second response times across factory bays.
-        </p>
-      </div>
-
-      <!-- Architectural Tiers Diagram -->
-      <div class="arch-diagram-wrap">
-        <div class="arch-tiers-flex">
-          <div class="arch-node-block">
-            <div class="arch-node-title">Client Tier</div>
-            <div class="arch-node-sub">Admin Web • Employee PWA • Reception Portal</div>
-          </div>
-          <div class="arch-connector-arrow">⇄</div>
-          <div class="arch-node-block" style="border-color:var(--accent-gold)">
-            <div class="arch-node-title" style="color:var(--accent-gold)">Core API Engine</div>
-            <div class="arch-node-sub">Node.js • RBAC Middleware • Workflow Engine</div>
-          </div>
-          <div class="arch-connector-arrow">⇄</div>
-          <div class="arch-node-block">
-            <div class="arch-node-title">Data Storage</div>
-            <div class="arch-node-sub">PostgreSQL • S3 Object Storage</div>
-          </div>
-          <div class="arch-connector-arrow">⇄</div>
-          <div class="arch-node-block" style="border-color:var(--accent-teal)">
-            <div class="arch-node-title" style="color:var(--accent-teal)">External Services</div>
-            <div class="arch-node-sub">Neural ANPR • WhatsApp API • Geofence</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Role-Based Access Control Matrix (8 Roles) -->
+      <!-- 8 User Roles Matrix -->
       <div class="roles-matrix-grid">
         <div class="role-matrix-card">
           <div class="role-card-name">Super Admin</div>
@@ -2153,30 +1696,160 @@
   </section>
 
   <!-- ══════════════════════════════════════════════════════
-       SCENE 10: SIGNATURE ENDING & CALL TO ACTION (90–100 SEC)
-       GRAPHITE BLACK CINEMATIC FINALE
+       SECTION 09: REPORTS & DIGITAL CERTIFICATES (PORCELAIN)
        ══════════════════════════════════════════════════════ -->
-  <section class="scene-wrap ending-scene" id="cta">
+  <section class="scene-wrap porcelain-scene" id="documentation">
+    <div class="container">
+      <div class="editorial-header">
+        <div class="section-eyebrow eyebrow-light">
+          <span class="eyebrow-dot"></span> REGULATORY OUTPUTS
+        </div>
+        <h2 class="editorial-headline" style="color:var(--text-light-primary)">
+          Every Result.<br>
+          Properly Documented.
+        </h2>
+      </div>
+
+      <div class="doc-panels-grid">
+        <div class="doc-sheet">
+          <div class="doc-sheet-head">
+            <div>
+              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted);letter-spacing:0.1em;display:block">STATUTORY INSPECTION RECORD</span>
+              <strong style="font-family:var(--font-display);font-size:18px;color:var(--text-light-primary)">Vehicle Fitness Test Report</strong>
+            </div>
+            <span class="doc-stamp">ATS-MP-BPL-004</span>
+          </div>
+          <div style="font-size:13px;line-height:1.7;color:var(--text-light-secondary);margin-bottom:16px">
+            Vehicle Reg No: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">MP 04 AB 1234</strong><br>
+            Inspection Bay: <strong>Lane 1, Automated Roller Bench</strong><br>
+            Supervising Engineer: <strong>Vikram Malhotra (ID #ENG-04)</strong>
+          </div>
+          <div style="background:var(--bg-porcelain-muted);border:1px solid var(--border-light);padding:12px;border-radius:6px;font-family:var(--font-mono);font-size:11.5px;color:var(--text-light-secondary)">
+            [+] ROLLER BRAKE FORCE: 6.8 kN (THRESHOLD >4.5 kN) — PASS<br>
+            [+] BRAKE AXLE IMBALANCE: 7.3% (LIMIT <30%) — PASS<br>
+            [+] BEAM INTENSITY: 26,500 cd — PASS
+          </div>
+        </div>
+
+        <div class="doc-sheet" style="border-top:4px solid var(--accent-gold)">
+          <div class="doc-sheet-head">
+            <div>
+              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-light-muted);letter-spacing:0.1em;display:block">MINISTRY OF ROAD TRANSPORT</span>
+              <strong style="font-family:var(--font-display);font-size:18px;color:var(--text-light-primary)">Digital Fitness Certificate</strong>
+            </div>
+            <span class="doc-stamp" style="border-color:#0E8065;color:#0E8065">LEGAL VALIDITY</span>
+          </div>
+          <div style="font-size:13px;line-height:1.7;color:var(--text-light-secondary);margin-bottom:16px">
+            Certificate Number: <strong style="color:var(--text-light-primary);font-family:var(--font-mono)">ATS-FC-2026-8801</strong><br>
+            Issue Date: <strong>20 November 2026</strong><br>
+            Expiry Date: <strong style="color:#C0392B;font-weight:700">19 November 2027</strong>
+          </div>
+          <div style="background:rgba(220,166,91,0.1);border:1px solid rgba(220,166,91,0.3);padding:12px;border-radius:6px;font-size:12px;color:#9A6D2C">
+            <strong>QR Code Tamper-Proof Seal:</strong> Stored cryptographically in the national ATS registry and verifiable by enforcement agencies via RTO scanner.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 10: ARCHITECTURE & ROADMAP
+       ══════════════════════════════════════════════════════ -->
+  <section class="scene-wrap" style="background:var(--bg-charcoal);border-bottom:1px solid var(--border-dark)" id="architecture">
+    <div class="container">
+      <div class="editorial-header" style="max-width:720px;margin-bottom:48px">
+        <div class="section-eyebrow eyebrow-dark">
+          <span class="eyebrow-dot"></span> SYSTEM ARCHITECTURE
+        </div>
+        <h2 class="editorial-headline" style="margin-bottom:16px">
+          Built for Precision.<br>
+          <span style="color:var(--accent-gold)">Designed for Scale.</span>
+        </h2>
+      </div>
+
+      <div class="arch-diagram-wrap" style="margin-bottom:60px">
+        <div class="arch-tiers-flex">
+          <div class="arch-node-block">
+            <div class="arch-node-title">Client Tier</div>
+            <div class="arch-node-sub">Admin Web • Employee PWA • Reception Portal</div>
+          </div>
+          <div class="arch-node-block" style="border-color:var(--accent-gold)">
+            <div class="arch-node-title" style="color:var(--accent-gold)">Core API Engine</div>
+            <div class="arch-node-sub">Node.js • RBAC Middleware • Workflow Engine</div>
+          </div>
+          <div class="arch-node-block">
+            <div class="arch-node-title">Data Storage</div>
+            <div class="arch-node-sub">PostgreSQL • S3 Object Storage</div>
+          </div>
+          <div class="arch-node-block" style="border-color:var(--accent-teal)">
+            <div class="arch-node-title" style="color:var(--accent-teal)">External Services</div>
+            <div class="arch-node-sub">Neural ANPR • WhatsApp API • Geofence</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 11: 6 Implementation Phases (Roadmap) -->
+      <div class="editorial-header" style="margin-bottom:36px">
+        <div class="section-eyebrow eyebrow-dark">
+          <span class="eyebrow-dot"></span> IMPLEMENTATION ROADMAP
+        </div>
+        <h3 class="editorial-headline" style="font-size:36px;color:#FFFFFF">6 Delivery Phases</h3>
+      </div>
+
+      <div class="roadmap-grid">
+        <div class="phase-card">
+          <div class="phase-num">PHASE 01</div>
+          <div class="phase-name">Discovery & Validation</div>
+          <div class="phase-desc">Confirm ATS regulatory context, test types, equipment interfaces and statutory formats.</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 02</div>
+          <div class="phase-name">Core Operations</div>
+          <div class="phase-desc">Authentication, RBAC, customer records, booking system and operator dashboards.</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 03</div>
+          <div class="phase-name">Workforce Management</div>
+          <div class="phase-desc">GPS attendance with geofence validation, EOD reporting, and automated payroll rules.</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 04</div>
+          <div class="phase-name">Testing & Evidence</div>
+          <div class="phase-desc">Test forms, camera capture, OCR-assisted plate extraction and report verification workflows.</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 05</div>
+          <div class="phase-name">Follow-up Automation</div>
+          <div class="phase-desc">Certificate validity tracking, background expiry jobs and official Meta WhatsApp Cloud API.</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 06</div>
+          <div class="phase-name">Validation & Rollout</div>
+          <div class="phase-desc">Role permission testing, audit trails, disaster recovery testing, and client UAT sign-off.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 12: FINAL 3D CTA & FOOTER
+       ══════════════════════════════════════════════════════ -->
+  <section class="final-cta-scene" id="cta">
     <div class="container">
       <div class="section-eyebrow eyebrow-dark" style="justify-content:center">
-        <span class="eyebrow-dot"></span> NEXT-GENERATION VEHICLE COMPLIANCE
+        <span class="eyebrow-dot"></span> AUTOMATED VEHICLE TESTING PLATFORM
       </div>
       <h2 class="editorial-headline" style="max-width:860px;margin:0 auto 20px">
-        Transforming Vehicle Testing<br>
-        <span style="color:var(--accent-gold)">Into Intelligent Operations.</span>
+        Building the Future of<br>
+        <span style="color:var(--accent-gold)">Vehicle Fitness Testing.</span>
       </h2>
       <p class="editorial-subhead subhead-dark" style="max-width:620px;margin:0 auto 40px">
-        One unified platform for bookings, workforce management, multi-bay inspection execution, statutory documentation and customer lifecycle retention.
+        Every booking. Every inspection. Every certificate. Connected through one intelligent platform.
       </p>
-
-      <!-- Centered Silhouette Visual -->
-      <div class="ending-vehicle-silhouette">
-        <img src="../assets/images/hero-car.jpg" alt="ATS Pro Industrial Automotive Platform" />
-      </div>
 
       <div style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
         <a href="../ats-app/index.html" class="btn btn-gold" style="font-size:15px;padding:16px 36px">
-          Launch Live Application ↗
+          Launch Working Application ↗
         </a>
         <a href="#overview" class="btn btn-dark-subtle" style="font-size:15px;padding:16px 32px">
           Explore ATS Pro Modules
@@ -2185,9 +1858,7 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════════════════
-       PREMIUM CORPORATE FOOTER
-       ══════════════════════════════════════════════════════ -->
+  <!-- Corporate Footer -->
   <footer>
     <div class="container">
       <div class="footer-top">
@@ -2209,7 +1880,7 @@
           <ul>
             <li><a href="#overview">Vehicle Bookings</a></li>
             <li><a href="#overview">Testing Task Engine</a></li>
-            <li><a href="#ai-inspection">Neural ANPR OCR</a></li>
+            <li><a href="#workflow">7-Stage Pipeline</a></li>
             <li><a href="#workforce">GPS Attendance</a></li>
           </ul>
         </div>
@@ -2217,10 +1888,10 @@
         <div class="footer-col">
           <h4>Architecture</h4>
           <ul>
-            <li><a href="#command-center">Command Center</a></li>
-            <li><a href="#workflow">7-Stage Pipeline</a></li>
-            <li><a href="#architecture">RBAC Permission Matrix</a></li>
+            <li><a href="#dashboard">Command Center</a></li>
+            <li><a href="#workforce">RBAC Permission Matrix</a></li>
             <li><a href="#documentation">Statutory Reports</a></li>
+            <li><a href="#architecture">Technical Stack</a></li>
           </ul>
         </div>
 
@@ -2229,7 +1900,6 @@
           <ul>
             <li><a href="../ATS_Management_System_SRS.md">Technical SRS Document</a></li>
             <li><a href="../ats-app/index.html">Live Application Portal</a></li>
-            <li><a href="#hero">Station Telemetry</a></li>
             <li><a href="https://github.com/Siddhant2622/ats-vechile" target="_blank">GitHub Repository</a></li>
           </ul>
         </div>
@@ -2237,10 +1907,557 @@
 
       <div class="footer-bottom-bar">
         <span>© 2026 ATS Pro Operations Management System. All rights reserved.</span>
-        <span>Engineered with Node.js, Web PWA & Neural OCR. Precision in Motion.</span>
+        <span>Engineered with Node.js, Web PWA & Real-Time Three.js. Precision in Motion.</span>
       </div>
     </div>
   </footer>
 
+  <!-- ══════════════════════════════════════════════════════
+       THREE.JS 3D AUTOMOTIVE INSPECTION FACILITY ENGINE
+       ══════════════════════════════════════════════════════ -->
+  <script>
+    (function init3DExperience() {
+      // Check WebGL availability
+      function isWebGLAvailable() {
+        try {
+          const canvas = document.createElement('canvas');
+          return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+        } catch (e) {
+          return false;
+        }
+      }
+
+      if (!isWebGLAvailable()) {
+        console.warn('WebGL not supported. Displaying fallback graphics.');
+        return;
+      }
+
+      // Shared Helper: Create Procedural Luxury Vehicle Model
+      function createVehicleModel() {
+        const car = new THREE.Group();
+
+        // 1. Car Body Materials
+        const paintMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0x6e7885, // Graphite Silver
+          metalness: 0.85,
+          roughness: 0.18,
+          clearcoat: 0.9,
+          clearcoatRoughness: 0.1
+        });
+
+        const glassMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0x070c12,
+          transmission: 0.45,
+          opacity: 0.92,
+          transparent: true,
+          roughness: 0.05
+        });
+
+        const trimMaterial = new THREE.MeshStandardMaterial({
+          color: 0x14181E,
+          roughness: 0.6,
+          metalness: 0.2
+        });
+
+        // Main Lower Chassis
+        const lowerBodyGeo = new THREE.BoxGeometry(1.85, 0.48, 4.4);
+        const lowerBody = new THREE.Mesh(lowerBodyGeo, paintMaterial);
+        lowerBody.position.y = 0.52;
+        car.add(lowerBody);
+
+        // Aerodynamic Upper Cabin / Roof
+        const cabinGeo = new THREE.BoxGeometry(1.52, 0.46, 2.3);
+        const cabin = new THREE.Mesh(cabinGeo, paintMaterial);
+        cabin.position.set(0, 0.96, -0.15);
+        car.add(cabin);
+
+        // Windshield (Front & Rear slanted glass)
+        const frontWindshieldGeo = new THREE.PlaneGeometry(1.44, 0.62);
+        const frontWindshield = new THREE.Mesh(frontWindshieldGeo, glassMaterial);
+        frontWindshield.position.set(0, 0.93, 1.05);
+        frontWindshield.rotation.x = -Math.PI / 3.4;
+        car.add(frontWindshield);
+
+        const rearWindshieldGeo = new THREE.PlaneGeometry(1.44, 0.54);
+        const rearWindshield = new THREE.Mesh(rearWindshieldGeo, glassMaterial);
+        rearWindshield.position.set(0, 0.94, -1.35);
+        rearWindshield.rotation.x = Math.PI / 3.2;
+        car.add(rearWindshield);
+
+        // Side Windows
+        const sideWinGeo = new THREE.BoxGeometry(1.54, 0.36, 1.9);
+        const sideWin = new THREE.Mesh(sideWinGeo, glassMaterial);
+        sideWin.position.set(0, 0.94, -0.15);
+        car.add(sideWin);
+
+        // Front Grille & Carbon Splitter
+        const grilleGeo = new THREE.BoxGeometry(1.4, 0.2, 0.06);
+        const grille = new THREE.Mesh(grilleGeo, trimMaterial);
+        grille.position.set(0, 0.42, 2.22);
+        car.add(grille);
+
+        // Curved Dual LED Headlights (Left & Right) with Teal Glow
+        const headlightGeo = new THREE.BoxGeometry(0.32, 0.1, 0.08);
+        const headlightMat = new THREE.MeshStandardMaterial({
+          color: 0xD8F8FF,
+          emissive: 0x36D6C1,
+          emissiveIntensity: 2.2,
+          roughness: 0.1
+        });
+
+        const leftLight = new THREE.Mesh(headlightGeo, headlightMat);
+        leftLight.position.set(-0.62, 0.55, 2.21);
+        car.add(leftLight);
+
+        const rightLight = new THREE.Mesh(headlightGeo, headlightMat);
+        rightLight.position.set(0.62, 0.55, 2.21);
+        car.add(rightLight);
+
+        // Sleek Rear LED Light Bar
+        const tailLightGeo = new THREE.BoxGeometry(1.6, 0.08, 0.08);
+        const tailLightMat = new THREE.MeshStandardMaterial({
+          color: 0xFF2222,
+          emissive: 0xFF0000,
+          emissiveIntensity: 2.5
+        });
+        const tailLight = new THREE.Mesh(tailLightGeo, tailLightMat);
+        tailLight.position.set(0, 0.62, -2.21);
+        car.add(tailLight);
+
+        // Registration License Plate ("MP 04 AB 1234") Canvas Texture
+        const plateCanvas = document.createElement('canvas');
+        plateCanvas.width = 256; plateCanvas.height = 64;
+        const ctx = plateCanvas.getContext('2d');
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, 256, 64);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#002B49';
+        ctx.strokeRect(2, 2, 252, 60);
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 26px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('MP 04 AB 1234', 128, 32);
+
+        const plateTex = new THREE.CanvasTexture(plateCanvas);
+        const plateGeo = new THREE.PlaneGeometry(0.56, 0.14);
+        const plateMat = new THREE.MeshBasicMaterial({ map: plateTex });
+
+        const frontPlate = new THREE.Mesh(plateGeo, plateMat);
+        frontPlate.position.set(0, 0.36, 2.23);
+        car.add(frontPlate);
+
+        // 4 Rotatable Wheels with Alloy Rims & Brake Calipers
+        const wheels = [];
+        const tireMat = new THREE.MeshStandardMaterial({ color: 0x111317, roughness: 0.85 });
+        const rimMat = new THREE.MeshStandardMaterial({ color: 0xC0C6CD, metalness: 0.9, roughness: 0.15 });
+        const caliperMat = new THREE.MeshStandardMaterial({ color: 0x36D6C1, metalness: 0.4 });
+
+        const wheelPositions = [
+          [-0.88, 0.34, 1.3],  // Front Left
+          [0.88, 0.34, 1.3],   // Front Right
+          [-0.88, 0.34, -1.3], // Rear Left
+          [0.88, 0.34, -1.3]   // Rear Right
+        ];
+
+        wheelPositions.forEach(([x, y, z]) => {
+          const wheelGroup = new THREE.Group();
+          wheelGroup.position.set(x, y, z);
+
+          // Tire
+          const tireGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.22, 24);
+          tireGeo.rotateZ(Math.PI / 2);
+          const tire = new THREE.Mesh(tireGeo, tireMat);
+          wheelGroup.add(tire);
+
+          // Rim
+          const rimGeo = new THREE.CylinderGeometry(0.24, 0.24, 0.23, 16);
+          rimGeo.rotateZ(Math.PI / 2);
+          const rim = new THREE.Mesh(rimGeo, rimMat);
+          wheelGroup.add(rim);
+
+          // Caliper
+          const caliperGeo = new THREE.BoxGeometry(0.08, 0.14, 0.12);
+          const caliper = new THREE.Mesh(caliperGeo, caliperMat);
+          caliper.position.set(x > 0 ? -0.06 : 0.06, 0.1, 0.08);
+          wheelGroup.add(caliper);
+
+          car.add(wheelGroup);
+          wheels.push(wheelGroup);
+        });
+
+        car.userData = { wheels, frontPlate };
+        return car;
+      }
+
+      // Shared Helper: Create Automated Testing Station Environment
+      function createInspectionFacility() {
+        const facility = new THREE.Group();
+
+        // 1. Concrete Polished Floor with Reflectivity
+        const floorGeo = new THREE.PlaneGeometry(36, 48);
+        const floorMat = new THREE.MeshStandardMaterial({
+          color: 0x141820,
+          roughness: 0.35,
+          metalness: 0.2
+        });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = 0;
+        facility.add(floor);
+
+        // 2. Yellow & Black Safety Hazard Stripes Along Lanes
+        const stripeGeo = new THREE.PlaneGeometry(0.18, 24);
+        const stripeMat = new THREE.MeshBasicMaterial({ color: 0xDCA65B });
+        const leftStripe = new THREE.Mesh(stripeGeo, stripeMat);
+        leftStripe.rotation.x = -Math.PI / 2;
+        leftStripe.position.set(-1.8, 0.01, 0);
+        facility.add(leftStripe);
+
+        const rightStripe = new THREE.Mesh(stripeGeo, stripeMat);
+        rightStripe.rotation.x = -Math.PI / 2;
+        rightStripe.position.set(1.8, 0.01, 0);
+        facility.add(rightStripe);
+
+        // 3. Recessed Brake Rollers Pit (Under Front & Rear Wheels)
+        const rollerMat = new THREE.MeshStandardMaterial({
+          color: 0x4B5360,
+          metalness: 0.85,
+          roughness: 0.3
+        });
+        const rollers = [];
+
+        [1.3, -1.3].forEach(zPos => {
+          const pitGeo = new THREE.BoxGeometry(2.4, 0.12, 0.7);
+          const pit = new THREE.Mesh(pitGeo, new THREE.MeshStandardMaterial({ color: 0x080B10, roughness: 0.9 }));
+          pit.position.set(0, 0.02, zPos);
+          facility.add(pit);
+
+          // Left and right rollers
+          [-0.88, 0.88].forEach(xPos => {
+            const rGeo = new THREE.CylinderGeometry(0.14, 0.14, 0.5, 18);
+            rGeo.rotateZ(Math.PI / 2);
+            const roller = new THREE.Mesh(rGeo, rollerMat);
+            roller.position.set(xPos, 0.07, zPos);
+            facility.add(roller);
+            rollers.push(roller);
+          });
+        });
+
+        // 4. Overhead Industrial Truss Gantry with Floodlights
+        const trussMat = new THREE.MeshStandardMaterial({ color: 0x242C37, metalness: 0.6, roughness: 0.5 });
+        const gantry = new THREE.Group();
+
+        // Gantry Posts
+        const postGeo = new THREE.CylinderGeometry(0.08, 0.08, 4.5, 8);
+        const p1 = new THREE.Mesh(postGeo, trussMat); p1.position.set(-3.2, 2.25, 1.3); gantry.add(p1);
+        const p2 = new THREE.Mesh(postGeo, trussMat); p2.position.set(3.2, 2.25, 1.3); gantry.add(p2);
+
+        // Gantry Crossbar
+        const crossGeo = new THREE.BoxGeometry(6.6, 0.16, 0.16);
+        const cross = new THREE.Mesh(crossGeo, trussMat);
+        cross.position.set(0, 4.4, 1.3);
+        gantry.add(cross);
+
+        // Overhead Linear LED Fixture
+        const lightFixtureGeo = new THREE.BoxGeometry(4.0, 0.08, 0.2);
+        const fixtureMat = new THREE.MeshBasicMaterial({ color: 0xD6F4FF });
+        const fixture = new THREE.Mesh(lightFixtureGeo, fixtureMat);
+        fixture.position.set(0, 4.32, 1.3);
+        gantry.add(fixture);
+
+        facility.add(gantry);
+
+        // 5. Holographic ANPR Laser Scanning Projector & Plane
+        const laserGeo = new THREE.PlaneGeometry(1.8, 1.2);
+        const laserMat = new THREE.MeshBasicMaterial({
+          color: 0x36D6C1,
+          transparent: true,
+          opacity: 0.0,
+          side: THREE.DoubleSide
+        });
+        const laserPlane = new THREE.Mesh(laserGeo, laserMat);
+        laserPlane.position.set(0, 0.45, 2.3);
+        laserPlane.rotation.x = Math.PI / 2;
+        facility.add(laserPlane);
+
+        facility.userData = { rollers, laserPlane };
+        return facility;
+      }
+
+      // ──────────────────────────────────────────────────────────
+      // 1. HERO 3D SCENE (Canvas: #heroCanvas)
+      // ──────────────────────────────────────────────────────────
+      const heroCanvas = document.getElementById('heroCanvas');
+      if (heroCanvas) {
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x101419, 0.04);
+
+        const camera = new THREE.PerspectiveCamera(42, heroCanvas.clientWidth / heroCanvas.clientHeight, 0.1, 100);
+        camera.position.set(3.8, 1.6, 4.6);
+        camera.lookAt(0, 0.65, 0);
+
+        const renderer = new THREE.WebGLRenderer({ canvas: heroCanvas, antialias: true, alpha: true });
+        renderer.setSize(heroCanvas.clientWidth, heroCanvas.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Lighting
+        const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambient);
+
+        const keySpot = new THREE.SpotLight(0xE5F4FF, 2.4, 25, Math.PI / 4, 0.3);
+        keySpot.position.set(0, 6, 2);
+        scene.add(keySpot);
+
+        const fillGold = new THREE.PointLight(0xDCA65B, 1.2, 15);
+        fillGold.position.set(-4, 2, -2);
+        scene.add(fillGold);
+
+        const fillTeal = new THREE.PointLight(0x36D6C1, 1.5, 15);
+        fillTeal.position.set(3, 1.5, 3);
+        scene.add(fillTeal);
+
+        // Build car & facility
+        const car = createVehicleModel();
+        scene.add(car);
+
+        const facility = createInspectionFacility();
+        scene.add(facility);
+
+        // Mouse Parallax
+        let mouseX = 0, mouseY = 0;
+        heroCanvas.addEventListener('mousemove', e => {
+          const rect = heroCanvas.getBoundingClientRect();
+          mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          mouseY = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+        });
+
+        // Render Loop
+        let clock = new THREE.Clock();
+        function animateHero() {
+          requestAnimationFrame(animateHero);
+          const t = clock.getElapsedTime();
+
+          // Subtle idling floating and mouse tilt
+          car.position.y = Math.sin(t * 1.5) * 0.015;
+          car.rotation.y = 0.08 * Math.sin(t * 0.4) + mouseX * 0.15;
+
+          camera.position.x = 3.8 + mouseX * 0.4;
+          camera.position.y = 1.6 + mouseY * 0.2;
+          camera.lookAt(0, 0.65, 0);
+
+          renderer.render(scene, camera);
+        }
+        animateHero();
+
+        window.addEventListener('resize', () => {
+          if (!heroCanvas) return;
+          camera.aspect = heroCanvas.clientWidth / heroCanvas.clientHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(heroCanvas.clientWidth, heroCanvas.clientHeight);
+        });
+      }
+
+      // ──────────────────────────────────────────────────────────
+      // 2. PINNED SCROLL-DRIVEN VEHICLE JOURNEY (Canvas: #journeyCanvas)
+      // ──────────────────────────────────────────────────────────
+      const journeyCanvas = document.getElementById('journeyCanvas');
+      if (journeyCanvas && window.gsap && window.ScrollTrigger) {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x080B10, 0.035);
+
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(3.5, 1.5, 4.2);
+        camera.lookAt(0, 0.6, 0);
+
+        const renderer = new THREE.WebGLRenderer({ canvas: journeyCanvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Lighting
+        const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambient);
+
+        const overheadLight = new THREE.SpotLight(0xE5F4FF, 3.2, 30, Math.PI / 4, 0.25);
+        overheadLight.position.set(0, 7, 1);
+        scene.add(overheadLight);
+
+        const tealScannerLight = new THREE.PointLight(0x36D6C1, 0, 10);
+        tealScannerLight.position.set(0, 0.8, 2.6);
+        scene.add(tealScannerLight);
+
+        const goldSideLight = new THREE.PointLight(0xDCA65B, 1.2, 15);
+        goldSideLight.position.set(-4, 1.8, 0);
+        scene.add(goldSideLight);
+
+        // Assets
+        const car = createVehicleModel();
+        scene.add(car);
+
+        const facility = createInspectionFacility();
+        scene.add(facility);
+
+        const rollers = facility.userData.rollers;
+        const laserPlane = facility.userData.laserPlane;
+
+        // Stage Content Mapping
+        const stagesData = [
+          {
+            tag: "STAGE A / 05",
+            title: "Every Vehicle Has a Journey.",
+            desc: "Incoming transport arrives at the automated testing facility. The vehicle enters the inspection lane for initial registration verification.",
+            stepId: "railA"
+          },
+          {
+            tag: "STAGE B / 05",
+            title: "Intelligent Vehicle Recognition.",
+            desc: "Neural ANPR scanning locks onto the registration plate (MP 04 AB 1234). The booking database verifies ownership with zero manual entry.",
+            stepId: "railB"
+          },
+          {
+            tag: "STAGE C / 05",
+            title: "Every Test. Precisely Managed.",
+            desc: "Brake testing rollers activate under dual axles. Real-time telemetry measures dynamic left/right brake force (6.8 kN) and axle imbalance (7.3%).",
+            stepId: "railC"
+          },
+          {
+            tag: "STAGE D / 05",
+            title: "From Inspection to Verification.",
+            desc: "Automated test readings complete across headlights, speedometer, and suspension benches. All four statutory safety standards verified.",
+            stepId: "railD"
+          },
+          {
+            tag: "STAGE E / 05",
+            title: "One Connected ATS Platform.",
+            desc: "The complete testing station workflow converges into an official digital fitness certificate, tamper-proof logs, and automated customer notifications.",
+            stepId: "railE"
+          }
+        ];
+
+        const hudTag = document.getElementById('hudStageTag');
+        const hudTitle = document.getElementById('hudStageTitle');
+        const hudDesc = document.getElementById('hudStageDesc');
+        const hudCoords = document.getElementById('hudCameraCoords');
+
+        function updateHUD(index) {
+          const d = stagesData[index];
+          if (!d) return;
+          hudTag.textContent = d.tag;
+          hudTitle.textContent = d.title;
+          hudDesc.textContent = d.desc;
+
+          document.querySelectorAll('.rail-step').forEach(r => r.classList.remove('active'));
+          const activeRail = document.getElementById(d.stepId);
+          if (activeRail) activeRail.classList.add('active');
+        }
+
+        // Camera Path Choreography via GSAP Timeline synced with ScrollTrigger
+        const camProxy = {
+          x: 3.5, y: 1.5, z: 4.2,
+          tx: 0, ty: 0.6, tz: 0,
+          rollerSpin: 0,
+          laserOpacity: 0
+        };
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#journey",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1.2,
+            onUpdate: self => {
+              const p = self.progress;
+              if (p < 0.2) updateHUD(0);
+              else if (p < 0.4) updateHUD(1);
+              else if (p < 0.65) updateHUD(2);
+              else if (p < 0.85) updateHUD(3);
+              else updateHUD(4);
+            }
+          }
+        });
+
+        // Stage A -> Stage B: Zoom into Front Plate (0% to 25%)
+        tl.to(camProxy, {
+          x: 0.35, y: 0.65, z: 2.65,
+          tx: 0, ty: 0.4, tz: 2.1,
+          laserOpacity: 0.85,
+          ease: "power2.inOut",
+          duration: 2
+        });
+
+        // Stage B -> Stage C: Move low to Left Front Wheel & Brake Rollers (25% to 55%)
+        tl.to(camProxy, {
+          x: 1.6, y: 0.45, z: 1.3,
+          tx: 0.6, ty: 0.35, tz: 1.1,
+          laserOpacity: 0.0,
+          rollerSpin: 14.0,
+          ease: "power2.inOut",
+          duration: 2.5
+        });
+
+        // Stage C -> Stage D: Shift to Side Inspection Angle (55% to 80%)
+        tl.to(camProxy, {
+          x: 3.4, y: 1.35, z: 0.2,
+          tx: 0, ty: 0.6, tz: 0,
+          rollerSpin: 18.0,
+          ease: "power2.inOut",
+          duration: 2
+        });
+
+        // Stage D -> Stage E: Wide Cinematic Crane Pullback (80% to 100%)
+        tl.to(camProxy, {
+          x: 5.6, y: 3.6, z: 6.2,
+          tx: 0, ty: 0.8, tz: 0,
+          ease: "power2.out",
+          duration: 2
+        });
+
+        // Render Loop for Journey
+        function animateJourney() {
+          requestAnimationFrame(animateJourney);
+
+          camera.position.set(camProxy.x, camProxy.y, camProxy.z);
+          camera.lookAt(camProxy.tx, camProxy.ty, camProxy.tz);
+
+          if (hudCoords) {
+            hudCoords.textContent = `X: ${camProxy.x.toFixed(1)}m | Y: ${camProxy.y.toFixed(1)}m | Z: ${camProxy.z.toFixed(1)}m`;
+          }
+
+          // Spin wheels and rollers when rollerSpin is animating
+          if (car.userData.wheels) {
+            car.userData.wheels.forEach(w => w.rotation.x = camProxy.rollerSpin);
+          }
+          if (rollers) {
+            rollers.forEach(r => r.rotation.x = camProxy.rollerSpin);
+          }
+
+          // Laser opacity & intensity
+          if (laserPlane) {
+            laserPlane.material.opacity = camProxy.laserOpacity;
+          }
+          tealScannerLight.intensity = camProxy.laserOpacity * 3.5;
+
+          renderer.render(scene, camera);
+        }
+        animateJourney();
+
+        window.addEventListener('resize', () => {
+          if (!journeyCanvas) return;
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      }
+
+      // Navbar scroll effect
+      const nav = document.getElementById('mainNav');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 80) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+      });
+    })();
+  </script>
 </body>
 </html>
