@@ -23,11 +23,11 @@ const server = http.createServer((req, res) => {
 
   // Default redirect root to landing page
   if (cleanUrl === '/' || cleanUrl === '') {
-    cleanUrl = '/ats-website/index.html';
+    cleanUrl = '/index.html';
   } else if (cleanUrl === '/app' || cleanUrl === '/app/') {
     cleanUrl = '/ats-app/index.html';
   } else if (cleanUrl === '/website' || cleanUrl === '/website/') {
-    cleanUrl = '/ats-website/index.html';
+    cleanUrl = '/index.html';
   }
 
   // Sanitize path to prevent directory traversal
